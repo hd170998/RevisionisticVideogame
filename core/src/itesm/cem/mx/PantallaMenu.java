@@ -20,8 +20,6 @@ class PantallaMenu extends Pantalla {
     private Texture textFondo;
     private Texture title;
     private SpriteBatch batch;
-    private Animation<TextureAtlas.AtlasRegion> animation;
-    private TextureAtlas atlas;
 
     public PantallaMenu(PantallaInicio pantallaInicio) {
         this.pantallaInicio=pantallaInicio;
@@ -122,7 +120,5 @@ class PantallaMenu extends Pantalla {
 
     @Override
     public void dispose() {
-        batch.dispose();
-        atlas.dispose();
     }
 }
