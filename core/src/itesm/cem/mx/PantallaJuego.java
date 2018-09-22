@@ -1,8 +1,7 @@
 package itesm.cem.mx;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Screen;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -16,14 +15,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import itesm.cem.mx.PantallaInicio;
-
-import java.security.AlgorithmParameterGenerator;
 
 class PantallaJuego extends Pantalla {
     private final PantallaInicio pantallaInicio;
-    private Sprite BtnCargar;
-    private Sprite BtnNuevo;
     private Texture Title;
     //fondo de pantalla
     private Texture textFondo;
@@ -53,7 +47,7 @@ class PantallaJuego extends Pantalla {
         Texture BtnBackOP = new Texture("BackButton02HOVER.png");
         TextureRegionDrawable tbackop = new TextureRegionDrawable(new TextureRegion(BtnBackOP));
         ImageButton btnBack = new ImageButton(tback,tbackop);
-        btnBack.setPosition(0,ALTO-BtnBack.getHeight());
+        btnBack.setPosition(btnBack.getWidth()/3,ALTO-(BtnBack.getHeight()+10));
         btnBack.addListener(new ClickListener(){
                     public void clicked(InputEvent event, float x, float y) {
                          super.clicked(event, x, y);
@@ -64,12 +58,12 @@ class PantallaJuego extends Pantalla {
         Drawable regionCargar = new TextureRegionDrawable(new TextureRegion(new Texture("CargarJuegoBtn01.png")));
         Drawable regionCargarOp = new TextureRegionDrawable(new TextureRegion(new Texture("CargarJuegoBtn02HOVER.png")));
         ImageButton btnCargar = new ImageButton(regionCargar,regionCargarOp);
-        btnCargar.setPosition(ANCHO/16,ALTO/2);
+        btnCargar.setPosition(ANCHO/18,ALTO/2);
         //boton juego nuevo
         Drawable regionNuevo = new TextureRegionDrawable(new TextureRegion(new Texture("NuevoJuegoBtn01.png")));
         Drawable regionNuevoOP = new TextureRegionDrawable(new TextureRegion( new Texture("NuevoJuegoBtn02HOVER.png")));
         ImageButton btnNuevo = new ImageButton(regionNuevo,regionNuevoOP);
-        btnNuevo.setPosition(ANCHO/16, ALTO/2 -100);
+        btnNuevo.setPosition(ANCHO/18, ALTO/2 -100);
         escenaMenu.addActor(btnNuevo);
         escenaMenu.addActor(btnBack);
         escenaMenu.addActor(btnCargar);
