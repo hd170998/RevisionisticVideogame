@@ -45,10 +45,6 @@ class PantallaJuego extends Pantalla {
         batch = new SpriteBatch();
         escenaMenu=new Stage(vista);
         textFondo = new Texture("SecondScreen.png");
-        BtnCargar=new Sprite(new Texture("CargarJuegoBtn01.png"));
-        BtnCargar.setPosition(ANCHO/16,(ALTO/2));
-        BtnNuevo=new Sprite(new Texture("NuevoJuegoBtn01.png"));
-        BtnNuevo.setPosition(ANCHO/16,(ALTO/2)-100);
         //fondo
         Title = new Texture("littleTitle.png");
         //btn regreso
@@ -64,7 +60,19 @@ class PantallaJuego extends Pantalla {
                          pantallaInicio.setScreen(new PantallaMenu(pantallaInicio));
             }
         });
+        //boton cargar juego
+        Drawable regionCargar = new TextureRegionDrawable(new TextureRegion(new Texture("CargarJuegoBtn01.png")));
+        Drawable regionCargarOp = new TextureRegionDrawable(new TextureRegion(new Texture("CargarJuegoBtn02HOVER.png")));
+        ImageButton btnCargar = new ImageButton(regionCargar,regionCargarOp);
+        btnCargar.setPosition(ANCHO/16,ALTO/2);
+        //boton juego nuevo
+        Drawable regionNuevo = new TextureRegionDrawable(new TextureRegion(new Texture("NuevoJuegoBtn01.png")));
+        Drawable regionNuevoOP = new TextureRegionDrawable(new TextureRegion( new Texture("NuevoJuegoBtn02HOVER.png")));
+        ImageButton btnNuevo = new ImageButton(regionNuevo,regionNuevoOP);
+        btnNuevo.setPosition(ANCHO/16, ALTO/2 -100);
+        escenaMenu.addActor(btnNuevo);
         escenaMenu.addActor(btnBack);
+        escenaMenu.addActor(btnCargar);
     }
 
     @Override
@@ -73,6 +81,7 @@ class PantallaJuego extends Pantalla {
         batch.setProjectionMatrix(camara.combined);
         batch.begin();
         batch.draw(textFondo,0,0);
+        batch.draw(Title,ANCHO-Title.getWidth(),ALTO-Title.getHeight());
         batch.end();
         escenaMenu.draw();
 
