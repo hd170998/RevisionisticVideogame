@@ -2,7 +2,7 @@ package itesm.cem.mx;
 
 import com.badlogic.gdx.Screen;
 
-public class PantallaOpciones implements Screen {
+public class PantallaOpciones extends Pantalla {
     private final PantallaInicio pantallaInicio;
 
     public PantallaOpciones(PantallaInicio pantallaInicio) {
@@ -16,6 +16,7 @@ public class PantallaOpciones implements Screen {
 
     @Override
     public void render(float delta) {
+        borrarPantalla(0,0,0);
 
     }
 

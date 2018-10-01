@@ -35,7 +35,7 @@ class PantallaMenu extends Pantalla {
         batch = new SpriteBatch();
         escenaMenu=new Stage(vista);
         textFondo = new Texture("MainScreen.png");
-        title = new Texture("TituloMaybe.png");
+        title = new Texture("LogoMainScreen.png");
 
 // Botones
         Texture textBtnPlay=new Texture("BtnJugarBasico01.png");

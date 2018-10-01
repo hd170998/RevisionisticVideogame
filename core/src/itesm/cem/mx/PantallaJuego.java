@@ -3,6 +3,7 @@ package itesm.cem.mx;
 import com.badlogic.gdx.Gdx;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -18,6 +19,9 @@ class PantallaJuego extends Pantalla {
     //fondo de pantalla
     private Texture textFondo;
     private Stage escenaMenu;
+    private Animation animation;
+    private TextureRegion[] regions;
+    private float elapsedTime;
     //boton regreso
 
 
@@ -32,11 +36,21 @@ class PantallaJuego extends Pantalla {
     }
 
     private void crearescena() {
+        regions = new TextureRegion[5];
         batch = new SpriteBatch();
         escenaMenu=new Stage(vista);
+        //aniamcion Transicion
+        regions[0] = new TextureRegion(new Texture("Teeth01.png"));
+        regions[1] = new TextureRegion(new Texture("Teeth02.png"));
+        regions[2] = new TextureRegion(new Texture("Teeth03.png"));
+        regions[3] = new TextureRegion(new Texture("Teeth04.png"));
+        regions[4] = new TextureRegion(new Texture("Teeth05.png"));
+        animation = new Animation(0.15f,regions[0],regions[1],regions[2],regions[3],regions[4]);
+        animation.setPlayMode(Animation.PlayMode.LOOP);
+        elapsedTime = 0;
         textFondo = new Texture("SecondScreen.png");
         //fondo
-        Title = new Texture("littleTitle.png");
+        Title = new Texture("LogoSecondScreen.png");
         //btn regreso
         Texture BtnBack=new Texture("BackButton01.png");
         TextureRegionDrawable tback= new TextureRegionDrawable(new TextureRegion(BtnBack));
@@ -67,6 +81,7 @@ class PantallaJuego extends Pantalla {
 
     @Override
     public void render(float delta) {
+        elapsedTime += Gdx.graphics.getDeltaTime();
         borrarPantalla(0,0,1);
         batch.setProjectionMatrix(camara.combined);
         batch.begin();
