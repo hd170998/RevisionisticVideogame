@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class PantallaOpciones extends Pantalla {
@@ -46,6 +47,10 @@ public class PantallaOpciones extends Pantalla {
                 pantallaInicio.setScreen(new PantallaMenu(pantallaInicio));
             }
         });
+        Drawable regionMusic = new TextureRegionDrawable(new TextureRegion(new Texture("ButtonMusic_On.png")));
+        Drawable regionMusicOP = new TextureRegionDrawable(new TextureRegion( new Texture("ButtonMusic_Off.png")));
+        ImageButton btnMusic = new ImageButton(regionMusic,regionMusicOP);
+
         escenaOpciones.addActor(btnBack);
     }
 
