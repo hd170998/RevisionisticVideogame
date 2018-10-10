@@ -70,7 +70,7 @@ public class Personaje extends Objeto{
         TiledMapTileLayer capa = (TiledMapTileLayer)mapa.getLayers().get(0);
         TiledMapTileLayer.Cell celda = capa.getCell(cx,cy);
         Object tipo = celda.getTile().getProperties().get("tipo");
-        if (!"tubo".equals(tipo)) {
+        if (!"Solido".equals(tipo)) {
             // No es obstáculo, puede pasar
             return true;
         }

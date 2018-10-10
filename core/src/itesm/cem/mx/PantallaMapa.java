@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class PantallaMapa extends Pantalla {
-    private static final float ANCHO_MAPA = 6784;
+    private static final float ANCHO_MAPA = 4800;
     private final Juego juego;
 
     // Mapas
