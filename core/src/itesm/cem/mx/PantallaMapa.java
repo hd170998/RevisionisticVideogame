@@ -1,8 +1,13 @@
 package itesm.cem.mx;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -27,11 +32,26 @@ public class PantallaMapa extends Pantalla {
 
     @Override
     public void show() {
+        cargarMapa();
+        // El input lo maneja la escena
 
+    }
+
+    private void cargarMapa() {
+        AssetManager manager = new AssetManager();
+        manager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
+        manager.load("ForestMap.tmx",TiledMap.class);
+        manager.finishLoading(); // Espera
+        mapa = manager.get("ForestMap.tmx");
+        renderer = new OrthogonalTiledMapRenderer(mapa);
     }
 
     @Override
     public void render(float delta) {
+        borrarPantalla(0.35f,0.55f,1);
+        batch.setProjectionMatrix(camara.combined);
+        renderer.setView(camara);
+        renderer.render();
 
     }
 
@@ -47,6 +67,7 @@ public class PantallaMapa extends Pantalla {
 
     @Override
     public void dispose() {
+        mapa.dispose();
 
     }
 }

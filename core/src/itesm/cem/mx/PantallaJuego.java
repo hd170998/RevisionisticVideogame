@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 class PantallaJuego extends Pantalla {
+    private Juego juego;
     private final PantallaInicio pantallaInicio;
     private Texture Title;
     //fondo de pantalla
@@ -77,7 +78,7 @@ class PantallaJuego extends Pantalla {
         btnNuevo.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                pantallaInicio.setScreen(new PantallaMapa(pantallaInicio));
+                pantallaInicio.setScreen(new PantallaMapa(juego));
             }
         });
         escenaMenu.addActor(btnNuevo);
