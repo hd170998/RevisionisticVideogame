@@ -74,6 +74,12 @@ class PantallaJuego extends Pantalla {
         Drawable regionNuevoOP = new TextureRegionDrawable(new TextureRegion( new Texture("NuevoJuegoBtn02HOVER.png")));
         ImageButton btnNuevo = new ImageButton(regionNuevo,regionNuevoOP);
         btnNuevo.setPosition(ANCHO/18, ALTO/2 -100);
+        btnNuevo.addListener(new ClickListener(){
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                pantallaInicio.setScreen(new PantallaMapa(pantallaInicio));
+            }
+        });
         escenaMenu.addActor(btnNuevo);
         escenaMenu.addActor(btnBack);
         escenaMenu.addActor(btnCargar);
