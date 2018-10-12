@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -84,7 +85,12 @@ public class PantallaMapa extends Pantalla {
                     ivan.setEstadoMover(Personaje.EstadoMovimento.DERECHA);
                 } else if ( pad.getKnobPercentX() < -0.20 ) {   // Más de 20% IZQUIERDA
                     ivan.setEstadoMover(Personaje.EstadoMovimento.IZQUIERDA);
-                } else {
+                }else if (pad.getKnobPercentY()>0.20){
+                    ivan.setEstadoMover(Personaje.EstadoMovimento.ARRIBA);
+                }else if (pad.getKnobPercentY()<-0.20){
+                    ivan.setEstadoMover(Personaje.EstadoMovimento.ABAJO);
+                }
+                else{
                     ivan.setEstadoMover(Personaje.EstadoMovimento.QUIETO);
                 }
             }
@@ -142,14 +148,16 @@ public class PantallaMapa extends Pantalla {
 
     private void actualizarCamara() {
         // Depende de la posición del personaje. Siempre sigue al personaje
+
         float posX = ivan.getX();
+        float posY = ivan.getY();
         // Primera mitad de la pantalla
-        if (posX < ANCHO/2 ) {
+        if (posX < ANCHO/2 && posY==1250) {
             camara.position.set(ANCHO/2, ALTO_MAPA/2-50, 0);
-        } else if (posX > ANCHO_MAPA - ANCHO/2) {   // Última mitad de la pantalla
-            camara.position.set(ANCHO_MAPA-ANCHO/2,camara.position.y,0);
+        } else if (posX > ANCHO_MAPA - ANCHO/2 && posY > ALTO_MAPA/2-50) {   // Última mitad de la pantalla
+            camara.position.set(ANCHO_MAPA-ANCHO/2,ALTO_MAPA-ALTO/2,0);
         } else {    // En 'medio' del mapa
-            camara.position.set(posX,camara.position.y,0);
+            camara.position.set(posX,posY,0);
         }
         camara.update();
     }
@@ -240,7 +248,7 @@ public class PantallaMapa extends Pantalla {
 
         @Override
         public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-            return false;
+                return false;
         }
 
         @Override

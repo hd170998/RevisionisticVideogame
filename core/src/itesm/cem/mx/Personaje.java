@@ -15,10 +15,13 @@ public class Personaje extends Objeto{
     private float x, y;   // coordenadas
     EstadoMovimento estadoMover = EstadoMovimento.QUIETO;
     private static final float VX = 240;  // Velocidad en x, [pixeles/segundo]
+    private static final float VY = 240;
     public enum EstadoMovimento {
         QUIETO,
         DERECHA,
-        IZQUIERDA
+        IZQUIERDA,
+        ARRIBA,
+        ABAJO
     }
     public Personaje(Texture textura) {
         // Crea una region
@@ -30,9 +33,9 @@ public class Personaje extends Objeto{
         timerAnimacion = 0;
         // Quieto
         sprite = new Sprite(texturaPersonaje[0][0]);
-        sprite.setPosition(0,1250);
-        x = 0;
-        y = 64;
+        sprite.setPosition(64,1250);
+        x = 64;
+        y = 1250;
     }
     public void render(SpriteBatch batch) {
         if (estadoMover==EstadoMovimento.QUIETO) {
@@ -52,13 +55,23 @@ public class Personaje extends Objeto{
     public void actualizar(TiledMap mapa) {
         // Verificar si se puede mover (no hay obstáculos, por ahora tubos verdes)
         switch (estadoMover) {
+            case ABAJO:
+                if (puedeMover(VY*Gdx.graphics.getDeltaTime(),mapa)){
+                    moverY(-VY*Gdx.graphics.getDeltaTime());
+                }
+                break;
+            case ARRIBA:
+                if (puedeMover(VY*Gdx.graphics.getDeltaTime(),mapa)){
+                    moverY((VX*Gdx.graphics.getDeltaTime()));
+                }
+                break;
             case DERECHA:
                 if (puedeMover(VX*Gdx.graphics.getDeltaTime(),mapa)) {
-                    mover(VX * Gdx.graphics.getDeltaTime());
+                    moverX(VX * Gdx.graphics.getDeltaTime());
                 }
                 break;
             case IZQUIERDA:
-                mover(-VX*Gdx.graphics.getDeltaTime());
+                moverX(-VX*Gdx.graphics.getDeltaTime());
                 break;
         }
     }
@@ -69,7 +82,7 @@ public class Personaje extends Objeto{
         // Obtener la celda en x,y
         TiledMapTileLayer capa = (TiledMapTileLayer)mapa.getLayers().get(0);
         TiledMapTileLayer.Cell celda = capa.getCell(cx,cy);
-        Object tipo = celda.getTile().getProperties().get("tipo");
+        Object tipo = celda.getTile().getProperties().get("Tipo");
         if (!"Solido".equals(tipo)) {
             // No es obstáculo, puede pasar
             return true;
@@ -95,8 +108,12 @@ public class Personaje extends Objeto{
         sprite.setPosition(x,y);
     }
 
-    public void mover(float dx) {
+    public void moverX(float dx) {
         x += dx;
+        sprite.setPosition(x,y);
+    }
+    public void moverY(float dy){
+        y += dy;
         sprite.setPosition(x,y);
     }
 
