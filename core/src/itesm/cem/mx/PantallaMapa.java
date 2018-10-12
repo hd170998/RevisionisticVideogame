@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -88,10 +89,24 @@ public class PantallaMapa extends Pantalla {
                 }
             }
         });
+
         pad.setColor(1,1,1,0.7f);   // Transparente
+        Drawable regionPausa = new TextureRegionDrawable(new TextureRegion(new Texture("button_pause.png")));
+        Drawable regionPausaOP = new TextureRegionDrawable(new TextureRegion( new Texture("button_pause.png")));
+        ImageButton btnPausa = new ImageButton(regionPausa,regionPausaOP);
+        btnPausa.setPosition(ANCHO-btnPausa.getWidth(),ALTO-btnPausa.getHeight());
+        btnPausa.addListener(new ClickListener(){
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                estado = EstadoJuego.PAUSADO;
+            }
+        });
+
         // Crea la escena y agrega el pad
         escenaHUD = new Stage(vistaHUD);    // Escalar con esta vista
+        escenaHUD.addActor(btnPausa);
         escenaHUD.addActor(pad);
+
     }
 
     private void cargarMapa() {
