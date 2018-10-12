@@ -1,6 +1,7 @@
 package itesm.cem.mx;
 
 import com.badlogic.gdx.Gdx;
+<<<<<<< HEAD
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
@@ -10,16 +11,53 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+=======
+import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+>>>>>>> 6d7c1fba55bd837b1ee7c6c2109b50a4f782260e
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class PantallaMapa extends Pantalla {
     private static final float ANCHO_MAPA = 4800;
+<<<<<<< HEAD
     private final Juego juego;
+=======
+    private static final float ALTO_MAPA = 2600;
+    private final Juego juego;
+    private EstadoJuego estado;
+    private EscenaPausa escenaPausa;
+>>>>>>> 6d7c1fba55bd837b1ee7c6c2109b50a4f782260e
 
     // Mapas
     private TiledMap mapa;      // El mapa
     private OrthogonalTiledMapRenderer renderer;    // Dibuja el mapa
+<<<<<<< HEAD
     private Personaje mario;    // Mario, lo controla el usuario
+=======
+    private Personaje ivan;    // Mario, lo controla el usuario
+>>>>>>> 6d7c1fba55bd837b1ee7c6c2109b50a4f782260e
 
     // HUD, otra cámara con la imagen fija
     private OrthographicCamera camaraHUD;
@@ -33,7 +71,71 @@ public class PantallaMapa extends Pantalla {
     @Override
     public void show() {
         cargarMapa();
+<<<<<<< HEAD
         // El input lo maneja la escena
+=======
+        ivan = new Personaje(new Texture("ForestStuff/1V4N_WalkingSprites_64x128.png"));
+
+        crearHUD();
+        // El input lo maneja la escena
+        Gdx.input.setInputProcessor(escenaHUD);
+
+    }
+
+    private void crearHUD() {
+        // Crea la cámara y la vista
+        camaraHUD = new OrthographicCamera(ANCHO, ALTO);
+        camaraHUD.position.set(ANCHO/2, ALTO_MAPA/2-50, 0);
+        camaraHUD.update();
+        vistaHUD = new StretchViewport(ANCHO, ALTO, camaraHUD);
+        // Crea el pad
+        Skin skin = new Skin(); // Texturas para el pad
+        skin.add("fondo", new Texture("padBack.png"));
+        skin.add("boton", new Texture("padKnob.png"));
+        // Configura la vista del pad
+        Touchpad.TouchpadStyle estilo = new Touchpad.TouchpadStyle();
+        estilo.background = skin.getDrawable("fondo");
+        estilo.knob = skin.getDrawable("boton");
+        // Crea el pad
+        Touchpad pad = new Touchpad(64,estilo);     // Radio, estilo
+        pad.setBounds(16,16,256,256);               // x,y - ancho,alto
+        // Comportamiento del pad
+        pad.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Touchpad pad = (Touchpad)actor;
+                if (pad.getKnobPercentX() > 0.20) { // Más de 20% de desplazamiento DERECHA
+                    ivan.setEstadoMover(Personaje.EstadoMovimento.DERECHA);
+                } else if ( pad.getKnobPercentX() < -0.20 ) {   // Más de 20% IZQUIERDA
+                    ivan.setEstadoMover(Personaje.EstadoMovimento.IZQUIERDA);
+                }else if (pad.getKnobPercentY()>0.20){
+                    ivan.setEstadoMover(Personaje.EstadoMovimento.ARRIBA);
+                }else if (pad.getKnobPercentY()<-0.20){
+                    ivan.setEstadoMover(Personaje.EstadoMovimento.ABAJO);
+                }
+                else{
+                    ivan.setEstadoMover(Personaje.EstadoMovimento.QUIETO);
+                }
+            }
+        });
+
+        pad.setColor(1,1,1,0.7f);   // Transparente
+        Drawable regionPausa = new TextureRegionDrawable(new TextureRegion(new Texture("button_pause.png")));
+        Drawable regionPausaOP = new TextureRegionDrawable(new TextureRegion( new Texture("button_pause.png")));
+        ImageButton btnPausa = new ImageButton(regionPausa,regionPausaOP);
+        btnPausa.setPosition(ANCHO-btnPausa.getWidth(),ALTO-btnPausa.getHeight());
+        btnPausa.addListener(new ClickListener(){
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                estado = EstadoJuego.PAUSADO;
+            }
+        });
+
+        // Crea la escena y agrega el pad
+        escenaHUD = new Stage(vistaHUD);    // Escalar con esta vista
+        escenaHUD.addActor(btnPausa);
+        escenaHUD.addActor(pad);
+>>>>>>> 6d7c1fba55bd837b1ee7c6c2109b50a4f782260e
 
     }
 
@@ -48,6 +150,7 @@ public class PantallaMapa extends Pantalla {
 
     @Override
     public void render(float delta) {
+<<<<<<< HEAD
         borrarPantalla(0.35f,0.55f,1);
         batch.setProjectionMatrix(camara.combined);
         renderer.setView(camara);
@@ -55,6 +158,48 @@ public class PantallaMapa extends Pantalla {
 
     }
 
+=======
+        ivan.actualizar(mapa);
+        actualizarCamara();
+        borrarPantalla(0,0,0);
+        batch.setProjectionMatrix(camara.combined);
+        renderer.setView(camara);
+        camara.position.set(ANCHO/2,ALTO_MAPA/2-50,0);
+        camara.update();
+        renderer.render();
+        batch.begin();
+        ivan.render(batch);
+        batch.end();
+        batch.setProjectionMatrix(camaraHUD.combined);
+        escenaHUD.draw();
+
+        // Botón PAUSA
+        if (estado==EstadoJuego.PAUSADO) {
+            escenaPausa.draw(); // Solo si está pausado muestra la image
+        }
+    }
+
+    private void actualizarCamara() {
+        // Depende de la posición del personaje. Siempre sigue al personaje
+
+        float posX = ivan.getX();
+        float posY = ivan.getY();
+        // Primera mitad de la pantalla
+        if (posX < ANCHO/2 && posY==1250) {
+            camara.position.set(ANCHO/2, ALTO_MAPA/2-50, 0);
+        } else if (posX > ANCHO_MAPA - ANCHO/2 && posY > ALTO_MAPA/2-50) {   // Última mitad de la pantalla
+            camara.position.set(ANCHO_MAPA-ANCHO/2,ALTO_MAPA-ALTO/2,0);
+        } else {    // En 'medio' del mapa
+            camara.position.set(posX,posY,0);
+        }
+        camara.update();
+    }
+    @Override
+    public void resize(int width, int height) {
+        vista.update(width, height);
+        vistaHUD.update(width, height);
+    }
+>>>>>>> 6d7c1fba55bd837b1ee7c6c2109b50a4f782260e
     @Override
     public void pause() {
 
@@ -68,6 +213,100 @@ public class PantallaMapa extends Pantalla {
     @Override
     public void dispose() {
         mapa.dispose();
+<<<<<<< HEAD
 
+=======
+        escenaHUD.dispose();
+    }
+
+    private class EscenaPausa extends Stage{
+
+        public EscenaPausa(Viewport vista, Batch batch) {
+            super(vista,batch);
+            //transparente
+            Pixmap pixmap = new Pixmap((int)(ANCHO*0.7f), (int)(ALTO*0.8f), Pixmap.Format.RGBA8888 );
+            pixmap.setColor( 1f, 1f, 1f, 0.65f );
+            pixmap.fillRectangle(0, 0, pixmap.getWidth(), pixmap.getHeight());
+            Texture texturaRectangulo = new Texture( pixmap );
+            pixmap.dispose();
+            Image imgRectangulo = new Image(texturaRectangulo);
+            imgRectangulo.setPosition(0.15f*ANCHO, 0.1f*ALTO);
+            this.addActor(imgRectangulo);
+            //boton back
+            Texture BtnBack=new Texture("BackButton01.png");
+            TextureRegionDrawable tback= new TextureRegionDrawable(new TextureRegion(BtnBack));
+            Texture BtnBackOP = new Texture("BackButton02HOVER.png");
+            TextureRegionDrawable tbackop = new TextureRegionDrawable(new TextureRegion(BtnBackOP));
+            ImageButton btnBack = new ImageButton(tback,tbackop);
+            btnBack.setPosition(ANCHO/2-btnBack.getWidth()/2, ALTO/2);
+            btnBack.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    // Regresa al menú
+                    juego.setScreen(new PantallaMapa(juego));
+                }
+            });
+            this.addActor(btnBack);
+
+            // boton resume
+            Texture BtnResume=new Texture("BackButton01.png");
+            TextureRegionDrawable tresume= new TextureRegionDrawable(new TextureRegion(BtnResume));
+            Texture BtnresumeOP = new Texture("BackButton02HOVER.png");
+            TextureRegionDrawable tresumeop = new TextureRegionDrawable(new TextureRegion(BtnresumeOP));
+            ImageButton btnResume = new ImageButton(tresume,tresumeop);
+            btnResume.setPosition(ANCHO/2-btnResume.getWidth()/2, ALTO/4);
+            btnResume.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    // Regresa al juego
+                    estado = EstadoJuego.JUGANDO;
+                    Gdx.input.setInputProcessor(new ProcesadorEntrada()); // No debería crear uno nuevo
+                }
+            });
+            this.addActor(btnResume);
+        }
+    }
+
+    private class ProcesadorEntrada implements InputProcessor {
+        @Override
+        public boolean keyDown(int keycode) {
+            return false;
+        }
+
+        @Override
+        public boolean keyUp(int keycode) {
+            return false;
+        }
+
+        @Override
+        public boolean keyTyped(char character) {
+            return false;
+        }
+
+        @Override
+        public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+                return false;
+        }
+
+        @Override
+        public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+            return false;
+        }
+
+        @Override
+        public boolean touchDragged(int screenX, int screenY, int pointer) {
+            return false;
+        }
+
+        @Override
+        public boolean mouseMoved(int screenX, int screenY) {
+            return false;
+        }
+
+        @Override
+        public boolean scrolled(int amount) {
+            return false;
+        }
+>>>>>>> 6d7c1fba55bd837b1ee7c6c2109b50a4f782260e
     }
 }
