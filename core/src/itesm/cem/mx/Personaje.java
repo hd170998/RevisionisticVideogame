@@ -24,13 +24,13 @@ public class Personaje extends Objeto{
         // Crea una region
         TextureRegion region = new TextureRegion(textura);
         // Divide la región en frames de 32x64
-        TextureRegion[][] texturaPersonaje = region.split(32,64);
+        TextureRegion[][] texturaPersonaje = region.split(64,128);
         animacion = new Animation(0.15f,texturaPersonaje[0][3],texturaPersonaje[0][2],texturaPersonaje[0][1]);
         animacion.setPlayMode(Animation.PlayMode.LOOP);
         timerAnimacion = 0;
         // Quieto
         sprite = new Sprite(texturaPersonaje[0][0]);
-        sprite.setPosition(0,64);
+        sprite.setPosition(0,1250);
         x = 0;
         y = 64;
     }
