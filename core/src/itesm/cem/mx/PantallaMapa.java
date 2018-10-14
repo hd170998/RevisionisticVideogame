@@ -1,17 +1,6 @@
 package itesm.cem.mx;
 
 import com.badlogic.gdx.Gdx;
-<<<<<<< HEAD
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-=======
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
@@ -23,7 +12,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -36,28 +24,19 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
->>>>>>> 6d7c1fba55bd837b1ee7c6c2109b50a4f782260e
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class PantallaMapa extends Pantalla {
     private static final float ANCHO_MAPA = 4800;
-<<<<<<< HEAD
-    private final Juego juego;
-=======
     private static final float ALTO_MAPA = 2600;
     private final Juego juego;
     private EstadoJuego estado;
     private EscenaPausa escenaPausa;
->>>>>>> 6d7c1fba55bd837b1ee7c6c2109b50a4f782260e
 
     // Mapas
     private TiledMap mapa;      // El mapa
     private OrthogonalTiledMapRenderer renderer;    // Dibuja el mapa
-<<<<<<< HEAD
-    private Personaje mario;    // Mario, lo controla el usuario
-=======
     private Personaje ivan;    // Mario, lo controla el usuario
->>>>>>> 6d7c1fba55bd837b1ee7c6c2109b50a4f782260e
 
     // HUD, otra cámara con la imagen fija
     private OrthographicCamera camaraHUD;
@@ -71,9 +50,6 @@ public class PantallaMapa extends Pantalla {
     @Override
     public void show() {
         cargarMapa();
-<<<<<<< HEAD
-        // El input lo maneja la escena
-=======
         ivan = new Personaje(new Texture("ForestStuff/1V4N_WalkingSprites_64x128.png"));
 
         crearHUD();
@@ -108,7 +84,7 @@ public class PantallaMapa extends Pantalla {
                     ivan.setEstadoMover(Personaje.EstadoMovimento.DERECHA);
                 } else if ( pad.getKnobPercentX() < -0.20 ) {   // Más de 20% IZQUIERDA
                     ivan.setEstadoMover(Personaje.EstadoMovimento.IZQUIERDA);
-                }else if (pad.getKnobPercentY()>0.20){
+                } else if (pad.getKnobPercentY()>0.20){
                     ivan.setEstadoMover(Personaje.EstadoMovimento.ARRIBA);
                 }else if (pad.getKnobPercentY()<-0.20){
                     ivan.setEstadoMover(Personaje.EstadoMovimento.ABAJO);
@@ -135,7 +111,6 @@ public class PantallaMapa extends Pantalla {
         escenaHUD = new Stage(vistaHUD);    // Escalar con esta vista
         escenaHUD.addActor(btnPausa);
         escenaHUD.addActor(pad);
->>>>>>> 6d7c1fba55bd837b1ee7c6c2109b50a4f782260e
 
     }
 
@@ -150,15 +125,6 @@ public class PantallaMapa extends Pantalla {
 
     @Override
     public void render(float delta) {
-<<<<<<< HEAD
-        borrarPantalla(0.35f,0.55f,1);
-        batch.setProjectionMatrix(camara.combined);
-        renderer.setView(camara);
-        renderer.render();
-
-    }
-
-=======
         ivan.actualizar(mapa);
         actualizarCamara();
         borrarPantalla(0,0,0);
@@ -181,15 +147,17 @@ public class PantallaMapa extends Pantalla {
 
     private void actualizarCamara() {
         // Depende de la posición del personaje. Siempre sigue al personaje
-
         float posX = ivan.getX();
         float posY = ivan.getY();
-        // Primera mitad de la pantalla
-        if (posX < ANCHO/2 && posY==1250) {
+        // Primera mitad d
+        // e la pantalla
+        if (posX < ANCHO/2) {
             camara.position.set(ANCHO/2, ALTO_MAPA/2-50, 0);
-        } else if (posX > ANCHO_MAPA - ANCHO/2 && posY > ALTO_MAPA/2-50) {   // Última mitad de la pantalla
+        }
+        else if (posX > ANCHO_MAPA - ANCHO/2 && posY > ALTO_MAPA/2-50) {   // Última mitad de la pantalla
             camara.position.set(ANCHO_MAPA-ANCHO/2,ALTO_MAPA-ALTO/2,0);
-        } else {    // En 'medio' del mapa
+        }
+        else {// En 'medio' del mapa
             camara.position.set(posX,posY,0);
         }
         camara.update();
@@ -199,7 +167,6 @@ public class PantallaMapa extends Pantalla {
         vista.update(width, height);
         vistaHUD.update(width, height);
     }
->>>>>>> 6d7c1fba55bd837b1ee7c6c2109b50a4f782260e
     @Override
     public void pause() {
 
@@ -213,9 +180,6 @@ public class PantallaMapa extends Pantalla {
     @Override
     public void dispose() {
         mapa.dispose();
-<<<<<<< HEAD
-
-=======
         escenaHUD.dispose();
     }
 
@@ -285,7 +249,7 @@ public class PantallaMapa extends Pantalla {
 
         @Override
         public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-                return false;
+            return false;
         }
 
         @Override
@@ -307,6 +271,5 @@ public class PantallaMapa extends Pantalla {
         public boolean scrolled(int amount) {
             return false;
         }
->>>>>>> 6d7c1fba55bd837b1ee7c6c2109b50a4f782260e
     }
 }
