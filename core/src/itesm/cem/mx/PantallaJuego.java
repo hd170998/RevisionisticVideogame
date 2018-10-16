@@ -81,6 +81,12 @@ class PantallaJuego extends Pantalla {
                 pantallaInicio.setScreen(new PantallaMapa(juego));
             }
         });
+        btnCargar.addListener(new ClickListener(){
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                pantallaInicio.setScreen(new PantallaNivel(pantallaInicio));
+            }
+        });
         escenaMenu.addActor(btnNuevo);
         escenaMenu.addActor(btnBack);
         escenaMenu.addActor(btnCargar);

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -32,6 +33,7 @@ public class PantallaMapa extends Pantalla {
     private final Juego juego;
     private EstadoJuego estado;
     private EscenaPausa escenaPausa;
+    private Music music;
 
     // Mapas
     private TiledMap mapa;      // El mapa
@@ -50,7 +52,7 @@ public class PantallaMapa extends Pantalla {
     @Override
     public void show() {
         cargarMapa();
-        ivan = new Personaje(new Texture("ForestStuff/1V4N_WalkingSprites_64x128.png"));
+        ivan = new Personaje(new Texture("ForestStuff/1V4N_Xaxis.png"));
 
         crearHUD();
         // El input lo maneja la escena
@@ -151,6 +153,7 @@ public class PantallaMapa extends Pantalla {
         float posY = ivan.getY();
         // Primera mitad d
         // e la pantalla
+
         if (posX < ANCHO/2) {
             camara.position.set(ANCHO/2, ALTO_MAPA/2-50, 0);
         }
@@ -181,6 +184,7 @@ public class PantallaMapa extends Pantalla {
     public void dispose() {
         mapa.dispose();
         escenaHUD.dispose();
+        escenaPausa.dispose();
     }
 
     private class EscenaPausa extends Stage{

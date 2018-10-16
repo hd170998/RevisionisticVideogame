@@ -4,7 +4,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class Objeto {
+public class Objeto
+{
     protected Sprite sprite;    // Imagen
 
     public Objeto(Texture textura, float x, float y) {
