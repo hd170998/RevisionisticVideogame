@@ -82,13 +82,15 @@ public class PantallaMapa extends Pantalla {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Touchpad pad = (Touchpad)actor;
-                if (pad.getKnobPercentX() > 0.20) { // Más de 20% de desplazamiento DERECHA
+                ivan.setVx(pad.getKnobPercentX());
+                ivan.setVy(pad.getKnobPercentY());
+                if (pad.getKnobPercentX() > 0.10) { // Más de 20% de desplazamiento DERECHA
                     ivan.setEstadoMover(Personaje.EstadoMovimento.DERECHA);
-                } else if ( pad.getKnobPercentX() < -0.20 ) {   // Más de 20% IZQUIERDA
+                } else if ( pad.getKnobPercentX() < -0.10 ) {   // Más de 20% IZQUIERDA
                     ivan.setEstadoMover(Personaje.EstadoMovimento.IZQUIERDA);
-                } else if (pad.getKnobPercentY()>0.20){
+                } else if (pad.getKnobPercentY() > 0.10){
                     ivan.setEstadoMover(Personaje.EstadoMovimento.ARRIBA);
-                }else if (pad.getKnobPercentY()<-0.20){
+                }else if (pad.getKnobPercentY() < -0.10){
                     ivan.setEstadoMover(Personaje.EstadoMovimento.ABAJO);
                 }
                 else{

@@ -10,12 +10,14 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 
 public class Personaje extends Objeto{
-    private Animation animacion;
+    private Animation animacionX;
+    private Animation animacionY;
     private float timerAnimacion;
     private float x, y;   // coordenadas
     EstadoMovimento estadoMover = EstadoMovimento.QUIETO;
-    private static final float VX = 240;  // Velocidad en x, [pixeles/segundo]
-    private static final float VY = 240;
+    private static float VX;  // Velocidad en x, [pixeles/segundo]
+    private static float VY;
+    public static final float SPEED = 3;
     public enum EstadoMovimento {
         QUIETO,
         DERECHA,
@@ -28,8 +30,12 @@ public class Personaje extends Objeto{
         TextureRegion region = new TextureRegion(textura);
         // Divide la región en frames de 32x64
         TextureRegion[][] texturaPersonaje = region.split(64,128);
-        animacion = new Animation(0.15f,texturaPersonaje[0][3],texturaPersonaje[0][2],texturaPersonaje[0][1]);
-        animacion.setPlayMode(Animation.PlayMode.LOOP);
+        animacionX = new Animation(0.15f,texturaPersonaje[0][2],texturaPersonaje[0][1]);
+        animacionX.setPlayMode(Animation.PlayMode.LOOP);
+        TextureRegion regionYup= new TextureRegion(new Texture("1V4N_YaxisUp.png"));
+        TextureRegion [][] texturaPersonajeYup = regionYup.split(64,128);
+        animacionY = new Animation(0.15f, texturaPersonajeYup[0][2], texturaPersonajeYup[0][1], texturaPersonajeYup[0][0]);
+        animacionY.setPlayMode(Animation.PlayMode.LOOP);
         timerAnimacion = 0;
         // Quieto
         sprite = new Sprite(texturaPersonaje[0][0]);
@@ -41,56 +47,89 @@ public class Personaje extends Objeto{
         if (estadoMover==EstadoMovimento.QUIETO) {
             //batch.draw(marioQuieto.getTexture(),x,y);
             sprite.draw(batch);
-        } else {
+        } else if (estadoMover== EstadoMovimento.DERECHA || estadoMover==EstadoMovimento.IZQUIERDA){
             timerAnimacion += Gdx.graphics.getDeltaTime();
-            TextureRegion region = (TextureRegion) animacion.getKeyFrame(timerAnimacion);
+            TextureRegion region = (TextureRegion) animacionX.getKeyFrame(timerAnimacion);
             if (estadoMover == EstadoMovimento.IZQUIERDA) {
                 region.flip(!region.isFlipX(), false);
             } else if (estadoMover == EstadoMovimento.DERECHA) {
                 region.flip(region.isFlipX(), false);
             }
             batch.draw(region, x, y);
+        }else if (estadoMover== EstadoMovimento.ARRIBA){
+            timerAnimacion += Gdx.graphics.getDeltaTime();
+            TextureRegion regionUP = (TextureRegion) animacionY.getKeyFrame(timerAnimacion);
+            if (estadoMover == EstadoMovimento.ARRIBA) {
+                regionUP.flip(false, regionUP.isFlipY());
+
+            }
         }
     }
     public void actualizar(TiledMap mapa) {
         // Verificar si se puede mover (no hay obstáculos, por ahora tubos verdes)
         switch (estadoMover) {
             case ABAJO:
-                if (puedeMover(VY*Gdx.graphics.getDeltaTime(),mapa)){
-                    moverY(-VY*Gdx.graphics.getDeltaTime());
+                if (puedeMoverY(-1,mapa)){
+                    mover(VX*SPEED, VY*SPEED);
                 }
                 break;
             case ARRIBA:
-                if (puedeMover(VY*Gdx.graphics.getDeltaTime(),mapa)){
-                    moverY((VX*Gdx.graphics.getDeltaTime()));
+                if (puedeMoverY(1,mapa)){
+                    mover(VX*SPEED, VY*SPEED);
                 }
                 break;
             case DERECHA:
-                if (puedeMover(VX*Gdx.graphics.getDeltaTime(),mapa)) {
-                    moverX(VX * Gdx.graphics.getDeltaTime());
+                if (puedeMoverX(1,mapa)) {
+                    mover(VX*SPEED, VX*SPEED);
                 }
                 break;
             case IZQUIERDA:
-                if (puedeMover(VX*Gdx.graphics.getDeltaTime(),mapa)) {
-                    moverX(-VX * Gdx.graphics.getDeltaTime());
+                if (puedeMoverX(-1,mapa)) {
+                    mover(VX*SPEED, VY*SPEED);
                 }
                 break;
         }
     }
 
-    private boolean puedeMover(float dx, TiledMap mapa) {
-        int cx = (int)(getX()+64)/64;
-        int cy = (int)(getY())/64;
-        // Obtener la celda en x,y
-        TiledMapTileLayer capa = (TiledMapTileLayer)mapa.getLayers().get(0);
+    private boolean puedeMoverY(float dy, TiledMap mapa) {
+        int cx = (int)(getX())/32;
+        int cy = (int)(getY()+(dy*32))/32;
+        TiledMapTileLayer capa = (TiledMapTileLayer)mapa.getLayers().get(1);
         TiledMapTileLayer.Cell celda = capa.getCell(cx,cy);
-        Object material = celda.getTile().getProperties().get("material");
-        Gdx.app.log("tipo",material+"");
-        if (!"Solido".equals(material)) {
-            // No es obstáculo, puede pasar
-            return true;
+        // Obtener la celda en x,y
+        if (celda!=null){
+            Object material = celda.getTile().getProperties().get("Material");
+            Gdx.app.log("tipo",material+"");
+            if (!"Solido".equals(material)) {
+                // No es obstáculo, puede pasar
+                return true;
+            }
+            else{
+                return false;
+            }
         }
-        return false;
+        return true;
+
+    }
+
+    private boolean puedeMoverX(float dx, TiledMap mapa) {
+        int cx = (int)(getX()+(dx*32))/32;
+        int cy = (int)(getY())/32;
+        TiledMapTileLayer capa = (TiledMapTileLayer)mapa.getLayers().get(1);
+        TiledMapTileLayer.Cell celda = capa.getCell(cx,cy);
+        // Obtener la celda en x,y
+        if (celda!=null){
+            Object material = celda.getTile().getProperties().get("Material");
+            Gdx.app.log("tipo",material+"");
+            if (!"Solido".equals(material)) {
+                // No es obstáculo, puede pasar
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        return true;
     }
 
     public float getX() {return x;}
@@ -109,15 +148,18 @@ public class Personaje extends Objeto{
         sprite.setPosition(x,y);
     }
 
-    public void moverX(float dx) {
+    public void mover(float dx, float dy) {
         x += dx;
-        sprite.setPosition(x,y);
-    }
-    public void moverY(float dy){
         y += dy;
-        sprite.setPosition(x,y);
+        sprite.setPosition(x, y);
+    }
+    public void setVx(float VX) {
+        this.VX = VX;
     }
 
+    public void setVy(float VY) {
+        this.VY = VY;
+    }
     public void setEstadoMover(EstadoMovimento estadoMover) {
         this.estadoMover = estadoMover;
     }
