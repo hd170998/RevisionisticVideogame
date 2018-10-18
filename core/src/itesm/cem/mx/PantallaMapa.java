@@ -29,7 +29,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class PantallaMapa extends Pantalla {
     private static final float ANCHO_MAPA = 4800;
-    private static final float ALTO_MAPA = 2600;
+    private static final float ALTO_MAPA = 2560;
     private final Juego juego;
     private EstadoJuego estado;
     private EscenaPausa escenaPausa;
@@ -157,14 +157,27 @@ public class PantallaMapa extends Pantalla {
         // e la pantalla
 
         if (posX < ANCHO/2) {
-            camara.position.set(ANCHO/2, ALTO_MAPA/2-50, 0);
+            camara.position.x = ANCHO/2;
         }
-        else if (posX > ANCHO_MAPA - ANCHO/2 && posY > ALTO_MAPA/2-50) {   // Última mitad de la pantalla
-            camara.position.set(ANCHO_MAPA-ANCHO/2,ALTO_MAPA-ALTO/2,0);
+        else if (posX > ANCHO_MAPA - ANCHO/2) {   // Última mitad de la pantalla
+            camara.position.x = ANCHO_MAPA-ANCHO/2;
         }
         else {// En 'medio' del mapa
-            camara.position.set(posX,posY,0);
+            camara.position.x= posX;
         }
+        if(posY == 1250){
+            camara.position.y = 1250;
+        }
+        else if (posY > ALTO_MAPA -ALTO/2){
+            camara.position.y = ALTO_MAPA -ALTO/2;
+        }
+        else if (posY < ALTO/2){
+            camara.position.y = ALTO/2;
+        }
+        else{
+            camara.position.y= posY;
+        }
+
         camara.update();
     }
     @Override
@@ -186,11 +199,52 @@ public class PantallaMapa extends Pantalla {
     public void dispose() {
         mapa.dispose();
         escenaHUD.dispose();
-        escenaPausa.dispose();
     }
 
-    private class EscenaPausa extends Stage{
 
+    private class ProcesadorEntrada implements InputProcessor {
+        @Override
+        public boolean keyDown(int keycode) {
+            return false;
+        }
+
+        @Override
+        public boolean keyUp(int keycode) {
+            return false;
+        }
+
+        @Override
+        public boolean keyTyped(char character) {
+            return false;
+        }
+
+        @Override
+        public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+            return false;
+        }
+
+        @Override
+        public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+            return false;
+        }
+
+        @Override
+        public boolean touchDragged(int screenX, int screenY, int pointer) {
+            return false;
+        }
+
+        @Override
+        public boolean mouseMoved(int screenX, int screenY) {
+            return false;
+        }
+
+        @Override
+        public boolean scrolled(int amount) {
+            return false;
+        }
+    }
+
+    private class EscenaPausa extends Stage {
         public EscenaPausa(Viewport vista, Batch batch) {
             super(vista,batch);
             //transparente
@@ -234,48 +288,6 @@ public class PantallaMapa extends Pantalla {
                 }
             });
             this.addActor(btnResume);
-        }
-    }
-
-    private class ProcesadorEntrada implements InputProcessor {
-        @Override
-        public boolean keyDown(int keycode) {
-            return false;
-        }
-
-        @Override
-        public boolean keyUp(int keycode) {
-            return false;
-        }
-
-        @Override
-        public boolean keyTyped(char character) {
-            return false;
-        }
-
-        @Override
-        public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-            return false;
-        }
-
-        @Override
-        public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-            return false;
-        }
-
-        @Override
-        public boolean touchDragged(int screenX, int screenY, int pointer) {
-            return false;
-        }
-
-        @Override
-        public boolean mouseMoved(int screenX, int screenY) {
-            return false;
-        }
-
-        @Override
-        public boolean scrolled(int amount) {
-            return false;
         }
     }
 }

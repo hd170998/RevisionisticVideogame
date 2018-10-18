@@ -12,13 +12,14 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 public class Personaje extends Objeto{
     private Animation animacionX;
     private Animation animacionY;
+    private Animation animacionYD;
     private float timerAnimacion;
     private float x, y;   // coordenadas
     EstadoMovimento estadoMover = EstadoMovimento.QUIETO;
     private static float VX;  // Velocidad en x, [pixeles/segundo]
     private static float VY;
-    public static final float SPEED = 3;
-    public enum EstadoMovimento {
+    public static final float SPEED = 10;
+        public enum EstadoMovimento {
         QUIETO,
         DERECHA,
         IZQUIERDA,
@@ -36,6 +37,10 @@ public class Personaje extends Objeto{
         TextureRegion [][] texturaPersonajeYup = regionYup.split(64,128);
         animacionY = new Animation(0.15f, texturaPersonajeYup[0][2], texturaPersonajeYup[0][1], texturaPersonajeYup[0][0]);
         animacionY.setPlayMode(Animation.PlayMode.LOOP);
+        TextureRegion regionDown = new TextureRegion(new Texture("1V4N_YaxisDown.png"));
+        TextureRegion [][] texturaPersonajeDown = regionDown.split(64,128);
+        animacionYD = new Animation(0.15f,texturaPersonajeDown[0][2], texturaPersonajeDown[0][1], texturaPersonajeDown[0][0]);
+        animacionYD.setPlayMode((animacionYD.getPlayMode().LOOP));
         timerAnimacion = 0;
         // Quieto
         sprite = new Sprite(texturaPersonaje[0][0]);
@@ -61,60 +66,44 @@ public class Personaje extends Objeto{
             TextureRegion regionUP = (TextureRegion) animacionY.getKeyFrame(timerAnimacion);
             if (estadoMover == EstadoMovimento.ARRIBA) {
                 regionUP.flip(false, regionUP.isFlipY());
-
             }
+            batch.draw(regionUP, x, y);
+        }else if (estadoMover == EstadoMovimento.ABAJO){
+            timerAnimacion += Gdx.graphics.getDeltaTime();
+            TextureRegion regionDown = (TextureRegion) animacionYD.getKeyFrame(timerAnimacion);
+            batch.draw(regionDown, x, y);
         }
     }
     public void actualizar(TiledMap mapa) {
         // Verificar si se puede mover (no hay obstáculos, por ahora tubos verdes)
         switch (estadoMover) {
             case ABAJO:
-                if (puedeMoverY(-1,mapa)){
+                if (puedeMover(0,-1,mapa)){
                     mover(VX*SPEED, VY*SPEED);
                 }
                 break;
             case ARRIBA:
-                if (puedeMoverY(1,mapa)){
+                if (puedeMover(0,1,mapa)){
                     mover(VX*SPEED, VY*SPEED);
                 }
                 break;
             case DERECHA:
-                if (puedeMoverX(1,mapa)) {
-                    mover(VX*SPEED, VX*SPEED);
+                if (puedeMover(1,0,mapa)) {
+
+                    mover(VX*SPEED, VY*SPEED);
                 }
                 break;
             case IZQUIERDA:
-                if (puedeMoverX(-1,mapa)) {
+                if (puedeMover(-1,0,mapa)) {
                     mover(VX*SPEED, VY*SPEED);
                 }
                 break;
         }
     }
 
-    private boolean puedeMoverY(float dy, TiledMap mapa) {
-        int cx = (int)(getX())/32;
-        int cy = (int)(getY()+(dy*32))/32;
-        TiledMapTileLayer capa = (TiledMapTileLayer)mapa.getLayers().get(1);
-        TiledMapTileLayer.Cell celda = capa.getCell(cx,cy);
-        // Obtener la celda en x,y
-        if (celda!=null){
-            Object material = celda.getTile().getProperties().get("Material");
-            Gdx.app.log("tipo",material+"");
-            if (!"Solido".equals(material)) {
-                // No es obstáculo, puede pasar
-                return true;
-            }
-            else{
-                return false;
-            }
-        }
-        return true;
-
-    }
-
-    private boolean puedeMoverX(float dx, TiledMap mapa) {
+    private boolean puedeMover(float dx,float dy, TiledMap mapa) {
         int cx = (int)(getX()+(dx*32))/32;
-        int cy = (int)(getY())/32;
+        int cy = (int)(getY()+(dy*32))/32;
         TiledMapTileLayer capa = (TiledMapTileLayer)mapa.getLayers().get(1);
         TiledMapTileLayer.Cell celda = capa.getCell(cx,cy);
         // Obtener la celda en x,y
