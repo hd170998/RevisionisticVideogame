@@ -52,12 +52,21 @@ public class PantallaMapa extends Pantalla {
     @Override
     public void show() {
         cargarMapa();
+        cargaMusica();
         ivan = new Personaje(new Texture("ForestStuff/1V4N_Xaxis.png"));
-
         crearHUD();
         // El input lo maneja la escena
         Gdx.input.setInputProcessor(escenaHUD);
 
+    }
+
+    private void cargaMusica() {
+        AssetManager manager = new AssetManager();
+        manager.load("Scary-Forest.mp3", Music.class);
+        manager.finishLoading();
+        music = manager.get("Scary-Forest.mp3");
+        music.setLooping(true);
+        music.play();
     }
 
     private void crearHUD() {

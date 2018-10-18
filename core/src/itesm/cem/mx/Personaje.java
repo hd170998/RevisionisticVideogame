@@ -18,7 +18,7 @@ public class Personaje extends Objeto{
     EstadoMovimento estadoMover = EstadoMovimento.QUIETO;
     private static float VX;  // Velocidad en x, [pixeles/segundo]
     private static float VY;
-    public static final float SPEED = 10;
+    public static final float SPEED = 5;
         public enum EstadoMovimento {
         QUIETO,
         DERECHA,
