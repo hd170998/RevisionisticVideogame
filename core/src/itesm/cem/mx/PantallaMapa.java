@@ -115,9 +115,9 @@ public class PantallaMapa extends Pantalla {
         btnPausa.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                    escenaPausa = new EscenaPausa(vista, batch);
+                escenaPausa = new EscenaPausa(vista, batch);
+                pause();
                 // PASA EL CONTROL A LA ESCENA
-                estado = EstadoJuego.PAUSADO;
             }
         });
 
@@ -196,6 +196,7 @@ public class PantallaMapa extends Pantalla {
     }
     @Override
     public void pause() {
+        this.estado = estado.PAUSADO;
 
     }
 

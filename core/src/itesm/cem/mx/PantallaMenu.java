@@ -33,9 +33,9 @@ class PantallaMenu extends Pantalla {
 
     private void cargarMusica() {
         AssetManager manager = new AssetManager();
-        manager.load("Menu.mp3", Music.class);
+        manager.load("audio/Menu.mp3", Music.class);
         manager.finishLoading();
-        music = manager.get("Menu.mp3");
+        music = manager.get("audio/Menu.mp3");
         music.setLooping(true);
         music.play();
     }
