@@ -57,7 +57,6 @@ public class PantallaMapa extends Pantalla {
         crearHUD();
         // El input lo maneja la escena
         Gdx.input.setInputProcessor(escenaHUD);
-
     }
 
     private void cargaMusica() {
@@ -116,6 +115,8 @@ public class PantallaMapa extends Pantalla {
         btnPausa.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
+                    escenaPausa = new EscenaPausa(vista, batch);
+                // PASA EL CONTROL A LA ESCENA
                 estado = EstadoJuego.PAUSADO;
             }
         });
@@ -151,7 +152,6 @@ public class PantallaMapa extends Pantalla {
         batch.end();
         batch.setProjectionMatrix(camaraHUD.combined);
         escenaHUD.draw();
-
         // Botón PAUSA
         if (estado==EstadoJuego.PAUSADO) {
             escenaPausa.draw(); // Solo si está pausado muestra la image
@@ -208,6 +208,8 @@ public class PantallaMapa extends Pantalla {
     public void dispose() {
         mapa.dispose();
         escenaHUD.dispose();
+        music.dispose();
+        escenaPausa.dispose();
     }
 
 

@@ -1,6 +1,8 @@
 package itesm.cem.mx;
 import com.badlogic.gdx.Gdx;
 
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -16,6 +18,7 @@ class PantallaMenu extends Pantalla {
     private Texture textFondo;
     private Texture title;
     private SpriteBatch batch;
+    private Music music;
 
     public PantallaMenu(PantallaInicio pantallaInicio) {
         this.pantallaInicio=pantallaInicio;
@@ -24,7 +27,17 @@ class PantallaMenu extends Pantalla {
     @Override
     public void show() {
         crearEscena();
+        cargarMusica();
         Gdx.input.setInputProcessor(escenaMenu);
+    }
+
+    private void cargarMusica() {
+        AssetManager manager = new AssetManager();
+        manager.load("Menu.mp3", Music.class);
+        manager.finishLoading();
+        music = manager.get("Menu.mp3");
+        music.setLooping(true);
+        music.play();
     }
 
     private void crearEscena() {
@@ -116,5 +129,6 @@ class PantallaMenu extends Pantalla {
 
     @Override
     public void dispose() {
+        music.dispose();
     }
 }

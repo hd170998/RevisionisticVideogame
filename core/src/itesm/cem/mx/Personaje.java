@@ -19,6 +19,8 @@ public class Personaje extends Objeto{
     private static float VX;  // Velocidad en x, [pixeles/segundo]
     private static float VY;
     public static final float SPEED = 5;
+    public int life;
+
         public enum EstadoMovimento {
         QUIETO,
         DERECHA,
