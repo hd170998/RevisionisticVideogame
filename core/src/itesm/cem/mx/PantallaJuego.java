@@ -41,13 +41,6 @@ class PantallaJuego extends Pantalla {
         batch = new SpriteBatch();
         escenaMenu=new Stage(vista);
         //aniamcion Transicion
-        regions[0] = new TextureRegion(new Texture("Teeth01.png"));
-        regions[1] = new TextureRegion(new Texture("Teeth02.png"));
-        regions[2] = new TextureRegion(new Texture("Teeth03.png"));
-        regions[3] = new TextureRegion(new Texture("Teeth04.png"));
-        regions[4] = new TextureRegion(new Texture("Teeth05.png"));
-        animation = new Animation(0.15f,regions[0],regions[1],regions[2],regions[3],regions[4]);
-        animation.setPlayMode(Animation.PlayMode.LOOP);
         elapsedTime = 0;
         textFondo = new Texture("SecondScreen.png");
         //fondo

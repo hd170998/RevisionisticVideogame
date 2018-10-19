@@ -61,9 +61,9 @@ public class PantallaMapa extends Pantalla {
 
     private void cargaMusica() {
         AssetManager manager = new AssetManager();
-        manager.load("Scary-Forest.mp3", Music.class);
+        manager.load("audio/Scary-Forest.mp3", Music.class);
         manager.finishLoading();
-        music = manager.get("Scary-Forest.mp3");
+        music = manager.get("audio/Scary-Forest.mp3");
         music.setLooping(true);
         music.play();
     }
@@ -115,8 +115,13 @@ public class PantallaMapa extends Pantalla {
         btnPausa.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                escenaPausa = new EscenaPausa(vista, batch);
-                pause();
+                Gdx.app.log("paso", "si");
+                if (escenaPausa == null){
+                    Gdx.app.log("render","si");
+                    escenaPausa = new EscenaPausa(vista, batch);
+                }
+                estado = EstadoJuego.PAUSADO;
+                Gdx.input.setInputProcessor(escenaPausa);
                 // PASA EL CONTROL A LA ESCENA
             }
         });
@@ -153,8 +158,8 @@ public class PantallaMapa extends Pantalla {
         batch.setProjectionMatrix(camaraHUD.combined);
         escenaHUD.draw();
         // Botón PAUSA
-        if (estado==EstadoJuego.PAUSADO) {
-            escenaPausa.draw(); // Solo si está pausado muestra la image
+        if (estado == EstadoJuego.PAUSADO){
+            escenaPausa.draw();
         }
     }
 
@@ -296,7 +301,7 @@ public class PantallaMapa extends Pantalla {
                 public void clicked(InputEvent event, float x, float y) {
                     // Regresa al juego
                     estado = EstadoJuego.JUGANDO;
-                    Gdx.input.setInputProcessor(new ProcesadorEntrada()); // No debería crear uno nuevo
+                    Gdx.input.setInputProcessor(escenaHUD); // No debería crear uno nuevo
                 }
             });
             this.addActor(btnResume);

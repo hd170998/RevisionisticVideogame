@@ -18,7 +18,7 @@ class PantallaMenu extends Pantalla {
     private Texture textFondo;
     private Texture title;
     private SpriteBatch batch;
-    private Music music;
+    public Music music;
 
     public PantallaMenu(PantallaInicio pantallaInicio) {
         this.pantallaInicio=pantallaInicio;

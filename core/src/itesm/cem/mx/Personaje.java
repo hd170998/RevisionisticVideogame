@@ -13,6 +13,7 @@ public class Personaje extends Objeto{
     private Animation animacionX;
     private Animation animacionY;
     private Animation animacionYD;
+    private Animation animacionXA;
     private float timerAnimacion;
     private float x, y;   // coordenadas
     EstadoMovimento estadoMover = EstadoMovimento.QUIETO;
@@ -26,7 +27,8 @@ public class Personaje extends Objeto{
         DERECHA,
         IZQUIERDA,
         ARRIBA,
-        ABAJO
+        ABAJO,
+        ATAQUEX
     }
     public Personaje(Texture textura) {
         // Crea una region
@@ -42,7 +44,11 @@ public class Personaje extends Objeto{
         TextureRegion regionDown = new TextureRegion(new Texture("1V4N_YaxisDown.png"));
         TextureRegion [][] texturaPersonajeDown = regionDown.split(64,128);
         animacionYD = new Animation(0.15f,texturaPersonajeDown[0][2], texturaPersonajeDown[0][1], texturaPersonajeDown[0][0]);
-        animacionYD.setPlayMode((animacionYD.getPlayMode().LOOP));
+        animacionYD.setPlayMode((Animation.PlayMode.LOOP));
+        TextureRegion ataquex = new TextureRegion(new Texture("Saw/SawSword_XaxisSingle.png"));
+        TextureRegion[][] regionesAtaqueX = ataquex.split(126,134);
+        animacionXA = new Animation(0.15f, regionesAtaqueX[0][1],regionesAtaqueX[0][0]);
+        animacionXA.setPlayMode((Animation.PlayMode.LOOP));
         timerAnimacion = 0;
         // Quieto
         sprite = new Sprite(texturaPersonaje[0][0]);
@@ -74,6 +80,8 @@ public class Personaje extends Objeto{
             timerAnimacion += Gdx.graphics.getDeltaTime();
             TextureRegion regionDown = (TextureRegion) animacionYD.getKeyFrame(timerAnimacion);
             batch.draw(regionDown, x, y);
+        }else if (estadoMover == EstadoMovimento.ATAQUEX){
+
         }
     }
     public void actualizar(TiledMap mapa) {
