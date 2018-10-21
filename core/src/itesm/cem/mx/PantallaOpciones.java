@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import javafx.scene.control.Alert;
 
 public class PantallaOpciones extends Pantalla {
     private final PantallaInicio pantallaInicio;
@@ -32,7 +33,8 @@ public class PantallaOpciones extends Pantalla {
         batch = new SpriteBatch();
         escenaOpciones = new Stage(vista);
         textFondo = new Texture("SecondScreen.png");
-        baseOpciones = new Texture("SettingsBase.png");
+        baseOpciones = new Texture("Options/SettingsBase.png");
+
         //btn regreso
         Texture BtnBack=new Texture("BackButton01.png");
         TextureRegionDrawable tback= new TextureRegionDrawable(new TextureRegion(BtnBack));
@@ -49,8 +51,10 @@ public class PantallaOpciones extends Pantalla {
         Drawable regionMusic = new TextureRegionDrawable(new TextureRegion(new Texture("ButtonMusic_On.png")));
         Drawable regionMusicOP = new TextureRegionDrawable(new TextureRegion( new Texture("ButtonMusic_Off.png")));
         ImageButton btnMusic = new ImageButton(regionMusic,regionMusicOP);
+        btnMusic.setPosition(ANCHO/2-btnMusic.getWidth()/2,5*ALTO/8);
 
         escenaOpciones.addActor(btnBack);
+        escenaOpciones.addActor(btnMusic);
     }
 
     @Override

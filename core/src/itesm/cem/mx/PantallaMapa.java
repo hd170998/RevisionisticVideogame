@@ -1,15 +1,16 @@
 package itesm.cem.mx;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -26,14 +27,17 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.objects.TextureMapObject;
 
 public class PantallaMapa extends Pantalla {
     private static final float ANCHO_MAPA = 4800;
     private static final float ALTO_MAPA = 2560;
-    private final Juego juego;
+    private final PantallaInicio pantallaInicio;
     private EstadoJuego estado;
     private EscenaPausa escenaPausa;
     private Music music;
+    private MapLayer objectLayer;
 
     // Mapas
     private TiledMap mapa;      // El mapa
@@ -45,16 +49,15 @@ public class PantallaMapa extends Pantalla {
     private Viewport vistaHUD;
     // HUD con una escena para los botones y componentes
     private Stage escenaHUD;    // Tendrá un Pad virtual para mover al personaje y el botón de Pausa
-    public PantallaMapa(Juego juego) {
-        this.juego = juego;
-    }
+
+    public PantallaMapa(PantallaInicio pantallaInicio) { this.pantallaInicio = pantallaInicio;}
 
     @Override
     public void show() {
         cargarMapa();
         cargaMusica();
-        ivan = new Personaje(new Texture("ForestStuff/1V4N_Xaxis.png"));
         crearHUD();
+        ivan = new Personaje(new Texture("ForestStuff/1V4N_Xaxis.png"));
         // El input lo maneja la escena
         Gdx.input.setInputProcessor(escenaHUD);
     }
@@ -62,6 +65,7 @@ public class PantallaMapa extends Pantalla {
     private void cargaMusica() {
         AssetManager manager = new AssetManager();
         manager.load("audio/Scary-Forest.mp3", Music.class);
+        manager.load("audio/saw-audio.mp3",Sound.class);
         manager.finishLoading();
         music = manager.get("audio/Scary-Forest.mp3");
         music.setLooping(true);
@@ -115,14 +119,28 @@ public class PantallaMapa extends Pantalla {
         btnPausa.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                Gdx.app.log("paso", "si");
                 if (escenaPausa == null){
-                    Gdx.app.log("render","si");
-                    escenaPausa = new EscenaPausa(vista, batch);
+                    escenaPausa = new EscenaPausa(vistaHUD, batch);
                 }
                 estado = EstadoJuego.PAUSADO;
                 Gdx.input.setInputProcessor(escenaPausa);
                 // PASA EL CONTROL A LA ESCENA
+            }
+        });
+        Drawable regionAtaque = new TextureRegionDrawable(new TextureRegion(new Texture("atacar.png")));
+        Drawable regionAtaqueOP = new TextureRegionDrawable(new TextureRegion( new Texture("atacar.png")));
+        final ImageButton btnAtaque = new ImageButton(regionAtaque,regionAtaqueOP);
+        btnAtaque.setPosition(ANCHO-btnAtaque.getWidth(),btnAtaque.getHeight());
+        btnAtaque.addListener(new ClickListener(){
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                if(btnAtaque.isChecked()){
+                    ivan.setEstadoMover(Personaje.EstadoMovimento.ATAQUEX);
+                    btnAtaque.setChecked(true);
+                } else {
+                    ivan.setEstadoMover(Personaje.EstadoMovimento.QUIETO);
+                    btnAtaque.setChecked(false);
+                }
             }
         });
 
@@ -130,15 +148,17 @@ public class PantallaMapa extends Pantalla {
         escenaHUD = new Stage(vistaHUD);    // Escalar con esta vista
         escenaHUD.addActor(btnPausa);
         escenaHUD.addActor(pad);
+        escenaHUD.addActor(btnAtaque);
 
     }
 
     private void cargarMapa() {
         AssetManager manager = new AssetManager();
         manager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-        manager.load("ForestMap.tmx",TiledMap.class);
+        manager.load("ForestStuff/ForestMap.tmx",TiledMap.class);
         manager.finishLoading(); // Espera
-        mapa = manager.get("ForestMap.tmx");
+        mapa = manager.get("ForestStuff/ForestMap.tmx");
+        objectLayer = mapa.getLayers().get("1V4N");
         renderer = new OrthogonalTiledMapRenderer(mapa);
     }
 
@@ -216,86 +236,55 @@ public class PantallaMapa extends Pantalla {
         escenaHUD.dispose();
         music.dispose();
         escenaPausa.dispose();
+
     }
-
-
-    private class ProcesadorEntrada implements InputProcessor {
-        @Override
-        public boolean keyDown(int keycode) {
-            return false;
-        }
-
-        @Override
-        public boolean keyUp(int keycode) {
-            return false;
-        }
-
-        @Override
-        public boolean keyTyped(char character) {
-            return false;
-        }
-
-        @Override
-        public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-            return false;
-        }
-
-        @Override
-        public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-            return false;
-        }
-
-        @Override
-        public boolean touchDragged(int screenX, int screenY, int pointer) {
-            return false;
-        }
-
-        @Override
-        public boolean mouseMoved(int screenX, int screenY) {
-            return false;
-        }
-
-        @Override
-        public boolean scrolled(int amount) {
-            return false;
-        }
-    }
-
     private class EscenaPausa extends Stage {
-        public EscenaPausa(Viewport vista, Batch batch) {
-            super(vista,batch);
+        public EscenaPausa(Viewport vistaHUD, Batch batch) {
+            super(vistaHUD,batch);
             //transparente
-            Pixmap pixmap = new Pixmap((int)(ANCHO*0.7f), (int)(ALTO*0.8f), Pixmap.Format.RGBA8888 );
+            Pixmap pixmap = new Pixmap((int)(ANCHO), (int)(ALTO), Pixmap.Format.RGBA8888 );
             pixmap.setColor( 1f, 1f, 1f, 0.65f );
             pixmap.fillRectangle(0, 0, pixmap.getWidth(), pixmap.getHeight());
             Texture texturaRectangulo = new Texture( pixmap );
             pixmap.dispose();
             Image imgRectangulo = new Image(texturaRectangulo);
-            imgRectangulo.setPosition(0.15f*ANCHO, 0.1f*ALTO);
+            imgRectangulo.setPosition(0, 0);
             this.addActor(imgRectangulo);
-            //boton back
-            Texture BtnBack=new Texture("BackButton01.png");
-            TextureRegionDrawable tback= new TextureRegionDrawable(new TextureRegion(BtnBack));
-            Texture BtnBackOP = new Texture("BackButton02HOVER.png");
-            TextureRegionDrawable tbackop = new TextureRegionDrawable(new TextureRegion(BtnBackOP));
-            ImageButton btnBack = new ImageButton(tback,tbackop);
-            btnBack.setPosition(ANCHO/2-btnBack.getWidth()/2, ALTO/2);
-            btnBack.addListener(new ClickListener(){
+            //base Settings
+            Texture baseOpciones = new Texture("Options/SettingsBase.png");
+            Image Opcion = new Image(baseOpciones);
+            Opcion.setPosition(ANCHO/2-baseOpciones.getWidth()/2, ALTO/2-baseOpciones.getHeight()/2);
+            this.addActor(Opcion);
+            //boton Musica
+            Drawable regionMusic = new TextureRegionDrawable(new TextureRegion(new Texture("ButtonMusic_On.png")));
+            Drawable regionMusicOP = new TextureRegionDrawable(new TextureRegion( new Texture("ButtonMusic_Off.png")));
+            final ImageButton btnMusic = new ImageButton(regionMusic,regionMusicOP, regionMusicOP);
+            btnMusic.setPosition(ANCHO/2-btnMusic.getWidth()/2,5*ALTO/8);
+            btnMusic.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    // Regresa al menú
-                    juego.setScreen(new PantallaMapa(juego));
+                    if (btnMusic.isChecked()){
+                        btnMusic.setChecked(true);
+                        music.pause();
+                    }
+                    else {
+                        btnMusic.setChecked(false);
+                        music.play();
+                    }
                 }
             });
-            this.addActor(btnBack);
-
-            // boton resume
-            Texture BtnResume=new Texture("BackButton01.png");
-            TextureRegionDrawable tresume= new TextureRegionDrawable(new TextureRegion(BtnResume));
-            Texture BtnresumeOP = new Texture("BackButton02HOVER.png");
-            TextureRegionDrawable tresumeop = new TextureRegionDrawable(new TextureRegion(BtnresumeOP));
-            ImageButton btnResume = new ImageButton(tresume,tresumeop);
-            btnResume.setPosition(ANCHO/2-btnResume.getWidth()/2, ALTO/4);
+            this.addActor(btnMusic);
+            //boton sound FX
+            Drawable regionSound = new TextureRegionDrawable(new TextureRegion(new Texture("ButtonSoundFX_ON.png")));
+            Drawable regionSoundOP = new TextureRegionDrawable(new TextureRegion(new Texture("ButtonSoundFX_OFF.png")));
+            ImageButton btnSound = new ImageButton(regionSound,regionSoundOP);
+            btnSound.setPosition(ANCHO/2-btnSound.getWidth()/2,4*ALTO/8);
+            this.addActor(btnSound);
+            //boton resume
+            Drawable regionResume = new TextureRegionDrawable(new TextureRegion(new Texture("ButtonResume_Normal.png")));
+            Drawable regionResumeOP = new TextureRegionDrawable(new TextureRegion(new Texture("ButtonResume_Click.png")));
+            ImageButton btnResume = new ImageButton(regionResume,regionResumeOP);
+            btnResume.setPosition(ANCHO/2-btnSound.getWidth()/2,1*ALTO/4);
             btnResume.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
@@ -305,6 +294,47 @@ public class PantallaMapa extends Pantalla {
                 }
             });
             this.addActor(btnResume);
+            //boton credits
+            Drawable regionCredits = new TextureRegionDrawable(new TextureRegion(new Texture("ButtonCredits_Normal.png")));
+            Drawable regionCreditsOP = new TextureRegionDrawable(new TextureRegion(new Texture("ButtonCredits_Click.png")));
+            ImageButton  btnCredits = new ImageButton(regionCredits, regionCreditsOP);
+            btnCredits.setPosition(ANCHO/2-btnSound.getWidth()/2,1*ALTO/8);
+            btnCredits.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    pantallaInicio.setScreen (new PantallaCreditos(pantallaInicio));
+                }
+            });
+            this.addActor(btnCredits);
+
+            //boton Menu
+            Drawable regionMenu = new TextureRegionDrawable(new TextureRegion(new Texture("ButtonCredits_Normal.png")));
+            Drawable regionMenuOP = new TextureRegionDrawable(new TextureRegion(new Texture("ButtonCredits_Click.png")));
+            ImageButton  btnMenu = new ImageButton(regionMenu, regionMenuOP);
+            btnMenu.setPosition(ANCHO/2-btnSound.getWidth()/2,1*ALTO/8);
+            btnMenu.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    pantallaInicio.setScreen (new PantallaMenu(pantallaInicio));
+                }
+            });
+            // boton back
+            Texture BtnBACK=new Texture("BackButton01.png");
+            TextureRegionDrawable tBACK= new TextureRegionDrawable(new TextureRegion(BtnBACK));
+            Texture BtnresumeOP = new Texture("BackButton02HOVER.png");
+            TextureRegionDrawable tBACKop = new TextureRegionDrawable(new TextureRegion(BtnresumeOP));
+            ImageButton btnBACK = new ImageButton(tBACK,tBACKop);
+            btnBACK.setPosition(btnBACK.getWidth()/2, ALTO-btnBACK.getHeight());
+            btnBACK.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    // Regresa al juego
+                    estado = EstadoJuego.JUGANDO;
+                    Gdx.input.setInputProcessor(escenaHUD); // No debería crear uno nuevo
+                }
+            });
+            this.addActor(btnBACK);
+
         }
     }
 }

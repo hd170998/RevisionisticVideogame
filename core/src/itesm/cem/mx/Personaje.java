@@ -1,6 +1,8 @@
 package itesm.cem.mx;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -8,8 +10,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.Disposable;
 
-public class Personaje extends Objeto{
+public class Personaje extends Objeto {
     private Animation animacionX;
     private Animation animacionY;
     private Animation animacionYD;
@@ -21,8 +25,9 @@ public class Personaje extends Objeto{
     private static float VY;
     public static final float SPEED = 5;
     public int life;
+    private Sound saw;
 
-        public enum EstadoMovimento {
+    public enum EstadoMovimento {
         QUIETO,
         DERECHA,
         IZQUIERDA,
@@ -48,13 +53,17 @@ public class Personaje extends Objeto{
         TextureRegion ataquex = new TextureRegion(new Texture("Saw/SawSword_XaxisSingle.png"));
         TextureRegion[][] regionesAtaqueX = ataquex.split(126,134);
         animacionXA = new Animation(0.15f, regionesAtaqueX[0][1],regionesAtaqueX[0][0]);
-        animacionXA.setPlayMode((Animation.PlayMode.LOOP));
+        animacionXA.setPlayMode((Animation.PlayMode.LOOP_PINGPONG));
         timerAnimacion = 0;
         // Quieto
         sprite = new Sprite(texturaPersonaje[0][0]);
         sprite.setPosition(64,1250);
         x = 64;
         y = 1250;
+        AssetManager manager = new AssetManager();
+        manager.load("audio/saw-audio.mp3",Sound.class);
+        manager.finishLoading();
+        saw = manager.get("audio/saw-audio.mp3",Sound.class);
     }
     public void render(SpriteBatch batch) {
         if (estadoMover==EstadoMovimento.QUIETO) {
@@ -81,6 +90,9 @@ public class Personaje extends Objeto{
             TextureRegion regionDown = (TextureRegion) animacionYD.getKeyFrame(timerAnimacion);
             batch.draw(regionDown, x, y);
         }else if (estadoMover == EstadoMovimento.ATAQUEX){
+            timerAnimacion += Gdx.graphics.getDeltaTime();
+            TextureRegion regionAtaque = (TextureRegion) animacionXA.getKeyFrame(timerAnimacion);
+            batch.draw(regionAtaque, x, y);
 
         }
     }
@@ -119,7 +131,6 @@ public class Personaje extends Objeto{
         // Obtener la celda en x,y
         if (celda!=null){
             Object material = celda.getTile().getProperties().get("Material");
-            Gdx.app.log("tipo",material+"");
             if (!"Solido".equals(material)) {
                 // No es obstáculo, puede pasar
                 return true;
