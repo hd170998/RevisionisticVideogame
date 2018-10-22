@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import javafx.scene.control.Alert;
+
 
 public class PantallaOpciones extends Pantalla {
     private final PantallaInicio pantallaInicio;
