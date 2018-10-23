@@ -26,13 +26,31 @@ public class PantallaCreditos extends Pantalla {
         Title = new Texture("LogoSecondScreen.png");
         stage = new Stage(vista);
         font = new BitmapFont(Gdx.files.internal("Letra.fnt"));
+        //Credits
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = font;
         labelStyle.fontColor = Color.valueOf("#77ff72");
         label = new Label("Credits", labelStyle);
-        label.setPosition(ANCHO/2- label.getWidth()/2, ALTO-label.getPrefHeight());
-        label.setAlignment(Align.center);
         stage.addActor(label);
+        //
+        Label.LabelStyle labelStyle1 = new Label.LabelStyle();
+        labelStyle1.font = font;
+        labelStyle1.fontColor = Color.valueOf("#72ffcb");
+        Label label1 = new Label("*The Team",labelStyle1);
+        label1 .setPosition(label.getWidth(), 6*ALTO/8);
+        label1.setAlignment(Align.center);
+        label.setPosition(ANCHO/2- label.getWidth()/2, ALTO-label.getPrefHeight());
+        label.setAlignment(Align.left);
+        stage.addActor(label1);
+        //Coders
+        Label.LabelStyle labelStyle2 = new Label.LabelStyle();
+        labelStyle2.font = font;
+        labelStyle2.fontColor = Color.valueOf("49fbff");
+        Label label2 = new Label("==> Coders:", labelStyle2);
+        label2.setPosition(label2.getWidth()/2, 5*ALTO/8);
+        label2.setAlignment(Align.left);
+        stage.addActor(label2);
+
 
 
     }

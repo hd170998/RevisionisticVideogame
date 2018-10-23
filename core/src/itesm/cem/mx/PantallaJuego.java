@@ -19,9 +19,6 @@ class PantallaJuego extends Pantalla {
     //fondo de pantalla
     private Texture textFondo;
     private Stage escenaMenu;
-    private Animation animation;
-    private TextureRegion[] regions;
-    private float elapsedTime;
     //boton regreso
 
 
@@ -36,11 +33,9 @@ class PantallaJuego extends Pantalla {
     }
 
     private void crearescena() {
-        regions = new TextureRegion[5];
         batch = new SpriteBatch();
         escenaMenu=new Stage(vista);
         //aniamcion Transicion
-        elapsedTime = 0;
         textFondo = new Texture("SecondScreen.png");
         //fondo
         Title = new Texture("LogoSecondScreen.png");
@@ -86,7 +81,6 @@ class PantallaJuego extends Pantalla {
 
     @Override
     public void render(float delta) {
-        elapsedTime += Gdx.graphics.getDeltaTime();
         borrarPantalla(0,0,1);
         batch.setProjectionMatrix(camara.combined);
         batch.begin();
@@ -109,6 +103,9 @@ class PantallaJuego extends Pantalla {
 
     @Override
     public void dispose() {
+        escenaMenu.dispose();
+        textFondo.dispose();
+        Title.dispose();
 
     }
 }

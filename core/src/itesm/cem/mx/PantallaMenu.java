@@ -129,6 +129,10 @@ class PantallaMenu extends Pantalla {
 
     @Override
     public void dispose() {
+        textFondo.dispose();
+        title.dispose();
+        escenaMenu.dispose();
         music.dispose();
+
     }
 }
