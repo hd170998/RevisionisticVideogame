@@ -5,10 +5,12 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -17,14 +19,12 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.StringBuilder;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -35,7 +35,8 @@ public class PantallaMapa extends Pantalla {
     private EstadoJuego estado;
     private EscenaPausa escenaPausa;
     private Music music;
-    private MapLayer objectLayer;
+    private Label label;
+    private BitmapFont font;
 
     // Mapas
     private TiledMap mapa;      // El mapa
@@ -56,6 +57,7 @@ public class PantallaMapa extends Pantalla {
         cargaMusica();
         crearHUD();
         ivan = new Personaje(new Texture("1V4N_Xaxis.png"));
+        ivan.setLife(100);
         // El input lo maneja la escena
         Gdx.input.setInputProcessor(escenaHUD);
     }
@@ -77,6 +79,11 @@ public class PantallaMapa extends Pantalla {
         camaraHUD.update();
         vistaHUD = new StretchViewport(ANCHO, ALTO, camaraHUD);
         // Crea el pad
+        font = new BitmapFont(Gdx.files.internal("font.fnt"));
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.font = font;
+        labelStyle.fontColor = Color.WHITE;
+        label= new Label(""+ivan.getLife(),labelStyle);
         Skin skin = new Skin(); // Texturas para el pad
         skin.add("fondo", new Texture("padBack.png"));
         skin.add("boton", new Texture("padKnob.png"));
@@ -141,12 +148,17 @@ public class PantallaMapa extends Pantalla {
                 }
             }
         });
-
+        Drawable regionCorazon = new TextureRegionDrawable(new TextureRegion( new Texture("heartSprite.png")));
+        Image corazon = new Image(regionCorazon);
+        corazon.setPosition(corazon.getWidth()/2, ALTO-corazon.getHeight());
+        label.setPosition(corazon.getWidth(),ALTO-label.getHeight());
         // Crea la escena y agrega el pad
-        escenaHUD = new Stage(vistaHUD);    // Escalar con esta vista
+        escenaHUD = new Stage(vistaHUD);// Escalar con esta vista
         escenaHUD.addActor(btnPausa);
         escenaHUD.addActor(pad);
         escenaHUD.addActor(btnAtaque);
+        escenaHUD.addActor(corazon);
+        escenaHUD.addActor(label);
 
     }
 
@@ -156,8 +168,6 @@ public class PantallaMapa extends Pantalla {
         manager.load("ForestStuff/ForestMap.tmx",TiledMap.class);
         manager.finishLoading(); // Espera
         mapa = manager.get("ForestStuff/ForestMap.tmx");
-        objectLayer = mapa.getLayers().get("1V4N");
-
         renderer = new OrthogonalTiledMapRenderer(mapa);
     }
 
@@ -235,6 +245,7 @@ public class PantallaMapa extends Pantalla {
         escenaHUD.dispose();
         music.dispose();
         escenaPausa.dispose();
+        batch.dispose();
 
     }
     private class EscenaPausa extends Stage {

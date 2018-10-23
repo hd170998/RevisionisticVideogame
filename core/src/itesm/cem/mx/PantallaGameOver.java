@@ -131,7 +131,11 @@ public class PantallaGameOver extends Pantalla {
 
     @Override
     public void dispose() {
-
+        escenaGameOver.dispose();
+        textFondo.dispose();
+        textGameOver.dispose();
+        baseGameOver.dispose();
+        batch.dispose();
         music.dispose();
     }
 

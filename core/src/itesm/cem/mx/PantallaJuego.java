@@ -106,6 +106,7 @@ class PantallaJuego extends Pantalla {
         escenaMenu.dispose();
         textFondo.dispose();
         Title.dispose();
+        batch.dispose();
 
     }
 }

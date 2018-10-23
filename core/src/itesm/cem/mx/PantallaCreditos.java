@@ -62,6 +62,10 @@ public class PantallaCreditos extends Pantalla {
 
     @Override
     public void dispose() {
+        creditos.dispose();
+        batch.dispose();
+        textFondo.dispose();
+
 
     }
 }

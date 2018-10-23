@@ -10,8 +10,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.utils.Disposable;
 
 public class Personaje extends Objeto {
     private Animation animacionX;
@@ -157,7 +155,12 @@ public class Personaje extends Objeto {
         this.y = y;
         sprite.setPosition(x,y);
     }
-
+    public void setLife(int life){
+        this.life = life;
+    }
+    public int getLife(){
+        return life;
+    }
     public void mover(float dx, float dy) {
         x += dx;
         y += dy;
