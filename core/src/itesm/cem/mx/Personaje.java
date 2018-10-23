@@ -50,8 +50,8 @@ public class Personaje extends Objeto {
         TextureRegion [][] texturaPersonajeDown = regionDown.split(64,128);
         animacionYD = new Animation(0.15f,texturaPersonajeDown[0][2], texturaPersonajeDown[0][1], texturaPersonajeDown[0][0]);
         animacionYD.setPlayMode((Animation.PlayMode.LOOP));
-        TextureRegion ataquex = new TextureRegion(new Texture("Saw/SawSword_XaxisSingle.png"));
-        TextureRegion[][] regionesAtaqueX = ataquex.split(126,134);
+        TextureRegion ataquex = new TextureRegion(new Texture("Saw/SawSword_Ydown.png"));
+        TextureRegion[][] regionesAtaqueX = ataquex.split(83,157);
         animacionXA = new Animation(0.15f, regionesAtaqueX[0][1],regionesAtaqueX[0][0]);
         animacionXA.setPlayMode((Animation.PlayMode.LOOP_PINGPONG));
         timerAnimacion = 0;

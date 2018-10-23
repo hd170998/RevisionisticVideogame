@@ -52,6 +52,23 @@ public class PantallaOpciones extends Pantalla {
         Drawable regionMusicOP = new TextureRegionDrawable(new TextureRegion( new Texture("ButtonMusic_Off.png")));
         ImageButton btnMusic = new ImageButton(regionMusic,regionMusicOP);
         btnMusic.setPosition(ANCHO/2-btnMusic.getWidth()/2,5*ALTO/8);
+        Drawable regionSound = new TextureRegionDrawable(new TextureRegion(new Texture("ButtonSoundFX_ON.png")));
+        Drawable regionSoundOP = new TextureRegionDrawable(new TextureRegion(new Texture("ButtonSoundFX_OFF.png")));
+        ImageButton btnSound = new ImageButton(regionSound,regionSoundOP);
+        btnSound.setPosition(ANCHO/2-btnSound.getWidth()/2,4*ALTO/8);
+        escenaOpciones.addActor(btnSound);
+
+        Drawable regionCredits = new TextureRegionDrawable(new TextureRegion(new Texture("ButtonCredits_Normal.png")));
+        Drawable regionCreditsOP = new TextureRegionDrawable(new TextureRegion(new Texture("ButtonCredits_Click.png")));
+        ImageButton  btnCredits = new ImageButton(regionCredits, regionCreditsOP);
+        btnCredits.setPosition(ANCHO/2-btnSound.getWidth()/2,1*ALTO/8);
+        btnCredits.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                pantallaInicio.setScreen (new PantallaCreditos(pantallaInicio));
+            }
+        });
+        escenaOpciones.addActor(btnCredits);
 
         escenaOpciones.addActor(btnBack);
         escenaOpciones.addActor(btnMusic);
@@ -91,6 +108,9 @@ public class PantallaOpciones extends Pantalla {
 
     @Override
     public void dispose() {
+        escenaOpciones.dispose();
+        textFondo.dispose();
+        baseOpciones.dispose();
 
     }
 }

@@ -27,8 +27,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.objects.TextureMapObject;
 
 public class PantallaMapa extends Pantalla {
     private static final float ANCHO_MAPA = 4800;
@@ -57,7 +55,7 @@ public class PantallaMapa extends Pantalla {
         cargarMapa();
         cargaMusica();
         crearHUD();
-        ivan = new Personaje(new Texture("ForestStuff/1V4N_Xaxis.png"));
+        ivan = new Personaje(new Texture("1V4N_YaxisDown.png"));
         // El input lo maneja la escena
         Gdx.input.setInputProcessor(escenaHUD);
     }
@@ -159,6 +157,7 @@ public class PantallaMapa extends Pantalla {
         manager.finishLoading(); // Espera
         mapa = manager.get("ForestStuff/ForestMap.tmx");
         objectLayer = mapa.getLayers().get("1V4N");
+
         renderer = new OrthogonalTiledMapRenderer(mapa);
     }
 
