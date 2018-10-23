@@ -274,14 +274,14 @@ public class PantallaMapa extends Pantalla {
             });
             this.addActor(btnMusic);
             //boton sound FX
-            Drawable regionSound = new TextureRegionDrawable(new TextureRegion(new Texture("ButtonSoundFX_ON.png")));
-            Drawable regionSoundOP = new TextureRegionDrawable(new TextureRegion(new Texture("ButtonSoundFX_OFF.png")));
+            Drawable regionSound = new TextureRegionDrawable(new TextureRegion(new Texture("Options\\ButtonSoundFX_On.png")));
+            Drawable regionSoundOP = new TextureRegionDrawable(new TextureRegion(new Texture("Options\\ButtonSoundFX_Off.png")));
             ImageButton btnSound = new ImageButton(regionSound,regionSoundOP);
             btnSound.setPosition(ANCHO/2-btnSound.getWidth()/2,4*ALTO/8);
             this.addActor(btnSound);
             //boton resume
-            Drawable regionResume = new TextureRegionDrawable(new TextureRegion(new Texture("ButtonResume_Normal.png")));
-            Drawable regionResumeOP = new TextureRegionDrawable(new TextureRegion(new Texture("ButtonResume_Click.png")));
+            Drawable regionResume = new TextureRegionDrawable(new TextureRegion(new Texture("Options\\ButtonResume_Normal.png")));
+            Drawable regionResumeOP = new TextureRegionDrawable(new TextureRegion(new Texture("Options\\ButtonResume_Click.png")));
             ImageButton btnResume = new ImageButton(regionResume,regionResumeOP);
             btnResume.setPosition(ANCHO/2-btnSound.getWidth()/2,1*ALTO/4);
             btnResume.addListener(new ClickListener(){
@@ -294,8 +294,8 @@ public class PantallaMapa extends Pantalla {
             });
             this.addActor(btnResume);
             //boton credits
-            Drawable regionCredits = new TextureRegionDrawable(new TextureRegion(new Texture("ButtonCredits_Normal.png")));
-            Drawable regionCreditsOP = new TextureRegionDrawable(new TextureRegion(new Texture("ButtonCredits_Click.png")));
+            Drawable regionCredits = new TextureRegionDrawable(new TextureRegion(new Texture("Options\\ButtonCredits_Normal.png")));
+            Drawable regionCreditsOP = new TextureRegionDrawable(new TextureRegion(new Texture("Options\\ButtonCredits_Click.png")));
             ImageButton  btnCredits = new ImageButton(regionCredits, regionCreditsOP);
             btnCredits.setPosition(ANCHO/2-btnSound.getWidth()/2,1*ALTO/8);
             btnCredits.addListener(new ClickListener(){
@@ -307,8 +307,8 @@ public class PantallaMapa extends Pantalla {
             this.addActor(btnCredits);
 
             //boton Menu
-            Drawable regionMenu = new TextureRegionDrawable(new TextureRegion(new Texture("ButtonCredits_Normal.png")));
-            Drawable regionMenuOP = new TextureRegionDrawable(new TextureRegion(new Texture("ButtonCredits_Click.png")));
+            Drawable regionMenu = new TextureRegionDrawable(new TextureRegion(new Texture("Options\\ButtonCredits_Normal.png")));
+            Drawable regionMenuOP = new TextureRegionDrawable(new TextureRegion(new Texture("Options\\ButtonCredits_Click.png")));
             ImageButton  btnMenu = new ImageButton(regionMenu, regionMenuOP);
             btnMenu.setPosition(ANCHO/2-btnSound.getWidth()/2,1*ALTO/8);
             btnMenu.addListener(new ClickListener(){
