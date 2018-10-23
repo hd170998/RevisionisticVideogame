@@ -133,6 +133,7 @@ class PantallaMenu extends Pantalla {
         title.dispose();
         escenaMenu.dispose();
         music.dispose();
+        batch.dispose();
 
     }
 }
