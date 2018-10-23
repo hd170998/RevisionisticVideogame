@@ -28,6 +28,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+
 public class PantallaMapa extends Pantalla {
     private static final float ANCHO_MAPA = 4800;
     private static final float ALTO_MAPA = 2560;
@@ -41,23 +42,48 @@ public class PantallaMapa extends Pantalla {
     private TiledMap mapa;      // El mapa
     private OrthogonalTiledMapRenderer renderer;    // Dibuja el mapa
     private Personaje ivan;    // Mario, lo controla el usuario
+    private Vaca vaca1;
+    private Vaca vaca2;
+    private Vaca vaca3;
+
 
     // HUD, otra cámara con la imagen fija
     private OrthographicCamera camaraHUD;
     private Viewport vistaHUD;
     // HUD con una escena para los botones y componentes
     private Stage escenaHUD;    // Tendrá un Pad virtual para mover al personaje y el botón de Pausa
+    public float width,height;
+
 
     public PantallaMapa(PantallaInicio pantallaInicio) { this.pantallaInicio = pantallaInicio;}
 
     @Override
     public void show() {
+        width = Gdx.graphics.getWidth();
+        height = Gdx.graphics.getHeight();
         cargarMapa();
         cargaMusica();
         crearHUD();
         ivan = new Personaje(new Texture("1V4N_Xaxis.png"));
+        vaca1 = new Vaca(100,1250);
+
+
+        vaca2 = new Vaca(400, 1850);
+
+
+        vaca3 = new Vaca(800,1250);
+
         // El input lo maneja la escena
         Gdx.input.setInputProcessor(escenaHUD);
+    }
+
+    public boolean estaColisionando(Vaca enemigo) {
+        if (ivan.getX()>=enemigo.getX() && ivan.getX()<=enemigo.getX()+enemigo.getWidth()) {
+            if (ivan.getY()>=enemigo.getY() && ivan.getY()<=enemigo.getY()+enemigo.getHeight()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void cargaMusica() {
@@ -173,6 +199,9 @@ public class PantallaMapa extends Pantalla {
         renderer.render();
         batch.begin();
         ivan.render(batch);
+        vaca1.render(batch);
+        vaca2.render(batch);
+        vaca3.render(batch);
         batch.end();
         batch.setProjectionMatrix(camaraHUD.combined);
         escenaHUD.draw();
