@@ -2,6 +2,8 @@ package itesm.cem.mx;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
@@ -20,6 +22,7 @@ public class PantallaExtras extends Pantalla{
     private Stage escenaExtras;
     private Texture lock;
     private Table popUp;
+    public Music music;
 
 
     public PantallaExtras(PantallaInicio pantallaInicio) {
@@ -29,9 +32,20 @@ public class PantallaExtras extends Pantalla{
     @Override
     public void show() {
         escenaExtras();
+        cargarMusica();
         Gdx.input.setInputProcessor(escenaExtras);
 
     }
+
+    private void cargarMusica() {
+        AssetManager manager = new AssetManager();
+        manager.load("audio/Menu.mp3", Music.class);
+        manager.finishLoading();
+        music = manager.get("audio/Menu.mp3");
+        music.setLooping(true);
+        music.play();
+    }
+
 
     private void escenaExtras() {
         batch = new SpriteBatch();
@@ -49,6 +63,7 @@ public class PantallaExtras extends Pantalla{
         btnBack.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
+                music.dispose();
                 pantallaInicio.setScreen(new PantallaMenu(pantallaInicio));
             }
         });

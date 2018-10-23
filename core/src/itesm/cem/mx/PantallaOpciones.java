@@ -1,6 +1,8 @@
 package itesm.cem.mx;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -11,11 +13,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
+
+
 public class PantallaOpciones extends Pantalla {
     private final PantallaInicio pantallaInicio;
     private Texture textFondo;
     private Stage escenaOpciones;
     private Texture baseOpciones;
+    public Music music;
 
     public PantallaOpciones(PantallaInicio pantallaInicio) {
         this.pantallaInicio = pantallaInicio;
@@ -24,8 +29,18 @@ public class PantallaOpciones extends Pantalla {
     @Override
     public void show() {
         crearEscena();
+        cargarMusica();
         Gdx.input.setInputProcessor(escenaOpciones);
 
+    }
+
+    private void cargarMusica() {
+        AssetManager manager = new AssetManager();
+        manager.load("audio/Menu.mp3", Music.class);
+        manager.finishLoading();
+        music = manager.get("audio/Menu.mp3");
+        music.setLooping(true);
+        music.play();
     }
 
     private void crearEscena() {
@@ -44,26 +59,32 @@ public class PantallaOpciones extends Pantalla {
         btnBack.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
+                music.dispose();
                 pantallaInicio.setScreen(new PantallaMenu(pantallaInicio));
             }
         });
-        Drawable regionMusic = new TextureRegionDrawable(new TextureRegion(new Texture("Options/ButtonMusic_On.png")));
-        Drawable regionMusicOP = new TextureRegionDrawable(new TextureRegion( new Texture("Options/ButtonMusic_Off.png")));
+
+        Drawable regionMusic = new TextureRegionDrawable(new TextureRegion(new Texture("Options\\ButtonMusic_On.png")));
+        Drawable regionMusicOP = new TextureRegionDrawable(new TextureRegion( new Texture("Options\\ButtonMusic_Off.png")));
         ImageButton btnMusic = new ImageButton(regionMusic,regionMusicOP);
         btnMusic.setPosition(ANCHO/2-btnMusic.getWidth()/2,5*ALTO/8);
-        Drawable regionSound = new TextureRegionDrawable(new TextureRegion(new Texture("Options/ButtonSoundFX_On.png")));
-        Drawable regionSoundOP = new TextureRegionDrawable(new TextureRegion(new Texture("Options/ButtonSoundFX_Off.png")));
+        Drawable regionSound = new TextureRegionDrawable(new TextureRegion(new Texture("Options\\ButtonSoundFX_On.png")));
+        Drawable regionSoundOP = new TextureRegionDrawable(new TextureRegion(new Texture("Options\\ButtonSoundFX_Off.png")));
+
         ImageButton btnSound = new ImageButton(regionSound,regionSoundOP);
         btnSound.setPosition(ANCHO/2-btnSound.getWidth()/2,4*ALTO/8);
         escenaOpciones.addActor(btnSound);
 
-        Drawable regionCredits = new TextureRegionDrawable(new TextureRegion(new Texture("Options/ButtonCredits_Normal.png")));
-        Drawable regionCreditsOP = new TextureRegionDrawable(new TextureRegion(new Texture("Options/ButtonCredits_Click.png")));
+
+        Drawable regionCredits = new TextureRegionDrawable(new TextureRegion(new Texture("Options\\ButtonCredits_Normal.png")));
+        Drawable regionCreditsOP = new TextureRegionDrawable(new TextureRegion(new Texture("Options\\ButtonCredits_Click.png")));
+
         ImageButton  btnCredits = new ImageButton(regionCredits, regionCreditsOP);
         btnCredits.setPosition(ANCHO/2-btnSound.getWidth()/2,1*ALTO/8);
         btnCredits.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                music.dispose();
                 pantallaInicio.setScreen (new PantallaCreditos(pantallaInicio));
             }
         });

@@ -85,7 +85,7 @@ class PantallaMenu extends Pantalla {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
 
-                pantallaInicio.setScreen (new PantallaExtras(pantallaInicio));
+                pantallaInicio.setScreen(new PantallaExtras(pantallaInicio));
             }
                           }
         );
