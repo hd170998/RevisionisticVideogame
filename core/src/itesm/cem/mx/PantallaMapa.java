@@ -55,17 +55,17 @@ public class PantallaMapa extends Pantalla {
         cargarMapa();
         cargaMusica();
         crearHUD();
-        ivan = new Personaje(new Texture("1V4N_YaxisDown.png"));
+        ivan = new Personaje(new Texture("1V4N_Xaxis.png"));
         // El input lo maneja la escena
         Gdx.input.setInputProcessor(escenaHUD);
     }
 
     private void cargaMusica() {
         AssetManager manager = new AssetManager();
-        manager.load("audio/Scary-Forest.mp3", Music.class);
+        manager.load("audio/Forest.mp3", Music.class);
         manager.load("audio/saw-audio.mp3",Sound.class);
         manager.finishLoading();
-        music = manager.get("audio/Scary-Forest.mp3");
+        music = manager.get("audio/Forest.mp3");
         music.setLooping(true);
         music.play();
     }
@@ -255,8 +255,8 @@ public class PantallaMapa extends Pantalla {
             Opcion.setPosition(ANCHO/2-baseOpciones.getWidth()/2, ALTO/2-baseOpciones.getHeight()/2);
             this.addActor(Opcion);
             //boton Musica
-            Drawable regionMusic = new TextureRegionDrawable(new TextureRegion(new Texture("ButtonMusic_On.png")));
-            Drawable regionMusicOP = new TextureRegionDrawable(new TextureRegion( new Texture("ButtonMusic_Off.png")));
+            Drawable regionMusic = new TextureRegionDrawable(new TextureRegion(new Texture("Options/ButtonMusic_On.png")));
+            Drawable regionMusicOP = new TextureRegionDrawable(new TextureRegion( new Texture("Options/ButtonMusic_Off.png")));
             final ImageButton btnMusic = new ImageButton(regionMusic,regionMusicOP, regionMusicOP);
             btnMusic.setPosition(ANCHO/2-btnMusic.getWidth()/2,5*ALTO/8);
             btnMusic.addListener(new ClickListener(){
@@ -274,14 +274,18 @@ public class PantallaMapa extends Pantalla {
             });
             this.addActor(btnMusic);
             //boton sound FX
+
             Drawable regionSound = new TextureRegionDrawable(new TextureRegion(new Texture("Options\\ButtonSoundFX_On.png")));
             Drawable regionSoundOP = new TextureRegionDrawable(new TextureRegion(new Texture("Options\\ButtonSoundFX_Off.png")));
+
             ImageButton btnSound = new ImageButton(regionSound,regionSoundOP);
             btnSound.setPosition(ANCHO/2-btnSound.getWidth()/2,4*ALTO/8);
             this.addActor(btnSound);
             //boton resume
+
             Drawable regionResume = new TextureRegionDrawable(new TextureRegion(new Texture("Options\\ButtonResume_Normal.png")));
             Drawable regionResumeOP = new TextureRegionDrawable(new TextureRegion(new Texture("Options\\ButtonResume_Click.png")));
+
             ImageButton btnResume = new ImageButton(regionResume,regionResumeOP);
             btnResume.setPosition(ANCHO/2-btnSound.getWidth()/2,1*ALTO/4);
             btnResume.addListener(new ClickListener(){
@@ -294,8 +298,10 @@ public class PantallaMapa extends Pantalla {
             });
             this.addActor(btnResume);
             //boton credits
+
             Drawable regionCredits = new TextureRegionDrawable(new TextureRegion(new Texture("Options\\ButtonCredits_Normal.png")));
             Drawable regionCreditsOP = new TextureRegionDrawable(new TextureRegion(new Texture("Options\\ButtonCredits_Click.png")));
+
             ImageButton  btnCredits = new ImageButton(regionCredits, regionCreditsOP);
             btnCredits.setPosition(ANCHO/2-btnSound.getWidth()/2,1*ALTO/8);
             btnCredits.addListener(new ClickListener(){
@@ -307,8 +313,10 @@ public class PantallaMapa extends Pantalla {
             this.addActor(btnCredits);
 
             //boton Menu
+
             Drawable regionMenu = new TextureRegionDrawable(new TextureRegion(new Texture("Options\\ButtonCredits_Normal.png")));
             Drawable regionMenuOP = new TextureRegionDrawable(new TextureRegion(new Texture("Options\\ButtonCredits_Click.png")));
+
             ImageButton  btnMenu = new ImageButton(regionMenu, regionMenuOP);
             btnMenu.setPosition(ANCHO/2-btnSound.getWidth()/2,1*ALTO/8);
             btnMenu.addListener(new ClickListener(){

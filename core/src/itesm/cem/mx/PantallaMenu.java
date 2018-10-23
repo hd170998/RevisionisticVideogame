@@ -43,21 +43,21 @@ class PantallaMenu extends Pantalla {
     private void crearEscena() {
         batch = new SpriteBatch();
         escenaMenu=new Stage(vista);
-        textFondo = new Texture("MainScreen.png");
-        title = new Texture("LogoMainScreen.png");
+        textFondo = new Texture("Menu/MainScreen.png");
+        title = new Texture("Menu/LogoMainScreen.png");
 
 // Botones
-        Texture textBtnPlay=new Texture("BtnJugarBasico01.png");
-        Texture BtnOpciones = new Texture("OpcionesBtn01.png");
-        Texture BtnExtras = new Texture("ExtrasBtn01.png");
+        Texture textBtnPlay=new Texture("Menu/BtnJugarBasico01.png");
+        Texture BtnOpciones = new Texture("Menu/OpcionesBtn01.png");
+        Texture BtnExtras = new Texture("Menu/ExtrasBtn01.png");
         //declarar regiones
         TextureRegionDrawable top= new TextureRegionDrawable(new TextureRegion(BtnOpciones));
         TextureRegionDrawable trd = new TextureRegionDrawable(new TextureRegion(textBtnPlay));
         TextureRegionDrawable tex = new TextureRegionDrawable(new TextureRegion(BtnExtras));
         //boton oprimido
-        Texture textBtnPlayOprimido = new Texture("BtnJugarBasico02HOVER.png");
-        Texture textBtnOpcionesOp = new Texture("OpcionesBtn02HOVER.png");
-        Texture textBtnExtrasOp = new Texture("ExtrasBtn02HOVER.png");
+        Texture textBtnPlayOprimido = new Texture("Menu/BtnJugarBasico02HOVER.png");
+        Texture textBtnOpcionesOp = new Texture("Menu/OpcionesBtn02HOVER.png");
+        Texture textBtnExtrasOp = new Texture("Menu/ExtrasBtn02HOVER.png");
         ///region Boton Oprimido
         TextureRegionDrawable trdOp = new TextureRegionDrawable(new TextureRegion(textBtnPlayOprimido));
         TextureRegionDrawable tropr = new TextureRegionDrawable(new TextureRegion(textBtnOpcionesOp));
@@ -85,7 +85,7 @@ class PantallaMenu extends Pantalla {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
 
-                pantallaInicio.setScreen (new PantallaExtras(pantallaInicio));
+                pantallaInicio.setScreen(new PantallaExtras(pantallaInicio));
             }
                           }
         );
