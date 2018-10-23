@@ -1,6 +1,8 @@
 package itesm.cem.mx;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -17,6 +19,7 @@ public class PantallaOpciones extends Pantalla {
     private Texture textFondo;
     private Stage escenaOpciones;
     private Texture baseOpciones;
+    public Music music;
 
     public PantallaOpciones(PantallaInicio pantallaInicio) {
         this.pantallaInicio = pantallaInicio;
@@ -25,8 +28,18 @@ public class PantallaOpciones extends Pantalla {
     @Override
     public void show() {
         crearEscena();
+        cargarMusica();
         Gdx.input.setInputProcessor(escenaOpciones);
 
+    }
+
+    private void cargarMusica() {
+        AssetManager manager = new AssetManager();
+        manager.load("audio/Menu.mp3", Music.class);
+        manager.finishLoading();
+        music = manager.get("audio/Menu.mp3");
+        music.setLooping(true);
+        music.play();
     }
 
     private void crearEscena() {
@@ -45,6 +58,7 @@ public class PantallaOpciones extends Pantalla {
         btnBack.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
+                music.dispose();
                 pantallaInicio.setScreen(new PantallaMenu(pantallaInicio));
             }
         });
@@ -65,6 +79,7 @@ public class PantallaOpciones extends Pantalla {
         btnCredits.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                music.dispose();
                 pantallaInicio.setScreen (new PantallaCreditos(pantallaInicio));
             }
         });
