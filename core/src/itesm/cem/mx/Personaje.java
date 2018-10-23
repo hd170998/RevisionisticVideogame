@@ -23,6 +23,7 @@ public class Personaje extends Objeto {
     private static float VY;
     public static final float SPEED = 5;
     public int life;
+    public int documents;
     private Sound saw;
 
     public enum EstadoMovimento {
@@ -146,6 +147,14 @@ public class Personaje extends Objeto {
         return y;
     }
 
+    public void setDocuments(int documents) {
+        this.documents = documents;
+    }
+
+    public int getDocuments() {
+        return documents;
+    }
+
     public void setX(float x) {
         this.x = x;
         sprite.setPosition(x,y);
@@ -169,7 +178,14 @@ public class Personaje extends Objeto {
     public void setVx(float VX) {
         this.VX = VX;
     }
-
+    public void addDocumets(int documents){
+        int suma = getDocuments() +documents;
+        setDocuments(suma);
+    }
+    public void damage(int damage){
+        int vida = getLife()-damage;
+        setLife(vida);
+    }
     public void setVy(float VY) {
         this.VY = VY;
     }

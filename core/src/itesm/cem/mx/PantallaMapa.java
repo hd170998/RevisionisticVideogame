@@ -55,9 +55,10 @@ public class PantallaMapa extends Pantalla {
     public void show() {
         cargarMapa();
         cargaMusica();
-        crearHUD();
         ivan = new Personaje(new Texture("1V4N_Xaxis.png"));
         ivan.setLife(100);
+        ivan.setDocuments(0);
+        crearHUD();
         // El input lo maneja la escena
         Gdx.input.setInputProcessor(escenaHUD);
     }
@@ -83,7 +84,7 @@ public class PantallaMapa extends Pantalla {
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = font;
         labelStyle.fontColor = Color.WHITE;
-        label= new Label(""+ivan.getLife(),labelStyle);
+        label= new Label(String.format("%03d",ivan.getLife()),labelStyle);
         Skin skin = new Skin(); // Texturas para el pad
         skin.add("fondo", new Texture("padBack.png"));
         skin.add("boton", new Texture("padKnob.png"));
@@ -286,16 +287,16 @@ public class PantallaMapa extends Pantalla {
             this.addActor(btnMusic);
             //boton sound FX
 
-            Drawable regionSound = new TextureRegionDrawable(new TextureRegion(new Texture("Options\\ButtonSoundFX_On.png")));
-            Drawable regionSoundOP = new TextureRegionDrawable(new TextureRegion(new Texture("Options\\ButtonSoundFX_Off.png")));
+            Drawable regionSound = new TextureRegionDrawable(new TextureRegion(new Texture("Options/ButtonSoundFX_On.png")));
+            Drawable regionSoundOP = new TextureRegionDrawable(new TextureRegion(new Texture("Options/ButtonSoundFX_Off.png")));
 
             ImageButton btnSound = new ImageButton(regionSound,regionSoundOP);
             btnSound.setPosition(ANCHO/2-btnSound.getWidth()/2,4*ALTO/8);
             this.addActor(btnSound);
             //boton resume
 
-            Drawable regionResume = new TextureRegionDrawable(new TextureRegion(new Texture("Options\\ButtonResume_Normal.png")));
-            Drawable regionResumeOP = new TextureRegionDrawable(new TextureRegion(new Texture("Options\\ButtonResume_Click.png")));
+            Drawable regionResume = new TextureRegionDrawable(new TextureRegion(new Texture("Options/ButtonResume_Normal.png")));
+            Drawable regionResumeOP = new TextureRegionDrawable(new TextureRegion(new Texture("Options/ButtonResume_Click.png")));
 
             ImageButton btnResume = new ImageButton(regionResume,regionResumeOP);
             btnResume.setPosition(ANCHO/2-btnSound.getWidth()/2,1*ALTO/4);
@@ -310,8 +311,8 @@ public class PantallaMapa extends Pantalla {
             this.addActor(btnResume);
             //boton credits
 
-            Drawable regionCredits = new TextureRegionDrawable(new TextureRegion(new Texture("Options\\ButtonCredits_Normal.png")));
-            Drawable regionCreditsOP = new TextureRegionDrawable(new TextureRegion(new Texture("Options\\ButtonCredits_Click.png")));
+            Drawable regionCredits = new TextureRegionDrawable(new TextureRegion(new Texture("Options/ButtonCredits_Normal.png")));
+            Drawable regionCreditsOP = new TextureRegionDrawable(new TextureRegion(new Texture("Options/ButtonCredits_Click.png")));
 
             ImageButton  btnCredits = new ImageButton(regionCredits, regionCreditsOP);
             btnCredits.setPosition(ANCHO/2-btnSound.getWidth()/2,1*ALTO/8);
@@ -325,8 +326,8 @@ public class PantallaMapa extends Pantalla {
 
             //boton Menu
 
-            Drawable regionMenu = new TextureRegionDrawable(new TextureRegion(new Texture("Options\\ButtonCredits_Normal.png")));
-            Drawable regionMenuOP = new TextureRegionDrawable(new TextureRegion(new Texture("Options\\ButtonCredits_Click.png")));
+            Drawable regionMenu = new TextureRegionDrawable(new TextureRegion(new Texture("Options/ButtonCredits_Normal.png")));
+            Drawable regionMenuOP = new TextureRegionDrawable(new TextureRegion(new Texture("Options/ButtonCredits_Click.png")));
 
             ImageButton  btnMenu = new ImageButton(regionMenu, regionMenuOP);
             btnMenu.setPosition(ANCHO/2-btnSound.getWidth()/2,1*ALTO/8);
