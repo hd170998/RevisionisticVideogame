@@ -29,6 +29,7 @@ public class PantallaCreditos extends Pantalla {
     private Texture textFondo;
     private float elapsedTime;
     private Texture creditos;
+    private Stage escenaCreditos;
     public PantallaCreditos(PantallaInicio pantallaInicio) { this.pantallaInicio = pantallaInicio;}
     @Override
     public void show() {
@@ -36,6 +37,22 @@ public class PantallaCreditos extends Pantalla {
         //fondo
         creditos = new Texture("Creditos/ProvisionalCreditsImage.png");
         elapsedTime = 0;
+        escenaCreditos = new Stage(vista);
+        Texture BtnBack=new Texture("BackButton01.png");
+        TextureRegionDrawable tback= new TextureRegionDrawable(new TextureRegion(BtnBack));
+        Texture BtnBackOP = new Texture("BackButton02HOVER.png");
+        TextureRegionDrawable tbackop = new TextureRegionDrawable(new TextureRegion(BtnBackOP));
+        ImageButton btnBack = new ImageButton(tback,tbackop);
+        btnBack.setPosition(btnBack.getWidth()/3,ALTO-(BtnBack.getHeight()+10));
+        btnBack.addListener(new ClickListener(){
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+
+                pantallaInicio.setScreen(new PantallaMapa(pantallaInicio));
+            }
+        });
+        escenaCreditos.addActor(btnBack);
+
 
     }
 
@@ -48,6 +65,7 @@ public class PantallaCreditos extends Pantalla {
         batch.draw(textFondo,0,0);
         batch.draw(creditos, 0, -creditos.getHeight()/2+(60*elapsedTime));
         batch.end();
+        escenaCreditos.draw();
     }
 
     @Override

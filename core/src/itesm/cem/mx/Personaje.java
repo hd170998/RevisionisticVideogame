@@ -75,7 +75,7 @@ public class Personaje extends Objeto {
         x = 64;
         y = 1250;
         position = new Vector3(x,y,0);
-        jugBounds = new Rectangle(x, y ,64, 128);
+        jugBounds = new Rectangle(x, y ,50, 100);
         AssetManager manager = new AssetManager();
         manager.load("audio/saw-audio.mp3",Sound.class);
         manager.finishLoading();

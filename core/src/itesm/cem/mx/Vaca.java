@@ -82,7 +82,7 @@ public class Vaca extends Enemigo {
 
         position = new Vector2(x, y);
         velocity = new Vector2(0, 0);
-        boundsVaca = new Rectangle(x, y, width, height /3);
+        boundsVaca = new Rectangle(x, y, width/2, height /2);
 
     }
 
