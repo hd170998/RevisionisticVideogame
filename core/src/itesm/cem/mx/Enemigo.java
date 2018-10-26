@@ -11,6 +11,7 @@ public abstract class Enemigo extends Objeto {
     Rectangle rectangle; // rectangle object to detect collisions
     public abstract void render(SpriteBatch batch);
     public abstract void update();
+    public abstract  void setSize(int x, int y);
 
 
 }

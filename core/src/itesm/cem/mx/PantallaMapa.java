@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -43,9 +43,9 @@ public class PantallaMapa extends Pantalla {
     private TiledMap mapa;      // El mapa
     private OrthogonalTiledMapRenderer renderer;    // Dibuja el mapa
     private Personaje ivan;    // Mario, lo controla el usuario
-    private Vaca vaca1;
-    private Vaca vaca2;
-    private Vaca vaca3;
+    public static Vaca vaca1;
+    public static Vaca vaca2;
+    public static Vaca vaca3;
 
 
     // HUD, otra cámara con la imagen fija
@@ -58,6 +58,7 @@ public class PantallaMapa extends Pantalla {
 
     public PantallaMapa(PantallaInicio pantallaInicio) { this.pantallaInicio = pantallaInicio;}
 
+
     @Override
     public void show() {
         width = Gdx.graphics.getWidth();
@@ -66,13 +67,13 @@ public class PantallaMapa extends Pantalla {
         cargaMusica();
         ivan = new Personaje(new Texture("1V4N_Xaxis.png"));
 
-        vaca1 = new Vaca(100,1250);
+        vaca1 = new Vaca(200,1250);
 
 
-        vaca2 = new Vaca(400, 1850);
+        vaca2 = new Vaca(800,1250);
 
 
-        vaca3 = new Vaca(800,1250);
+        vaca3 = new Vaca(400, 1850);
 
 
         ivan.setLife(100);
@@ -83,14 +84,6 @@ public class PantallaMapa extends Pantalla {
         Gdx.input.setInputProcessor(escenaHUD);
     }
 
-    public boolean estaColisionando(Vaca enemigo) {
-        if (ivan.getX()>=enemigo.getX() && ivan.getX()<=enemigo.getX()+enemigo.getWidth()) {
-            if (ivan.getY()>=enemigo.getY() && ivan.getY()<=enemigo.getY()+enemigo.getHeight()) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     private void cargaMusica() {
         AssetManager manager = new AssetManager();
@@ -203,7 +196,9 @@ public class PantallaMapa extends Pantalla {
 
     @Override
     public void render(float delta) {
+
         ivan.actualizar(mapa);
+
         actualizarCamara();
         borrarPantalla(0,0,0);
         batch.setProjectionMatrix(camara.combined);
@@ -213,17 +208,44 @@ public class PantallaMapa extends Pantalla {
         renderer.render();
         batch.begin();
         ivan.render(batch);
-        vaca1.render(batch);
-        vaca2.render(batch);
+
+        if(vaca1.state != true){
+            vaca1.update();
+            vaca1.render(batch);
+        }
+
+        if(vaca2.state != true){
+            vaca2.update();
+            vaca2.render(batch);
+        }
+
+
+        vaca3.update();
         vaca3.render(batch);
+
+        if(vaca1.collides(ivan.getBounds())){
+            vaca1.destroy();
+        }
+
+        if(vaca2.collides(ivan.getBounds())){
+            vaca2.destroy();
+        }
+
+        if(vaca3.collides(ivan.getBounds())){
+            pantallaInicio.setScreen(new PantallaGameOver(pantallaInicio));
+        }
+
         batch.end();
+
         batch.setProjectionMatrix(camaraHUD.combined);
         escenaHUD.draw();
+
         // Botón PAUSA
         if (estado == EstadoJuego.PAUSADO){
             escenaPausa.draw();
         }
     }
+
 
     private void actualizarCamara() {
         // Depende de la posición del personaje. Siempre sigue al personaje
@@ -277,7 +299,7 @@ public class PantallaMapa extends Pantalla {
         mapa.dispose();
         escenaHUD.dispose();
         music.dispose();
-        escenaPausa.dispose();
+        //escenaPausa.dispose();
         batch.dispose();
 
     }
@@ -387,5 +409,7 @@ public class PantallaMapa extends Pantalla {
             this.addActor(btnBACK);
 
         }
+
     }
+
 }

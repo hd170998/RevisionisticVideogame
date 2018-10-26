@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 public class Vaca extends Enemigo {
     private Animation animacionX;
@@ -15,6 +16,9 @@ public class Vaca extends Enemigo {
     private float x,y;
     public static final int height = 160;
     public static final int width = 288;
+    private Rectangle boundsVaca;
+    private Vector2 position;
+    public boolean state = false;
 
 
     @Override
@@ -25,6 +29,12 @@ public class Vaca extends Enemigo {
     @Override
     public void update() {
 
+    }
+
+    @Override
+    public void setSize(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 
     public int getWidth(){
@@ -58,6 +68,7 @@ public class Vaca extends Enemigo {
 
         TextureRegion[][] texturaVaca = region.split(width,height);
         animacionX = new Animation(0.15f,texturaVaca[0][2],texturaVaca[0][1]);
+
         //animacionX.setPlayMode(Animation.PlayMode.LOOP);
         TextureRegion regionYup= new TextureRegion(new Texture("ForestStuff/WalkingMeleeY.png"));
         TextureRegion [][] texturaVacaY = regionYup.split(width,height);
@@ -69,9 +80,20 @@ public class Vaca extends Enemigo {
         //y = 1250;
         sprite.setPosition(x,y);
 
+        position = new Vector2(x, y);
         velocity = new Vector2(0, 0);
-
-        rectangle = new Rectangle();
+        boundsVaca = new Rectangle(x, y, width, height /3);
 
     }
+
+    public boolean collides(Rectangle jugador){
+        return jugador.overlaps(boundsVaca);
+    }
+
+    public void destroy(){
+        sprite.getTexture().dispose();
+        state = true;
+    }
+
+
 }
