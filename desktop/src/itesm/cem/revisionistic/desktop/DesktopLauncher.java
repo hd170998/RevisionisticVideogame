@@ -1,9 +1,9 @@
-package itesm.cem.mx.desktop;
+package itesm.cem.revisionistic.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
-import itesm.cem.mx.PantallaInicio;
+import itesm.cem.revisionistic.PantallaInicio;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {

@@ -1,4 +1,4 @@
-package itesm.cem.mx;
+package itesm.cem.revisionistic;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;

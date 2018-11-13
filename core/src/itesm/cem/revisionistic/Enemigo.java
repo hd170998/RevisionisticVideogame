@@ -1,4 +1,4 @@
-package itesm.cem.mx;
+package itesm.cem.revisionistic;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.graphics.g2d.Sprite;

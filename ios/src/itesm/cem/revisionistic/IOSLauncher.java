@@ -1,4 +1,4 @@
-package itesm.cem.mx;
+package itesm.cem.revisionistic;
 
 import org.robovm.apple.foundation.NSAutoreleasePool;
 import org.robovm.apple.uikit.UIApplication;
