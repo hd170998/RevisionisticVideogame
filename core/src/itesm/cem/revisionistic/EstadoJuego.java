@@ -1,4 +1,4 @@
-package itesm.cem.mx;
+package itesm.cem.revisionistic;
 
 public enum EstadoJuego {
     JUGANDO,

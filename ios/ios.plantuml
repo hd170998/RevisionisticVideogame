@@ -2,7 +2,7 @@
 
 title __IOS's Class Diagram__\n
 
-  package itesm.cem.mx {
+  package mx.itesm.revisionistic {
     class IOSLauncher {
     }
   }
