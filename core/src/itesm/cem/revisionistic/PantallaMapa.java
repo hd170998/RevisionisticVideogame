@@ -221,18 +221,6 @@ public class PantallaMapa extends Pantalla {
         vaca3.update();
         vaca3.render(batch);
 
-        if(vaca1.collides(ivan.getBounds())){
-            vaca1.destroy();
-        }
-
-        if(vaca2.collides(ivan.getBounds())){
-            vaca2.destroy();
-        }
-
-        if(vaca3.collides(ivan.getBounds())){
-            pantallaInicio.setScreen(new PantallaGameOver(pantallaInicio));
-        }
-
         batch.end();
 
         batch.setProjectionMatrix(camaraHUD.combined);

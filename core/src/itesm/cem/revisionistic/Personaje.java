@@ -15,7 +15,6 @@ import com.badlogic.gdx.math.Vector3;
 
 
 public class Personaje extends Objeto {
-    Rectangle ivRectangle;
     private Animation animacionX;
     private Animation animacionY;
     private Animation animacionYD;
@@ -80,6 +79,47 @@ public class Personaje extends Objeto {
         manager.load("audio/saw-audio.mp3",Sound.class);
         manager.finishLoading();
         saw = manager.get("audio/saw-audio.mp3",Sound.class);
+    }
+    public TextureRegion getAnimation(){
+        TextureRegion regionQ = new TextureRegion( new Texture("1V4N_Xaxis.png"));
+        // Divide la región en frames de 32x64
+        TextureRegion[][] texturaPersonaje = regionQ.split(64,128);
+        if (estadoMover==EstadoMovimento.QUIETO) {
+            //batch.draw(marioQuieto.getTexture(),x,y);
+            return texturaPersonaje[0][0];
+        } else if (estadoMover== EstadoMovimento.DERECHA || estadoMover==EstadoMovimento.IZQUIERDA){
+            timerAnimacion += Gdx.graphics.getDeltaTime();
+            TextureRegion region = (TextureRegion) animacionX.getKeyFrame(timerAnimacion);
+            if (estadoMover == EstadoMovimento.IZQUIERDA) {
+                region.flip(!region.isFlipX(), false);
+            } else if (estadoMover == EstadoMovimento.DERECHA) {
+                region.flip(region.isFlipX(), false);
+            }
+
+            return  region;
+
+
+        }else if (estadoMover== EstadoMovimento.ARRIBA){
+            timerAnimacion += Gdx.graphics.getDeltaTime();
+            TextureRegion regionUP = (TextureRegion) animacionY.getKeyFrame(timerAnimacion);
+            if (estadoMover == EstadoMovimento.ARRIBA) {
+                regionUP.flip(false, regionUP.isFlipY());
+            }
+            return regionUP;
+
+        }else if (estadoMover == EstadoMovimento.ABAJO){
+            timerAnimacion += Gdx.graphics.getDeltaTime();
+            TextureRegion regionDown = (TextureRegion) animacionYD.getKeyFrame(timerAnimacion);
+
+            return regionDown;
+
+        }else if (estadoMover == EstadoMovimento.ATAQUEX){
+            timerAnimacion += Gdx.graphics.getDeltaTime();
+            TextureRegion regionAtaque = (TextureRegion) animacionXA.getKeyFrame(timerAnimacion);
+
+            return regionAtaque;
+        }
+        return texturaPersonaje[0][0];
     }
     public void render(SpriteBatch batch) {
 
@@ -207,27 +247,21 @@ public class Personaje extends Objeto {
     public void mover(float dx, float dy) {
         x += dx;
         y += dy;
-        if (x > 600){
-            setLife(0);
-
-        }
         sprite.setPosition(x, y);
     }
     public void setVx(float VX) {
         this.VX = VX;
     }
+
     public void addDocumets(int documents){
         int suma = getDocuments() +documents;
         setDocuments(suma);
     }
+
     public void damage(int damage){
         int vida = getLife()-damage;
         setLife(vida);
 
-    }
-
-    public Rectangle getBounds(){
-        return jugBounds;
     }
 
     public int getWidth(){
