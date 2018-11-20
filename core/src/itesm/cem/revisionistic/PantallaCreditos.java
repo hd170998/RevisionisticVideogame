@@ -52,6 +52,7 @@ public class PantallaCreditos extends Pantalla {
         batch.draw(creditos, 0, -creditos.getHeight()/2+(60*elapsedTime));
         batch.end();
         escenaCreditos.draw();
+        Gdx.input.setInputProcessor(escenaCreditos);
     }
 
     @Override
