@@ -81,7 +81,7 @@ public class PantallaGameOver extends Pantalla {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 music.dispose();
-                pantallaInicio.setScreen(new PantallaMapa(pantallaInicio));
+                pantallaInicio.setScreen(new PlayScreen(pantallaInicio));
             }
         });
         escenaGameOver.addActor(btnBack);
