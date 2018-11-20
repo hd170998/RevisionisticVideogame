@@ -12,11 +12,15 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapLayers;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -26,6 +30,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -38,6 +43,8 @@ public class PlayScreen  extends Pantalla{
     private TiledMapRenderer tiledMapRenderer;
     private Personaje ivan;
     private MapLayer objectLayer;
+    private MapLayer enemiesLayer;
+
     private Label label, labeld;
     private BitmapFont font;
     private OrthographicCamera camaraHUD;
@@ -48,6 +55,17 @@ public class PlayScreen  extends Pantalla{
     private EstadoJuego estado;
     private Music music;
     private EscenaPausa escenaPausa;
+    private Array<Slime> slimes;
+    private Array<Vaca> vacas;
+    private Slime slime;
+    private Vaca vaca1;
+    private Vaca vaca2;
+    private Vaca vaca3;
+    private Vaca vaca4;
+    private Vaca vaca5;
+    private Slime slime1;
+
+
 
     public PlayScreen(PantallaInicio pantallaInicio) {
         this.pantallaInicio = pantallaInicio;
@@ -55,6 +73,19 @@ public class PlayScreen  extends Pantalla{
     @Override
     public void show() {
         ivan = new Personaje(new Texture("1V4N_Xaxis.png"));
+
+        vaca1 = new Vaca(200,1250);
+
+        vaca2 = new Vaca(800,1250);
+
+        vaca3 = new Vaca(400, 1850);
+
+        vaca4 = new Vaca(600,1850);
+
+        vaca5 = new Vaca(1500,1050);
+
+
+
         ivan.setLife(100);
         ivan.setDocuments(0);
         font = new BitmapFont(Gdx.files.internal("font.fnt"));
@@ -91,7 +122,7 @@ public class PlayScreen  extends Pantalla{
         labelStyle.fontColor = Color.WHITE;
         label= new Label(String.format("%03d",ivan.getLife()),labelStyle);
         labeld = new Label(String.format("%01d",ivan.getDocuments()),labelStyle);
-        final TextureMapObject character = (TextureMapObject)mapa.getLayers().get("1V4N").getObjects().get(0);
+        //final TextureMapObject character = (TextureMapObject)mapa.getLayers().get("1V4N").getObjects().get(0);
         Skin skin = new Skin(); // Texturas para el pad
         skin.add("fondo", new Texture("padBack.png"));
         skin.add("boton", new Texture("padKnob.png"));
@@ -224,11 +255,18 @@ public class PlayScreen  extends Pantalla{
         manager.load("audio/saw-audio.mp3",Sound.class);
         manager.finishLoading(); // Espera
         mapa = manager.get("ForestStuff/ForestMap.tmx");
+
         saw = manager.get("audio/saw-audio.mp3",Sound.class);
+
         tiledMapRenderer = new OrthogonalTiledMapRendererWithSprites(mapa);
+        
         objectLayer = mapa.getLayers().get("1V4N");
         TextureMapObject IvanO = new TextureMapObject(ivan.getAnimation());
         objectLayer.getObjects().add(IvanO);
+
+
+
+
     }
 
     @Override
@@ -240,17 +278,84 @@ public class PlayScreen  extends Pantalla{
         batch.setProjectionMatrix(camara.combined);
         camara.position.set(ANCHO/2,ALTO_MAPA/2-50,0);
         camara.update();
+
         tiledMapRenderer.render();
         TextureMapObject character = (TextureMapObject)mapa.getLayers().get("1V4N").getObjects().get(0);
         character.setX(ivan.getX());
         character.setY(ivan.getY());
         character.setTextureRegion(ivan.getAnimation());
+        batch.begin();
+
+
+
+        if(vaca1.state != true){
+            vaca1.update();
+            vaca1.render(batch);
+        }
+
+        if(vaca2.state != true){
+            vaca2.update();
+            vaca2.render(batch);
+        }
+
+
+
+        vaca3.update();
+        vaca3.render(batch);
+
+        if(vaca4.state != true){
+            vaca4.update();
+            vaca4.render(batch);
+        }
+
+        if(vaca5.state != true){
+            vaca5.update();
+            vaca5.render(batch);
+        }
+
+
+        if(vaca1.collides(ivan.getBounds())){
+            vaca1.destroy();
+        }
+
+        if(vaca2.collides(ivan.getBounds())){
+            vaca2.destroy();
+        }
+
+        if(vaca3.collides(ivan.getBounds())){
+            pantallaInicio.setScreen(new PantallaGameOver(pantallaInicio));
+        }
+
+        if(vaca4.collides(ivan.getBounds())){
+            pantallaInicio.setScreen(new PantallaGameOver(pantallaInicio));
+        }
+
+        if(vaca5.collides(ivan.getBounds())){
+            pantallaInicio.setScreen(new PantallaGameOver(pantallaInicio));
+        }
+
+
+
+        batch.end();
         batch.setProjectionMatrix(camaraHUD.combined);
+
         escenaHUD.draw();
+
+
+
+
+
         if (estado == EstadoJuego.PAUSADO){
             escenaPausa.draw();
         }
 
+    }
+
+    public Array<Enemigo> getEnemies(){
+        Array<Enemigo> enemies = new Array<Enemigo>();
+        enemies.addAll(slimes);
+        enemies.addAll(vacas);
+        return enemies;
     }
 
     @Override

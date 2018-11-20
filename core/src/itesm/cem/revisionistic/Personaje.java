@@ -30,6 +30,7 @@ public class Personaje extends Objeto {
     public static final float SPEED = 5;
     public int life;
     public int documents;
+    private Rectangle jugBounds;
 
 
     public enum EstadoMovimento {
@@ -89,6 +90,7 @@ public class Personaje extends Objeto {
         sprite.setPosition(64,1250);
         x = 64;
         y = 1250;
+        jugBounds = new Rectangle(x, y ,64, 128 );
         AssetManager manager = new AssetManager();
         manager.load("audio/saw-audio.mp3",Sound.class);
         manager.finishLoading();
@@ -254,6 +256,7 @@ public class Personaje extends Objeto {
 
     }
 
+
     public int getWidth(){
         return width;
     }
@@ -267,6 +270,11 @@ public class Personaje extends Objeto {
     }
     public void setEstadoMover(EstadoMovimento estadoMover) {
         this.estadoMover = estadoMover;
+    }
+
+
+    public Rectangle getBounds(){
+        return jugBounds;
     }
 
 }
