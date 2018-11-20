@@ -26,6 +26,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import javax.tools.ForwardingJavaFileManager;
+
 
 public class PantallaMapa extends Pantalla {
     private static final float ANCHO_MAPA = 4800;
@@ -213,6 +215,7 @@ public class PantallaMapa extends Pantalla {
         }
 
         if(vaca2.state != true){
+
             vaca2.update();
             vaca2.render(batch);
         }
