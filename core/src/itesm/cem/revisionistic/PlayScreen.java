@@ -2,9 +2,13 @@ package itesm.cem.revisionistic;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
@@ -15,6 +19,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -33,13 +38,16 @@ public class PlayScreen  extends Pantalla{
     private TiledMapRenderer tiledMapRenderer;
     private Personaje ivan;
     private MapLayer objectLayer;
-    private Label label;
+    private Label label, labeld;
     private BitmapFont font;
     private OrthographicCamera camaraHUD;
     private Viewport vistaHUD;
     // HUD con una escena para los botones y componentes
     private Stage escenaHUD;
-
+    private Sound saw;
+    private EstadoJuego estado;
+    private Music music;
+    private EscenaPausa escenaPausa;
 
     public PlayScreen(PantallaInicio pantallaInicio) {
         this.pantallaInicio = pantallaInicio;
@@ -49,14 +57,29 @@ public class PlayScreen  extends Pantalla{
         ivan = new Personaje(new Texture("1V4N_Xaxis.png"));
         ivan.setLife(100);
         ivan.setDocuments(0);
+        font = new BitmapFont(Gdx.files.internal("font.fnt"));
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.font = font;
+        labelStyle.fontColor = Color.WHITE;
         cargarMapa();
         crearHUD();
+        cargaMusica();
         Gdx.input.setInputProcessor(escenaHUD);
 
 
     }
+    private void cargaMusica() {
+        AssetManager manager = new AssetManager();
+        manager.load("audio/Forest.mp3", Music.class);
+        manager.load("audio/saw-audio.mp3",Sound.class);
+        manager.finishLoading();
+        music = manager.get("audio/Forest.mp3");
+        music.setLooping(true);
+        music.play();
+    }
 
     private void crearHUD() {
+
         camaraHUD = new OrthographicCamera(ANCHO, ALTO);
         camaraHUD.position.set(ANCHO/2, ALTO_MAPA/2-50, 0);
         camaraHUD.update();
@@ -67,6 +90,7 @@ public class PlayScreen  extends Pantalla{
         labelStyle.font = font;
         labelStyle.fontColor = Color.WHITE;
         label= new Label(String.format("%03d",ivan.getLife()),labelStyle);
+        labeld = new Label(String.format("%01d",ivan.getDocuments()),labelStyle);
         final TextureMapObject character = (TextureMapObject)mapa.getLayers().get("1V4N").getObjects().get(0);
         Skin skin = new Skin(); // Texturas para el pad
         skin.add("fondo", new Texture("padBack.png"));
@@ -105,14 +129,55 @@ public class PlayScreen  extends Pantalla{
         Drawable regionPausaOP = new TextureRegionDrawable(new TextureRegion( new Texture("button_pause.png")));
         ImageButton btnPausa = new ImageButton(regionPausa,regionPausaOP);
         btnPausa.setPosition(ANCHO-btnPausa.getWidth(),ALTO-btnPausa.getHeight());
+        btnPausa.addListener(new ClickListener(){
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                if (escenaPausa == null){
+                    escenaPausa = new EscenaPausa(vistaHUD, batch);
+                }
+                estado = EstadoJuego.PAUSADO;
+                Gdx.input.setInputProcessor(escenaPausa);
+                // PASA EL CONTROL A LA ESCENA
+            }
+        });
         Drawable regionAtaque = new TextureRegionDrawable(new TextureRegion(new Texture("atacar.png")));
         Drawable regionAtaqueOP = new TextureRegionDrawable(new TextureRegion( new Texture("atacar.png")));
-        final ImageButton btnAtaque = new ImageButton(regionAtaque,regionAtaqueOP);
-        btnAtaque.setPosition(ANCHO-btnAtaque.getWidth(),btnAtaque.getHeight());
+        ImageButton btnAtaque = new ImageButton(regionAtaque,regionAtaqueOP);
+        btnAtaque.setPosition(ANCHO-btnAtaque.getWidth(),btnAtaque.getHeight()/8);
+        btnAtaque.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if (ivan.estadoMover==Personaje.EstadoMovimento.DERECHA||ivan.estadoMover==Personaje.EstadoMovimento.QUIETO){
+                    ivan.setEstadoMover(Personaje.EstadoMovimento.ATAQUEX);
+                    saw.play();
+                }else if (ivan.estadoMover== Personaje.EstadoMovimento.IZQUIERDA){
+                    ivan.setEstadoMover(Personaje.EstadoMovimento.ATAQUEXI);
+                }
+                else if (ivan.estadoMover==Personaje.EstadoMovimento.ARRIBA){
+                    ivan.setEstadoMover(Personaje.EstadoMovimento.ATAQUEYUP);
+
+                }
+                else if (ivan.estadoMover==Personaje.EstadoMovimento.ABAJO){
+                    ivan.setEstadoMover(Personaje.EstadoMovimento.ATAQUEYDOWN);
+                }
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                saw.stop();
+                ivan.setEstadoMover(Personaje.EstadoMovimento.QUIETO);
+                //super.touchUp(event, x, y, pointer, button);
+            }
+        });
         Drawable regionCorazon = new TextureRegionDrawable(new TextureRegion( new Texture("heartSprite.png")));
         Image corazon = new Image(regionCorazon);
         corazon.setPosition(corazon.getWidth()/2, ALTO-corazon.getHeight());
-        label.setPosition(corazon.getWidth(),ALTO-label.getHeight());
+        label.setPosition(corazon.getWidth()+(label.getWidth()/1.5f),ALTO-(label.getHeight()/.8f));
+        Drawable regionDocumento = new TextureRegionDrawable(new TextureRegion( new Texture("FileSprite.png")));
+        Image documento = new Image(regionDocumento);
+        documento.setPosition(ANCHO/2,ALTO-documento.getHeight());
+        labeld.setPosition(documento.getWidth()+ANCHO/2+(labeld.getWidth()/1.5f),ALTO-(labeld.getHeight()/.8f));
         // Crea la escena y agrega el pad
         escenaHUD = new Stage(vistaHUD);// Escalar con esta vista
         escenaHUD.addActor(btnPausa);
@@ -120,6 +185,8 @@ public class PlayScreen  extends Pantalla{
         escenaHUD.addActor(btnAtaque);
         escenaHUD.addActor(corazon);
         escenaHUD.addActor(label);
+        escenaHUD.addActor(documento);
+        escenaHUD.addActor(labeld);
     }
 
     private void actualizarCamara() {
@@ -154,13 +221,14 @@ public class PlayScreen  extends Pantalla{
         AssetManager manager = new AssetManager();
         manager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
         manager.load("ForestStuff/ForestMap.tmx",TiledMap.class);
+        manager.load("audio/saw-audio.mp3",Sound.class);
         manager.finishLoading(); // Espera
         mapa = manager.get("ForestStuff/ForestMap.tmx");
+        saw = manager.get("audio/saw-audio.mp3",Sound.class);
         tiledMapRenderer = new OrthogonalTiledMapRendererWithSprites(mapa);
         objectLayer = mapa.getLayers().get("1V4N");
         TextureMapObject IvanO = new TextureMapObject(ivan.getAnimation());
         objectLayer.getObjects().add(IvanO);
-
     }
 
     @Override
@@ -179,6 +247,9 @@ public class PlayScreen  extends Pantalla{
         character.setTextureRegion(ivan.getAnimation());
         batch.setProjectionMatrix(camaraHUD.combined);
         escenaHUD.draw();
+        if (estado == EstadoJuego.PAUSADO){
+            escenaPausa.draw();
+        }
 
     }
 
@@ -194,6 +265,114 @@ public class PlayScreen  extends Pantalla{
 
     @Override
     public void dispose() {
+
+    }
+    private class EscenaPausa extends Stage {
+        public EscenaPausa(Viewport vistaHUD, Batch batch) {
+            super(vistaHUD,batch);
+            //transparente
+            Pixmap pixmap = new Pixmap((int)(ANCHO), (int)(ALTO), Pixmap.Format.RGBA8888 );
+            pixmap.setColor( 1f, 1f, 1f, 0.65f );
+            pixmap.fillRectangle(0, 0, pixmap.getWidth(), pixmap.getHeight());
+            Texture texturaRectangulo = new Texture( pixmap );
+            pixmap.dispose();
+            Image imgRectangulo = new Image(texturaRectangulo);
+            imgRectangulo.setPosition(0, 0);
+            this.addActor(imgRectangulo);
+            //base Settings
+            Texture baseOpciones = new Texture("Options/SettingsBase.png");
+            Image Opcion = new Image(baseOpciones);
+            Opcion.setPosition(ANCHO/2-baseOpciones.getWidth()/2, ALTO/2-baseOpciones.getHeight()/2);
+            this.addActor(Opcion);
+            //boton Musica
+            Drawable regionMusic = new TextureRegionDrawable(new TextureRegion(new Texture("Options/ButtonMusic_On.png")));
+            Drawable regionMusicOP = new TextureRegionDrawable(new TextureRegion( new Texture("Options/ButtonMusic_Off.png")));
+            final ImageButton btnMusic = new ImageButton(regionMusic,regionMusicOP, regionMusicOP);
+            btnMusic.setPosition(ANCHO/2-btnMusic.getWidth()/2,5*ALTO/8);
+            btnMusic.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    if (btnMusic.isChecked()){
+                        btnMusic.setChecked(true);
+                        music.pause();
+                    }
+                    else {
+                        btnMusic.setChecked(false);
+                        music.play();
+                    }
+                }
+            });
+            this.addActor(btnMusic);
+            //boton sound FX
+
+            Drawable regionSound = new TextureRegionDrawable(new TextureRegion(new Texture("Options/ButtonSoundFX_On.png")));
+            Drawable regionSoundOP = new TextureRegionDrawable(new TextureRegion(new Texture("Options/ButtonSoundFX_Off.png")));
+
+            ImageButton btnSound = new ImageButton(regionSound,regionSoundOP);
+            btnSound.setPosition(ANCHO/2-btnSound.getWidth()/2,4*ALTO/8);
+            this.addActor(btnSound);
+            //boton resume
+
+            Drawable regionResume = new TextureRegionDrawable(new TextureRegion(new Texture("Options/ButtonResume_Normal.png")));
+            Drawable regionResumeOP = new TextureRegionDrawable(new TextureRegion(new Texture("Options/ButtonResume_Click.png")));
+
+            ImageButton btnResume = new ImageButton(regionResume,regionResumeOP);
+            btnResume.setPosition(ANCHO/2-btnSound.getWidth()/2,1*ALTO/4);
+            btnResume.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    // Regresa al juego
+                    estado = EstadoJuego.JUGANDO;
+                    Gdx.input.setInputProcessor(escenaHUD); // No debería crear uno nuevo
+                }
+            });
+            this.addActor(btnResume);
+            //boton credits
+
+            Drawable regionCredits = new TextureRegionDrawable(new TextureRegion(new Texture("Options/ButtonCredits_Normal.png")));
+            Drawable regionCreditsOP = new TextureRegionDrawable(new TextureRegion(new Texture("Options/ButtonCredits_Click.png")));
+
+            ImageButton  btnCredits = new ImageButton(regionCredits, regionCreditsOP);
+            btnCredits.setPosition(ANCHO/2-btnSound.getWidth()/2,1*ALTO/8);
+            btnCredits.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    pantallaInicio.setScreen (new PantallaCreditos(pantallaInicio));
+                }
+            });
+            this.addActor(btnCredits);
+
+            //boton Menu
+
+            Drawable regionMenu = new TextureRegionDrawable(new TextureRegion(new Texture("Options/ButtonCredits_Normal.png")));
+            Drawable regionMenuOP = new TextureRegionDrawable(new TextureRegion(new Texture("Options/ButtonCredits_Click.png")));
+
+            ImageButton  btnMenu = new ImageButton(regionMenu, regionMenuOP);
+            btnMenu.setPosition(ANCHO/2-btnSound.getWidth()/2,1*ALTO/8);
+            btnMenu.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    pantallaInicio.setScreen (new PantallaMenu(pantallaInicio));
+                }
+            });
+            // boton back
+            Texture BtnBACK=new Texture("BackButton01.png");
+            TextureRegionDrawable tBACK= new TextureRegionDrawable(new TextureRegion(BtnBACK));
+            Texture BtnresumeOP = new Texture("BackButton02HOVER.png");
+            TextureRegionDrawable tBACKop = new TextureRegionDrawable(new TextureRegion(BtnresumeOP));
+            ImageButton btnBACK = new ImageButton(tBACK,tBACKop);
+            btnBACK.setPosition(btnBACK.getWidth()/2, ALTO-btnBACK.getHeight());
+            btnBACK.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    // Regresa al juego
+                    estado = EstadoJuego.JUGANDO;
+                    Gdx.input.setInputProcessor(escenaHUD); // No debería crear uno nuevo
+                }
+            });
+            this.addActor(btnBACK);
+
+        }
 
     }
 }

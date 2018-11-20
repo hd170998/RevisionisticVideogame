@@ -19,6 +19,8 @@ public class Personaje extends Objeto {
     private Animation animacionY;
     private Animation animacionYD;
     private Animation animacionXA;
+    private Animation animacionYAU;
+    private Animation animacionYAD;
     private float timerAnimacion;
     private int width, height;
     private float x, y;   // coordenadas
@@ -28,9 +30,7 @@ public class Personaje extends Objeto {
     public static final float SPEED = 5;
     public int life;
     public int documents;
-    private Vector3 position;
-    private Rectangle jugBounds;
-    private Sound saw;
+
 
     public enum EstadoMovimento {
         QUIETO,
@@ -38,7 +38,10 @@ public class Personaje extends Objeto {
         IZQUIERDA,
         ARRIBA,
         ABAJO,
-        ATAQUEX
+        ATAQUEX,
+        ATAQUEYUP,
+        ATAQUEYDOWN,
+        ATAQUEXI
     }
 
     public void setSize(int x, int y) {
@@ -63,22 +66,32 @@ public class Personaje extends Objeto {
         TextureRegion [][] texturaPersonajeDown = regionDown.split(64,128);
         animacionYD = new Animation(0.15f,texturaPersonajeDown[0][2], texturaPersonajeDown[0][1], texturaPersonajeDown[0][0]);
         animacionYD.setPlayMode((Animation.PlayMode.LOOP));
+        ///////////////////
         TextureRegion ataquex = new TextureRegion(new Texture("Saw/SawSword_XaxisSingle.png"));
         TextureRegion[][] regionesAtaqueX = ataquex.split(126,134);
         animacionXA = new Animation(0.15f, regionesAtaqueX[0][1],regionesAtaqueX[0][0]);
-        animacionXA.setPlayMode((Animation.PlayMode.LOOP_PINGPONG));
+        animacionXA.setPlayMode((Animation.PlayMode.LOOP));
+        ////////////
+        TextureRegion ataqueYU = new TextureRegion(new Texture("Saw/SawSword_YUp.png"));
+        TextureRegion [][] regionesYAU = ataqueYU.split(110,165);
+        animacionYAU = new Animation(0.15f,regionesYAU[0][1], regionesYAU[0][0]);
+        animacionYAU.setPlayMode(Animation.PlayMode.LOOP);
         timerAnimacion = 0;
+        ////////////
+        TextureRegion ataqueYD = new TextureRegion(new Texture("Saw/SawSword_YUp.png"));
+        TextureRegion [][] regionesYAD = ataqueYD.split(83,157);
+        animacionYAD = new Animation(0.15f,regionesYAD[0][1], regionesYAD[0][0]);
+        animacionYAD.setPlayMode(Animation.PlayMode.LOOP);
+        timerAnimacion = 0;
+        ////
         // Quieto
         sprite = new Sprite(texturaPersonaje[0][0]);
         sprite.setPosition(64,1250);
         x = 64;
         y = 1250;
-        position = new Vector3(x,y,0);
-        jugBounds = new Rectangle(x, y ,50, 100);
         AssetManager manager = new AssetManager();
         manager.load("audio/saw-audio.mp3",Sound.class);
         manager.finishLoading();
-        saw = manager.get("audio/saw-audio.mp3",Sound.class);
     }
     public TextureRegion getAnimation(){
         TextureRegion regionQ = new TextureRegion( new Texture("1V4N_Xaxis.png"));
@@ -95,16 +108,10 @@ public class Personaje extends Objeto {
             } else if (estadoMover == EstadoMovimento.DERECHA) {
                 region.flip(region.isFlipX(), false);
             }
-
             return  region;
-
-
         }else if (estadoMover== EstadoMovimento.ARRIBA){
             timerAnimacion += Gdx.graphics.getDeltaTime();
             TextureRegion regionUP = (TextureRegion) animacionY.getKeyFrame(timerAnimacion);
-            if (estadoMover == EstadoMovimento.ARRIBA) {
-                regionUP.flip(false, regionUP.isFlipY());
-            }
             return regionUP;
 
         }else if (estadoMover == EstadoMovimento.ABAJO){
@@ -113,65 +120,37 @@ public class Personaje extends Objeto {
 
             return regionDown;
 
-        }else if (estadoMover == EstadoMovimento.ATAQUEX){
+        }else if (estadoMover == EstadoMovimento.ATAQUEX || estadoMover== EstadoMovimento.ATAQUEXI){
             timerAnimacion += Gdx.graphics.getDeltaTime();
-            TextureRegion regionAtaque = (TextureRegion) animacionXA.getKeyFrame(timerAnimacion);
+            TextureRegion regionAtaqueX = (TextureRegion) animacionXA.getKeyFrame(timerAnimacion);
 
-            return regionAtaque;
+            if (estadoMover==EstadoMovimento.ATAQUEX) {
+                regionAtaqueX.flip(regionAtaqueX.isFlipX(), false);
+            }
+            else {
+                regionAtaqueX.flip(!regionAtaqueX.isFlipX(), false);
+            }
+            return regionAtaqueX;
+        }else if (estadoMover == EstadoMovimento.ATAQUEYUP){
+            timerAnimacion += Gdx.graphics.getDeltaTime();
+            TextureRegion regionAtaqueYU = (TextureRegion) animacionYAU.getKeyFrame(timerAnimacion);
+            return regionAtaqueYU;
+        }else if (estadoMover == EstadoMovimento.ATAQUEYDOWN){
+            timerAnimacion += Gdx.graphics.getDeltaTime();
+            TextureRegion regionAtaqueYD = (TextureRegion) animacionYAD.getKeyFrame(timerAnimacion);
+            return regionAtaqueYD;
         }
         return texturaPersonaje[0][0];
     }
-    public void render(SpriteBatch batch) {
 
-        if (estadoMover==EstadoMovimento.QUIETO) {
-            //batch.draw(marioQuieto.getTexture(),x,y);
-
-            sprite.draw(batch);
-        } else if (estadoMover== EstadoMovimento.DERECHA || estadoMover==EstadoMovimento.IZQUIERDA){
-            timerAnimacion += Gdx.graphics.getDeltaTime();
-            TextureRegion region = (TextureRegion) animacionX.getKeyFrame(timerAnimacion);
-            if (estadoMover == EstadoMovimento.IZQUIERDA) {
-                region.flip(!region.isFlipX(), false);
-            } else if (estadoMover == EstadoMovimento.DERECHA) {
-                region.flip(region.isFlipX(), false);
-            }
-
-            batch.draw(region, x, y);
-            jugBounds.setPosition(x,y);
-
-
-        }else if (estadoMover== EstadoMovimento.ARRIBA){
-            timerAnimacion += Gdx.graphics.getDeltaTime();
-            TextureRegion regionUP = (TextureRegion) animacionY.getKeyFrame(timerAnimacion);
-            if (estadoMover == EstadoMovimento.ARRIBA) {
-                regionUP.flip(false, regionUP.isFlipY());
-            }
-
-
-            batch.draw(regionUP, x, y);
-            jugBounds.setPosition(x,y);
-
-        }else if (estadoMover == EstadoMovimento.ABAJO){
-            timerAnimacion += Gdx.graphics.getDeltaTime();
-            TextureRegion regionDown = (TextureRegion) animacionYD.getKeyFrame(timerAnimacion);
-
-            sprite.setPosition(x,y);
-            batch.draw(regionDown, x, y);
-            jugBounds.setPosition(x,y);
-
-        }else if (estadoMover == EstadoMovimento.ATAQUEX){
-            timerAnimacion += Gdx.graphics.getDeltaTime();
-            TextureRegion regionAtaque = (TextureRegion) animacionXA.getKeyFrame(timerAnimacion);
-
-            batch.draw(regionAtaque, x, y);
-            jugBounds.setPosition(x,y);
-
-        }
-    }
     public void actualizar(TiledMap mapa) {
 
         // Verificar si se puede mover (no hay obstáculos, por ahora tubos verdes)
         switch (estadoMover) {
+            case ATAQUEX:
+                if (puedeMover(1,0,mapa)){
+                    mover(VX*SPEED, VY*SPEED);
+                }
             case ABAJO:
                 if (puedeMover(0,-1,mapa)){
                     mover(VX*SPEED, VY*SPEED);
@@ -193,6 +172,10 @@ public class Personaje extends Objeto {
                     mover(VX*SPEED, VY*SPEED);
                 }
                 break;
+            case ATAQUEYDOWN:
+                if (puedeMover(0,-1,mapa)){
+                    mover(VX*SPEED, VY*SPEED);
+                }
         }
     }
 
@@ -200,8 +183,15 @@ public class Personaje extends Objeto {
         int cx = (int)(getX()+(dx*32))/32;
         int cy = (int)(getY()+(dy*32))/32;
         TiledMapTileLayer capa = (TiledMapTileLayer)mapa.getLayers().get(1);
+        TiledMapTileLayer capa2 = (TiledMapTileLayer)mapa.getLayers().get(6);
+        TiledMapTileLayer.Cell celda2 = capa2.getCell(cx,cy);
         TiledMapTileLayer.Cell celda = capa.getCell(cx,cy);
         // Obtener la celda en x,y
+        if (celda2!=null){
+            addDocumets(1);
+            Gdx.app.log("Documentos",""+documents);
+            celda2.setTile(null);
+        }
         if (celda!=null){
             Object material = celda.getTile().getProperties().get("Material");
             if (!"Solido".equals(material)) {
