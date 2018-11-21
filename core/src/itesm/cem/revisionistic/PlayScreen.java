@@ -12,11 +12,17 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -48,12 +54,14 @@ public class PlayScreen  extends Pantalla{
     private EstadoJuego estado;
     private Music music;
     private EscenaPausa escenaPausa;
+    private MapObjects objetos;
 
     public PlayScreen(PantallaInicio pantallaInicio) {
         this.pantallaInicio = pantallaInicio;
     }
     @Override
     public void show() {
+        Gdx.input.setCatchBackKey(true);
         ivan = new Personaje(new Texture("1V4N_Xaxis.png"));
         ivan.setLife(100);
         ivan.setDocuments(0);
@@ -123,6 +131,7 @@ public class PlayScreen  extends Pantalla{
                 }
             }
         });
+
 
         pad.setColor(1,1,1,0.7f);   // Transparente
         Drawable regionPausa = new TextureRegionDrawable(new TextureRegion(new Texture("button_pause.png")));
@@ -229,6 +238,8 @@ public class PlayScreen  extends Pantalla{
         objectLayer = mapa.getLayers().get("1V4N");
         TextureMapObject IvanO = new TextureMapObject(ivan.getAnimation());
         objectLayer.getObjects().add(IvanO);
+        MapLayer collisionObjectLayer = mapa.getLayers().get("Enemigos");
+        objetos = collisionObjectLayer.getObjects();
     }
 
     @Override
@@ -250,6 +261,15 @@ public class PlayScreen  extends Pantalla{
         escenaHUD.draw();
         labeld.setText(String.format("%01d",ivan.documents));
         label.setText(String.format("%01d",ivan.life));
+        for (RectangleMapObject rectangleObject : objetos.getByType(RectangleMapObject.class)) {
+
+            Rectangle rectangle = rectangleObject.getRectangle();
+            Gdx.app.log("rectangle",""+rectangle);
+            if (Intersector.overlaps(rectangle, ivan.getRectangle())) {
+                Gdx.app.log("Collision", "Happened");
+                // collision happened
+            }
+        }
         if (estado == EstadoJuego.PAUSADO){
             escenaPausa.draw();
         }
