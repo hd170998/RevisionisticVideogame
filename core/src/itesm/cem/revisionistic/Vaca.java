@@ -23,17 +23,17 @@ public class Vaca extends Enemigo {
     private Array<TextureRegion> frames;
     Personaje.EstadoMovimento estadoMover = Personaje.EstadoMovimento.QUIETO;
     private Array<TextureRegion> attackVaca;
-    private float timerAnimacion;
-    private boolean setToDestroy;
-    private Rectangle boundsVaca;
-    private boolean destroyed;
+    public boolean state;
+    public Rectangle boundsVaca;
     public static final int height = 160;
     public static final int width = 288;
-    public boolean state = false;
     private Sprite sprite;
     float x;
     float y;
 
+    public Rectangle getBounds(){
+        return boundsVaca;
+    }
     public float getX(){
         return x;
     }
@@ -50,13 +50,7 @@ public class Vaca extends Enemigo {
         this.y = y;
     }
 
-    public void mover(float dx, float dy) {
-        x += dx;
-        y += dy;
-        sprite.setPosition(x, y);
-    }
-
-    public Vaca(float x, float y) {
+    public Vaca(float x, float y, float recHeight, float recWidth) {
 
 
         TextureRegion region = new TextureRegion(new Texture("ForestStuff/WalkingMeleeX.png"));
@@ -80,28 +74,38 @@ public class Vaca extends Enemigo {
 
        //currentState = previousState = Vaca.State.WALKING;
 
-        setBounds(getX(), getY(), 216, 128);
+        boundsVaca = new Rectangle(x, y,recWidth, recHeight);
     }
 
 
-    @Override
-    protected void defineEnemy() {
 
-    }
 
     @Override
     public void update() {
-        sprite.translateX(10* Gdx.graphics.getDeltaTime());
+        int i = 0;
+        while(i<=10){
+            i++;
+            x += 1;
+
+            sprite.setPosition(x, y);
+            boundsVaca.setPosition(x, y);
+        }
+        while(i > 10 && i <= 20){
+            x -= 1;
+            i++;
+            sprite.setPosition(x, y);
+            boundsVaca.setPosition(x, y);
+        }
+
     }
 
-    public void moveLeft(float delta){
-
-    }
 
 
     @Override
     public void hitOnHead() {
         sprite.getTexture().dispose();
+        boundsVaca.setPosition(-1000,-1000);
+        state = true;
 
     }
 
@@ -109,17 +113,6 @@ public class Vaca extends Enemigo {
     public void hitByEnemy(Enemigo enemigo) {
 
     }
-
-
-    public boolean collides(Rectangle jugador){
-        return jugador.overlaps(boundsVaca);
-    }
-
-    public void destroy(){
-        sprite.getTexture().dispose();
-        state = true;
-    }
-
 
 
 }

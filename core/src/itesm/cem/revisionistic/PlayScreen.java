@@ -280,15 +280,14 @@ public class PlayScreen  extends Pantalla{
 
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
-            vacas.add(new Vaca(rect.x, rect.y));
+            vacas.add(new Vaca(rect.x, rect.y, rect.width, rect.height));
 
 
 
         }
 
 
-        MapLayer collisionObjectLayer = mapa.getLayers().get("Enemigos");
-        objetos = collisionObjectLayer.getObjects();
+
     }
 
     private void SetIvanBounds(float x, float y){
@@ -317,10 +316,20 @@ public class PlayScreen  extends Pantalla{
         batch.begin();
         for(Vaca v : vacas){
             stateTime += Gdx.graphics.getDeltaTime();
-            TextureRegion currenFrame = (TextureRegion) v.walkingAnimation.getKeyFrame(stateTime, true);
-            batch.draw(currenFrame, v.getX(), v.getY());
+            if(v.state != true){
+                TextureRegion currenFrame = (TextureRegion) v.walkingAnimation.getKeyFrame(stateTime, true);
+                batch.draw(currenFrame, v.getX(), v.getY());
+                v.update();
+            }
+
         }
+
+        SetIvanBounds(ivan.getX(), ivan.getY());
+
+        checkCollision();
+
         batch.end();
+
 
 
         batch.setProjectionMatrix(camaraHUD.combined);
@@ -328,36 +337,45 @@ public class PlayScreen  extends Pantalla{
         labeld.setText(String.format("%01d",ivan.documents));
         label.setText(String.format("%01d",ivan.life));
 
-        SetIvanBounds(ivan.getX(), ivan.getY());
 
-        for (RectangleMapObject rectangleObject : objetos.getByType(RectangleMapObject.class)) {
+
+        /*for (RectangleMapObject rectangleObject : objetos.getByType(RectangleMapObject.class)) {
             int i;
             Rectangle rectangle = rectangleObject.getRectangle();
 
-            if (Intersector.overlaps(rectangle,jugBounds)) {
-                if(ivan.estadoMover != Personaje.EstadoMovimento.ATAQUEX || ivan.estadoMover != Personaje.EstadoMovimento.ATAQUEXI){
-                    ivan.damage(1);
+            for(i=0; i < vacas.size; i++){
+                for (Vaca v : vacas){
 
-                }else if (ivan.estadoMover == Personaje.EstadoMovimento.ATAQUEX || ivan.estadoMover == Personaje.EstadoMovimento.ATAQUEXI||
-                        ivan.estadoMover == Personaje.EstadoMovimento.ATAQUEYUP || ivan.estadoMover == Personaje.EstadoMovimento.ATAQUEYDOWN) {git
-
-                    for(i= 0; i < vacas.size; i++) {
-                        for (Vaca v : vacas) {
-                            if (v.getX() == rectangle.getX() && v.getY() == rectangle.getY()) {
-                                v.hitOnHead();
-                                vacas.removeIndex(i);
-                            }
+                    if(Intersector.overlaps(rectangle, jugBounds)){
+                        if(v.getX() == rectangle.getX() && v.getY() == rectangle.getY()){
+                            v.hitOnHead();
+                            vacas.removeIndex(i);
                         }
                     }
-
                 }
-                // collision happened
             }
-        }
+        }*/
         if (estado == EstadoJuego.PAUSADO){
             escenaPausa.draw();
         }
 
+    }
+
+    public void checkCollision(){
+        for(Vaca v : vacas){
+            if (jugBounds.overlaps(v.boundsVaca)){
+                if(ivan.movimiento == "ATAQUE"){
+
+                    v.hitOnHead();
+                } else {
+                    ivan.estado = "atacado";
+
+                    ivan.damage(1);
+
+                }
+
+            }
+        }
     }
 
     @Override

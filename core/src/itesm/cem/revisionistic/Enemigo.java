@@ -17,13 +17,11 @@ public abstract class Enemigo extends Sprite {
        // this.world = screen.getWorld();
 
        // setPosition(x, y);
-        defineEnemy();
         velocity = new Vector2(-1, -2);
 
 
     }
 
-    protected abstract void defineEnemy();
     public abstract void update();
     public abstract void hitOnHead();
     public abstract void hitByEnemy(Enemigo enemigo);

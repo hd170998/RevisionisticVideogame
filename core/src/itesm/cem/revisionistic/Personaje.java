@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.Vector3;
 
 
 public class Personaje extends Objeto {
+    private  Animation atacadoC;
     private Animation animacionX;
     private Animation animacionY;
     private Animation animacionYD;
@@ -34,7 +35,9 @@ public class Personaje extends Objeto {
     public static final float SPEED = 5;
     public int life;
     public int documents;
+    public String estado = new String();
     private Rectangle jugBounds;
+    public String movimiento = new String();
 
     public Rectangle getRectangle() {
         return jugBounds;
@@ -93,9 +96,12 @@ public class Personaje extends Objeto {
         animacionYAD.setPlayMode(Animation.PlayMode.LOOP);
 
         ///////Daño animation
+
         TextureRegion daño = new TextureRegion(new Texture("Damage/Damage_Back.png"));
         TextureRegion [][] regionDaño = daño.split(71,139);
         atacadoA = new Animation(0.15f, regionDaño[0][0], regionDaño[0][1], regionDaño[0][2]);
+
+
 
         TextureRegion dañoFrente = new TextureRegion(new Texture("Damage/Damage_Front.png"));
         TextureRegion [][] frentedaño = dañoFrente.split(61,139);
@@ -103,7 +109,7 @@ public class Personaje extends Objeto {
 
         TextureRegion dañoLado = new TextureRegion(new Texture("Damage/Damage_Side.png"));
         TextureRegion [][] regionLados = dañoLado.split(75,120);
-        atacadoB = new Animation(0.15f, regionDaño[0][0], regionDaño[0][1], regionDaño[0][2]);
+        atacadoC = new Animation(0.15f, regionLados[0][0], regionLados[0][1], regionLados[0][2]);
 
 
 
@@ -127,6 +133,7 @@ public class Personaje extends Objeto {
         TextureRegion[][] texturaPersonaje = regionQ.split(64,128);
         if (estadoMover==EstadoMovimento.QUIETO) {
             //batch.draw(marioQuieto.getTexture(),x,y);
+            movimiento = "QUIETO";
             return texturaPersonaje[0][0];
         }
         else if (estadoMover== EstadoMovimento.DERECHA || estadoMover==EstadoMovimento.IZQUIERDA){
@@ -134,27 +141,32 @@ public class Personaje extends Objeto {
             TextureRegion region = (TextureRegion) animacionX.getKeyFrame(timerAnimacion);
             if (estadoMover == EstadoMovimento.IZQUIERDA) {
                 region.flip(!region.isFlipX(), false);
+                movimiento = "IZQUIERDA";
             } else if (estadoMover == EstadoMovimento.DERECHA) {
                 region.flip(region.isFlipX(), false);
+                movimiento = "DERECHA";
             }
             return  region;
         }else if (estadoMover== EstadoMovimento.ARRIBA){
             timerAnimacion += Gdx.graphics.getDeltaTime();
             TextureRegion regionUP = (TextureRegion) animacionY.getKeyFrame(timerAnimacion);
+            movimiento = "ARRIBA";
             return regionUP;
 
         }else if (estadoMover == EstadoMovimento.ABAJO){
             timerAnimacion += Gdx.graphics.getDeltaTime();
             TextureRegion regionDown = (TextureRegion) animacionYD.getKeyFrame(timerAnimacion);
-
+            movimiento = "ABAJO";
             return regionDown;
 
         }else if (estadoMover == EstadoMovimento.ATAQUEX || estadoMover== EstadoMovimento.ATAQUEXI){
             timerAnimacion += Gdx.graphics.getDeltaTime();
             TextureRegion regionAtaqueX = (TextureRegion) animacionXA.getKeyFrame(timerAnimacion);
+            movimiento = "ATAQUE";
 
             if (estadoMover==EstadoMovimento.ATAQUEX) {
                 regionAtaqueX.flip(regionAtaqueX.isFlipX(), false);
+
             }
             else {
                 regionAtaqueX.flip(!regionAtaqueX.isFlipX(), false);
@@ -163,11 +175,20 @@ public class Personaje extends Objeto {
         }else if (estadoMover == EstadoMovimento.ATAQUEYUP){
             timerAnimacion += Gdx.graphics.getDeltaTime();
             TextureRegion regionAtaqueYU = (TextureRegion) animacionYAU.getKeyFrame(timerAnimacion);
+            movimiento = "ATAQUE";
             return regionAtaqueYU;
         }else if (estadoMover == EstadoMovimento.ATAQUEYDOWN){
             timerAnimacion += Gdx.graphics.getDeltaTime();
             TextureRegion regionAtaqueYD = (TextureRegion) animacionYAD.getKeyFrame(timerAnimacion);
+            movimiento = "ATAQUE";
             return regionAtaqueYD;
+        }
+
+        if(estado == "atacado"){
+            timerAnimacion += Gdx.graphics.getDeltaTime();
+            TextureRegion regionAtacadoX = (TextureRegion) atacadoB.getKeyFrame(timerAnimacion);
+            return regionAtacadoX;
+
         }
         return texturaPersonaje[0][0];
     }
@@ -261,6 +282,7 @@ public class Personaje extends Objeto {
         x += dx;
 
         sprite.setPosition(x, y);
+
     }
     public void moverY(float dy){
         y += dy;

@@ -48,11 +48,6 @@ public class GreenSlime extends Enemigo{
         setBounds(getX(), getY(), 216, 128);
     }
 
-    @Override
-    protected void defineEnemy() {
-
-    }
-
 
 
     @Override
