@@ -14,12 +14,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObjects;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.math.Intersector;
+
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -35,8 +34,8 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class PlayScreen2 extends Pantalla {
-    private static final float ANCHO_MAPA = 4800;
-    private static final float ALTO_MAPA = 2560;
+    private static final float ANCHO_MAPA = 2560;
+    private static final float ALTO_MAPA = 1280;
     private TiledMap mapa;
     private final PantallaInicio pantallaInicio;
     private TiledMapRenderer tiledMapRenderer;
@@ -55,6 +54,7 @@ public class PlayScreen2 extends Pantalla {
     private MapObjects objetos;
     private Array<Vaca> vacas = new Array<Vaca>();
     private Rectangle jugBounds;
+    private float elapsedTime;
 
     public PlayScreen2(PantallaInicio pantallaInicio) {
         this.pantallaInicio = pantallaInicio;
@@ -254,8 +254,10 @@ public class PlayScreen2 extends Pantalla {
         character.setX(ivan.getX());
         character.setY(ivan.getY());
         character.setTextureRegion(ivan.getAnimation());
-        batch.setProjectionMatrix(camaraHUD.combined);
+        elapsedTime += Gdx.graphics.getDeltaTime();
         batch.begin();
+        batch.end();
+        batch.setProjectionMatrix(camaraHUD.combined);
         escenaHUD.draw();
         labeld.setText(String.format("%01d",ivan.documents));
         label.setText(String.format("%01d",ivan.life));
@@ -263,8 +265,6 @@ public class PlayScreen2 extends Pantalla {
         if (estado == EstadoJuego.PAUSADO){
             escenaPausa.draw();
         }
-        batch.end();
-
     }
 
     private void actualizarCamara() {
