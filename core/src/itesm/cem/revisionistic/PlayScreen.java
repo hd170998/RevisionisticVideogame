@@ -314,6 +314,7 @@ public class PlayScreen  extends Pantalla{
             if (Intersector.overlaps(rectangle,jugBounds)) {
                 if(ivan.estadoMover != Personaje.EstadoMovimento.ATAQUEX || ivan.estadoMover != Personaje.EstadoMovimento.ATAQUEXI){
                     ivan.damage(1);
+                    break;
                 }else {
 
                     for(i= 0; i < vacas.size; i++) {
