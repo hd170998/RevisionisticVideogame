@@ -191,7 +191,6 @@ public class Personaje extends Objeto {
         // Obtener la celda en x,y
         if (celda2!=null){
             addDocumets(1);
-            Gdx.app.log("Documentos",""+documents);
             celda2.setTile(null);
         }
         if (celda!=null){
