@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -60,6 +61,7 @@ public class PlayScreen  extends Pantalla{
     private EscenaPausa escenaPausa;
     private Array<Vaca> vacas = new Array<Vaca>();
     private Rectangle jugBounds;
+    private float elapsedTime = 0f;
 
     private float stateTime = 0f;
 
@@ -286,8 +288,7 @@ public class PlayScreen  extends Pantalla{
 
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
-            vacas.add(new Vaca(rect.x, rect.y,false
-            ));
+            vacas.add(new Vaca(rect.x, rect.y,false));
 
 
 
@@ -318,18 +319,37 @@ public class PlayScreen  extends Pantalla{
         character.setY(ivan.getY());
         character.setTextureRegion(ivan.getAnimation());
         SetIvanBounds(ivan.getX(), ivan.getY());
+        elapsedTime += Gdx.graphics.getDeltaTime();
         batch.begin();
-        for(Vaca v : vacas){
-            stateTime += Gdx.graphics.getDeltaTime();
-            if(v.state != true){
 
-                TextureRegion currenFrame = (TextureRegion) v.walkingAnimation.getKeyFrame(stateTime, true);
-                batch.draw(currenFrame, v.x, v.y);
-                //v.boundsVaca.setPosition(v.x, v.y);
-                //v.update();
+        if(checkCollision()) {
+            for (Vaca v : vacas) {
+                stateTime += Gdx.graphics.getDeltaTime();
+                if (v.state != true) {
+
+                    TextureRegion currenFrame = (TextureRegion) v.attackingAnimation.getKeyFrame(stateTime, true);
+                    batch.draw(currenFrame, v.x, v.y);
+                    //v.boundsVaca.setPosition(v.x, v.y);
+                    //v.update();
+                }
             }
 
+        }else if (!checkCollision()) {
+
+                for (Vaca v : vacas) {
+
+                    stateTime += Gdx.graphics.getDeltaTime();
+                    if (v.state != true) {
+
+
+                        TextureRegion currenFrame = (TextureRegion) v.walkingAnimation.getKeyFrame(stateTime, true);
+                        batch.draw(currenFrame, v.x, v.y);
+                        //v.boundsVaca.setPosition(v.x, v.y);
+                        //v.update();
+                    }
+                }
         }
+
 
         batch.end();
         checkCollision();
@@ -346,23 +366,27 @@ public class PlayScreen  extends Pantalla{
 
     }
 
-    public void checkCollision(){
+    public boolean checkCollision(){
         for(Vaca v : vacas){
             if (jugBounds.overlaps(v.boundsVaca)){
                 if(ivan.movimiento == "ATAQUE"){
 
                     v.hitOnHead();
+                    return true;
                 } else {
                     //ivan.estado = "atacado";
 
                     ivan.damage(1);
                     if(ivan.getLife() <= 0){
                         pantallaInicio.setScreen (new PantallaGameOver(pantallaInicio));
+
                     }
+                    return true;
                 }
 
             }
         }
+        return false;
     }
 
     @Override

@@ -13,8 +13,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 public class Vaca extends Enemigo {
-    private  Animation attackingAnimation;
-
+    public  Animation attackingAnimation;
     public enum State {WALKING, ATTACKING}
     public Vaca.State currentState;
     public Vaca.State previousState;
