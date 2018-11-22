@@ -55,10 +55,12 @@ public class Vaca extends Enemigo {
         TextureRegion region = new TextureRegion(new Texture("ForestStuff/WalkingMeleeX.png"));
         TextureRegion regionY = new TextureRegion(new Texture("ForestStuff/WalkingMeleeY.png"));
         TextureRegion attackRegion = new TextureRegion(new Texture("ForestStuff/AttackMeleeX.png"));
+        TextureRegion attackRegionY = new TextureRegion(new Texture("ForestStuff/AttackMeleeY.png"));
         setSize(width, height);
 
         TextureRegion[][] texturaVaca = region.split(width, height);
         TextureRegion[][] texturaAtaque = attackRegion.split(288, 160);
+        TextureRegion[][] texturaAtaqueY = attackRegionY.split(96, 224);
         TextureRegion[][] texturaVacaY = regionY.split(96, 224);
 
         if(orientation){
@@ -76,10 +78,9 @@ public class Vaca extends Enemigo {
             setX(x);
             setY(y);
             sprite.setPosition(x, y);
-            walkingAnimation = new Animation(3f, texturaVacaY[0][3], texturaVacaY[0][2], texturaVacaY[0][1], texturaVacaY[0][0] );
-
-            attackingAnimation = new Animation(2f, texturaAtaque[0][2], texturaAtaque[0][1], texturaAtaque[0][0]);
-            boundsVaca = new Rectangle(x, y ,90, 180);
+            walkingAnimation = new Animation(3f, texturaVacaY[0][5], texturaVacaY[0][4], texturaVacaY[0][3], texturaVacaY[0][2], texturaVacaY[0][1], texturaVacaY[0][0] );
+            attackingAnimation = new Animation(2f, texturaAtaqueY[0][7], texturaAtaqueY[0][6], texturaAtaqueY[0][5], texturaAtaqueY[0][4], texturaAtaqueY[0][3], texturaAtaqueY[0][2], texturaAtaqueY[0][1], texturaAtaqueY[0][0]);
+            boundsVaca = new Rectangle(x, y ,90, 160);
 
         }
 
