@@ -26,6 +26,7 @@ class PantallaJuego extends Pantalla {
 
     @Override
     public void show() {
+        Gdx.input.setCatchBackKey(true);
         crearescena();
         Gdx.input.setInputProcessor(escenaMenu);
     }
