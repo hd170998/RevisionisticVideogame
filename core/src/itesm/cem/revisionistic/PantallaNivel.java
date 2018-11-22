@@ -46,7 +46,31 @@ public class PantallaNivel extends Pantalla {
                 super.clicked(event, x, y);
             }
         });
+        Drawable regionPlay2 = new TextureRegionDrawable(new TextureRegion(new Texture("Level/Level_Village.png")));
+        ImageButton levelPlay2 = new ImageButton(regionPlay2);
+        levelPlay2.setPosition(ANCHO/2-levelPlay2.getWidth()/2,ALTO/2-levelReac.getHeight()/2);
+        levelPlay2.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                pantallaInicio.setScreen(new PlayScreen2(pantallaInicio));
+                super.clicked(event, x, y);
+            }
+        });
+        Drawable regionPlay3 = new TextureRegionDrawable(new TextureRegion(new Texture("Level/Level_Lab.png")));
+        ImageButton levelPlay3 = new ImageButton(regionPlay3);
+        levelPlay3.setPosition(ANCHO-20-levelPlay3.getWidth(),ALTO/2-levelReac.getHeight()/2);
+        levelPlay3.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                pantallaInicio.setScreen(new PlayScreen3(pantallaInicio));
+                super.clicked(event, x, y);
+            }
+        });
+
+
+        escenaNivel.addActor(levelPlay2);
         escenaNivel.addActor(levelReac);
+        escenaNivel.addActor(levelPlay3);
 
 
     }
