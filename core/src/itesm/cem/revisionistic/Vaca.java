@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -98,7 +99,7 @@ public class Vaca extends Enemigo {
 
     }
 
-    /*public TextureRegion getAnimation(){
+    public TextureRegion getAnimation(){
         TextureRegion regionQ = new TextureRegion( new Texture("ForestStuff/WalkingMeleeX.png"));
         // Divide la región en frames de 32x64
         TextureRegion[][] texturaPersonaje = regionQ.split(288,128);
@@ -129,7 +130,7 @@ public class Vaca extends Enemigo {
         }
         return texturaPersonaje[0][0];
     }
-*/
+
 
 
 
@@ -161,7 +162,9 @@ public class Vaca extends Enemigo {
 
     }
 
-    public Vaca(int x, int y){
+
+
+    /*public Vaca(int x, int y){
 
         TextureRegion region = new TextureRegion(new Texture("ForestStuff/WalkingMeleeX.png"));
 
@@ -183,7 +186,7 @@ public class Vaca extends Enemigo {
 
         boundsVaca = new Rectangle(x, y, width/2, height /2);
 
-    }
+    }*/
 
     public boolean collides(Rectangle jugador){
         return jugador.overlaps(boundsVaca);

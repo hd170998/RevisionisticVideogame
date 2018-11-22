@@ -264,6 +264,10 @@ public class PlayScreen  extends Pantalla{
         TextureMapObject IvanO = new TextureMapObject(ivan.getAnimation());
         objectLayer.getObjects().add(IvanO);
 
+        objectLayer = mapa.getLayers().get("Enemigos");
+        TextureMapObject EnemOb = new TextureMapObject(ivan.getAnimation());
+        objectLayer.getObjects().add(EnemOb);
+
 
 
 
@@ -284,55 +288,18 @@ public class PlayScreen  extends Pantalla{
         character.setX(ivan.getX());
         character.setY(ivan.getY());
         character.setTextureRegion(ivan.getAnimation());
+
+        RectangleMapObject enemigos = (RectangleMapObject) mapa.getLayers().get("Enemigos").getObjects().get(0);
+        //enemigos.set(vaca4.getX());
+        //enemigos.setY(vaca4.getY());
+        //enemigos.setTextureRegion(vaca4.getAnimation());
         batch.begin();
 
 
 
-        if(vaca1.state != true){
-            vaca1.update();
-            vaca1.render(batch);
-        }
-
-        if(vaca2.state != true){
-            vaca2.update();
-            vaca2.render(batch);
-        }
 
 
 
-        vaca3.update();
-        vaca3.render(batch);
-
-        if(vaca4.state != true){
-            vaca4.update();
-            vaca4.render(batch);
-        }
-
-        if(vaca5.state != true){
-            vaca5.update();
-            vaca5.render(batch);
-        }
-
-
-        if(vaca1.collides(ivan.getBounds())){
-            vaca1.destroy();
-        }
-
-        if(vaca2.collides(ivan.getBounds())){
-            vaca2.destroy();
-        }
-
-        if(vaca3.collides(ivan.getBounds())){
-            pantallaInicio.setScreen(new PantallaGameOver(pantallaInicio));
-        }
-
-        if(vaca4.collides(ivan.getBounds())){
-            pantallaInicio.setScreen(new PantallaGameOver(pantallaInicio));
-        }
-
-        if(vaca5.collides(ivan.getBounds())){
-            pantallaInicio.setScreen(new PantallaGameOver(pantallaInicio));
-        }
 
 
 
