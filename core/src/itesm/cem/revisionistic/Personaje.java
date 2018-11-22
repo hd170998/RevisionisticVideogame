@@ -62,7 +62,7 @@ public class Personaje extends Objeto {
     }
 
     public Personaje(Texture textura) {
-        jugBounds = new Rectangle(x,y,textura.getWidth(),textura.getHeight());
+
         // Crea una region
         TextureRegion region = new TextureRegion(textura);
         setSize(textura.getWidth(), textura.getHeight());
@@ -235,6 +235,7 @@ public class Personaje extends Objeto {
         if (celda2!=null){
             celda2.setTile(null);
             addDocumets(1);
+
         }
         if (celda!=null){
             Object material = celda.getTile().getProperties().get("Material");

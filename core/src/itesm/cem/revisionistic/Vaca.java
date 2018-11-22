@@ -31,16 +31,6 @@ public class Vaca extends Enemigo {
     float x;
     float y;
 
-    public Rectangle getBounds(){
-        return boundsVaca;
-    }
-    public float getX(){
-        return x;
-    }
-
-    public float getY(){
-        return y;
-    }
 
     public void setX(float x){
         this.x = x;
@@ -50,31 +40,55 @@ public class Vaca extends Enemigo {
         this.y = y;
     }
 
-    public Vaca(float x, float y, float recHeight, float recWidth) {
+    public float getX(){
+        return x;
+    }
+
+    public float getY(){
+        return y;
+    }
+
+
+    public Vaca(float x, float y, boolean orientation) {
 
 
         TextureRegion region = new TextureRegion(new Texture("ForestStuff/WalkingMeleeX.png"));
+        TextureRegion regionY = new TextureRegion(new Texture("ForestStuff/WalkingMeleeY.png"));
         TextureRegion attackRegion = new TextureRegion(new Texture("ForestStuff/AttackMeleeX.png"));
         setSize(width, height);
 
         TextureRegion[][] texturaVaca = region.split(width, height);
-        TextureRegion[][] texturaAtaque = region.split(288, 160);
+        TextureRegion[][] texturaAtaque = attackRegion.split(288, 160);
+        TextureRegion[][] texturaVacaY = regionY.split(96, 224);
+
+        if(orientation){
+            sprite = new Sprite(texturaVaca[0][0]);
+            setX(x);
+            setY(y);
+            sprite.setPosition(x, y);
+            walkingAnimation = new Animation(3f, texturaVaca[0][2], texturaVaca[0][1], texturaVaca[0][0] );
+
+            attackingAnimation = new Animation(2f, texturaAtaque[0][2], texturaAtaque[0][1], texturaAtaque[0][0]);
+            boundsVaca = new Rectangle(x, y ,240, 80);
+
+        } else {
+            sprite = new Sprite(texturaVacaY[0][0]);
+            setX(x);
+            setY(y);
+            sprite.setPosition(x, y);
+            walkingAnimation = new Animation(3f, texturaVacaY[0][3], texturaVacaY[0][2], texturaVacaY[0][1], texturaVacaY[0][0] );
+
+            attackingAnimation = new Animation(2f, texturaAtaque[0][2], texturaAtaque[0][1], texturaAtaque[0][0]);
+            boundsVaca = new Rectangle(x, y ,90, 180);
+
+        }
 
 
-        sprite = new Sprite(texturaVaca[0][0]);
-        //x = 100;
-        //y = 1250;
-        setX(x);
-        setY(y);
-        sprite.setPosition(x, y);
-        walkingAnimation = new Animation(3f, texturaVaca[0][2], texturaVaca[0][1], texturaVaca[0][0] );
-
-        velocity = new Vector2(0, 0);
-        attackingAnimation = new Animation(2f, texturaAtaque[0][2], texturaAtaque[0][1], texturaAtaque[0][0]);
 
        //currentState = previousState = Vaca.State.WALKING;
 
-        boundsVaca = new Rectangle(x, y,recWidth, recHeight);
+
+
     }
 
 
@@ -82,20 +96,11 @@ public class Vaca extends Enemigo {
 
     @Override
     public void update() {
-        int i = 0;
-        while(i<=10){
-            i++;
-            x += 1;
+        //x += 1;
+        //boundsVaca.setPosition(x, y);
+        sprite.setPosition(x, y);
+        sprite.flip(true, false);
 
-            sprite.setPosition(x, y);
-            boundsVaca.setPosition(x, y);
-        }
-        while(i > 10 && i <= 20){
-            x -= 1;
-            i++;
-            sprite.setPosition(x, y);
-            boundsVaca.setPosition(x, y);
-        }
 
     }
 

@@ -58,7 +58,6 @@ public class PlayScreen  extends Pantalla{
     private EstadoJuego estado;
     private Music music;
     private EscenaPausa escenaPausa;
-    private MapObjects objetos;
     private Array<Vaca> vacas = new Array<Vaca>();
     private Rectangle jugBounds;
 
@@ -280,7 +279,16 @@ public class PlayScreen  extends Pantalla{
 
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
-            vacas.add(new Vaca(rect.x, rect.y, rect.width, rect.height));
+            vacas.add(new Vaca(rect.x, rect.y,true));
+
+        }
+
+        for(MapObject object : mapa.getLayers().get("Object Layer 5").getObjects()){
+
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+            vacas.add(new Vaca(rect.x, rect.y,false
+            ));
 
 
 
@@ -296,8 +304,8 @@ public class PlayScreen  extends Pantalla{
 
     @Override
     public void render(float delta) {
+
         ivan.actualizar(mapa);
-        actualizarCamara();
         actualizarCamara();
         borrarPantalla(0,0,0);
         tiledMapRenderer.setView(camara);
@@ -306,30 +314,26 @@ public class PlayScreen  extends Pantalla{
         camara.update();
         tiledMapRenderer.render();
 
-
-
-
         TextureMapObject character = (TextureMapObject)mapa.getLayers().get("1V4N").getObjects().get(0);
         character.setX(ivan.getX());
         character.setY(ivan.getY());
         character.setTextureRegion(ivan.getAnimation());
+        SetIvanBounds(ivan.getX(), ivan.getY());
         batch.begin();
         for(Vaca v : vacas){
             stateTime += Gdx.graphics.getDeltaTime();
             if(v.state != true){
+
                 TextureRegion currenFrame = (TextureRegion) v.walkingAnimation.getKeyFrame(stateTime, true);
-                batch.draw(currenFrame, v.getX(), v.getY());
-                v.update();
+                batch.draw(currenFrame, v.x, v.y);
+                //v.boundsVaca.setPosition(v.x, v.y);
+                //v.update();
             }
 
         }
 
-        SetIvanBounds(ivan.getX(), ivan.getY());
-
-        checkCollision();
-
         batch.end();
-
+        checkCollision();
 
 
         batch.setProjectionMatrix(camaraHUD.combined);
@@ -337,24 +341,6 @@ public class PlayScreen  extends Pantalla{
         labeld.setText(String.format("%01d",ivan.documents));
         label.setText(String.format("%01d",ivan.life));
 
-
-
-        /*for (RectangleMapObject rectangleObject : objetos.getByType(RectangleMapObject.class)) {
-            int i;
-            Rectangle rectangle = rectangleObject.getRectangle();
-
-            for(i=0; i < vacas.size; i++){
-                for (Vaca v : vacas){
-
-                    if(Intersector.overlaps(rectangle, jugBounds)){
-                        if(v.getX() == rectangle.getX() && v.getY() == rectangle.getY()){
-                            v.hitOnHead();
-                            vacas.removeIndex(i);
-                        }
-                    }
-                }
-            }
-        }*/
         if (estado == EstadoJuego.PAUSADO){
             escenaPausa.draw();
         }
@@ -368,10 +354,12 @@ public class PlayScreen  extends Pantalla{
 
                     v.hitOnHead();
                 } else {
-                    ivan.estado = "atacado";
+                    //ivan.estado = "atacado";
 
                     ivan.damage(1);
-
+                    if(ivan.getLife() <= 0){
+                        pantallaInicio.setScreen (new PantallaGameOver(pantallaInicio));
+                    }
                 }
 
             }
