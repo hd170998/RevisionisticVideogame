@@ -116,7 +116,7 @@ public class Personaje extends Objeto {
         sprite.setPosition(64,1250);
         x = 64;
         y = 1250;
-        jugBounds = new Rectangle(x, y ,64, 128 );
+
         AssetManager manager = new AssetManager();
         manager.load("audio/saw-audio.mp3",Sound.class);
         manager.finishLoading();

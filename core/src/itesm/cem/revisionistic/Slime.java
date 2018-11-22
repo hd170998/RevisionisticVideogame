@@ -77,18 +77,13 @@ public class Slime extends Enemigo{
     }
 
     @Override
-    public void update(float dt) {
-        setRegion(getFrame(dt));
-        if(currentState == State.ATTACKING && stateTime > 3){
-            currentState = State.WALKING;
-        }
+    public void update() {
 
-        setPosition(100, 1250);
 
     }
 
     @Override
-    public void hitOnHead(Personaje ivan) {
+    public void hitOnHead() {
         if (currentState != State.WALKING){
             currentState = State.ATTACKING;
         }
