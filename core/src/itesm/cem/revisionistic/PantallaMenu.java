@@ -8,9 +8,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.TimeUtils;
 
 class PantallaMenu extends Pantalla {
     private final PantallaInicio pantallaInicio;
@@ -19,6 +21,9 @@ class PantallaMenu extends Pantalla {
     private Texture title;
     private SpriteBatch batch;
     public Music music;
+    private float elapsedTime;
+    private Texture logoTec;
+    private Image tec;
 
     public PantallaMenu(PantallaInicio pantallaInicio) {
         this.pantallaInicio=pantallaInicio;
@@ -26,6 +31,9 @@ class PantallaMenu extends Pantalla {
 
     @Override
     public void show() {
+        logoTec = new Texture("TecSplashScreen.png");
+        tec = new Image(logoTec);
+        elapsedTime=0;
         crearEscena();
         cargarMusica();
         Gdx.input.setInputProcessor(escenaMenu);
@@ -45,6 +53,7 @@ class PantallaMenu extends Pantalla {
         escenaMenu=new Stage(vista);
         textFondo = new Texture("Menu/MainScreen.png");
         title = new Texture("Menu/LogoMainScreen.png");
+        Image titulo = new Image(title);
 
 // Botones
         Texture textBtnPlay=new Texture("Menu/BtnJugarBasico01.png");
@@ -97,10 +106,12 @@ class PantallaMenu extends Pantalla {
             }
 
         });
+        titulo.setPosition((ANCHO / 2) - title.getWidth() / 2, ALTO - title.getHeight());
         ///metodo de dibujo para los botones
         escenaMenu.addActor(btnPlay);
         escenaMenu.addActor(btnOp);
         escenaMenu.addActor(btnEX);
+        escenaMenu.addActor(titulo);
         // Animacion dientes
 
     }
@@ -109,11 +120,17 @@ class PantallaMenu extends Pantalla {
     public void render(float delta) {
         borrarPantalla(0,0,0);
         batch.setProjectionMatrix(camara.combined); //escalar la pantalla y la vista correctamente al dicpositivo
+        elapsedTime+= Gdx.graphics.getDeltaTime();
         batch.begin();
-        batch.draw(textFondo,0,0);
-        batch.draw(title,(ANCHO/2)-title.getWidth()/2, ALTO-title.getHeight());
+        if (elapsedTime<3) {
+            batch.draw(logoTec, 0, 0);
+        }
+        if (elapsedTime>3) {
+            batch.draw(textFondo, 0, 0);
+            batch.draw(title,(ANCHO / 2) - title.getWidth() / 2, ALTO - title.getHeight());
+            escenaMenu.draw();
+        }
         batch.end();
-        escenaMenu.draw();
 
     }
 

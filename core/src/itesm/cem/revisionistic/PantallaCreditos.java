@@ -19,6 +19,7 @@ public class PantallaCreditos extends Pantalla {
     public PantallaCreditos(PantallaInicio pantallaInicio) { this.pantallaInicio = pantallaInicio;}
     @Override
     public void show() {
+        Gdx.input.setCatchBackKey(true);
         textFondo = new Texture("Creditos/Credits_BG.png");
         //fondo
         creditos = new Texture("Creditos/ProvisionalCreditsImage.png");

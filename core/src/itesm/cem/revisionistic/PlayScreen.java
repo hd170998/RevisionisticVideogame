@@ -66,6 +66,7 @@ public class PlayScreen  extends Pantalla{
     public PlayScreen(PantallaInicio pantallaInicio) {
         this.pantallaInicio = pantallaInicio;
     }
+
     @Override
     public void show() {
         Gdx.input.setCatchBackKey(true);
@@ -80,8 +81,6 @@ public class PlayScreen  extends Pantalla{
         crearHUD();
         cargaMusica();
         Gdx.input.setInputProcessor(escenaHUD);
-
-
     }
     private void cargaMusica() {
         AssetManager manager = new AssetManager();

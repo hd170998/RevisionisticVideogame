@@ -1,8 +1,8 @@
 package itesm.cem.revisionistic;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
+
 
 public class PantallaHistoriaC extends Pantalla {
     private final PantallaInicio pantallaInicio;
@@ -15,8 +15,10 @@ public class PantallaHistoriaC extends Pantalla {
 
     @Override
     public void show() {
+        Gdx.input.setCatchBackKey(true);
         historia = new Texture("FullIntroPanels.png");
         elapsedtime=0;
+
 
 
     }
@@ -28,11 +30,13 @@ public class PantallaHistoriaC extends Pantalla {
         elapsedtime+= Gdx.graphics.getDeltaTime();
         batch.begin();
         batch.draw(historia,0,-6030+posY);
-        posY=+(elapsedtime*120);
+        posY=+(elapsedtime*280);
         batch.end();
         if (posY>5760){
-            pantallaInicio.setScreen(new PlayScreen(pantallaInicio));
+            pantallaInicio.setScreen(new PantallaCargando(pantallaInicio));
         }
+
+
 
 
     }

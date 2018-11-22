@@ -28,6 +28,7 @@ public class PantallaGameOver extends Pantalla {
 
     @Override
     public void show() {
+        Gdx.input.setCatchBackKey(true);
         crearEscena();
         cargarMusica();
         Gdx.input.setInputProcessor(escenaGameOver);
