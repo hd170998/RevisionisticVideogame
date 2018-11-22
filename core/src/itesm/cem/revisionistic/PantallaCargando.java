@@ -31,7 +31,7 @@ public class PantallaCargando extends Pantalla{
         manager.load("audio/Documento.mp3", Sound.class);
         manager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
         manager.load("ForestStuff/ForestMap.tmx",TiledMap.class);
-        //manager.load("MapLaboratory/LabMap01.tmx", TiledMap.class);
+        manager.load("MapLaboratory/LabMap01.tmx", TiledMap.class);
         manager.load("VillageStuff/VillageMap.tmx", TiledMap.class);
         manager.finishLoading(); // Espera
         if(manager.update()) {

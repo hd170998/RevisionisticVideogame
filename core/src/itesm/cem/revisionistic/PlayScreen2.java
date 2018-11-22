@@ -1,7 +1,6 @@
 package itesm.cem.revisionistic;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
@@ -19,9 +18,7 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -68,6 +65,8 @@ public class PlayScreen2 extends Pantalla {
     public void show() {
         Gdx.input.setCatchBackKey(true);
         ivan = new Personaje(new Texture("1V4N_Xaxis.png"));
+        ivan.setX(1000);
+        ivan.setY(5);
         ivan.setLife(100);
         ivan.setDocuments(0);
         font = new BitmapFont(Gdx.files.internal("font.fnt"));
@@ -226,6 +225,10 @@ public class PlayScreen2 extends Pantalla {
 
     private void cargarMapa() {
         AssetManager manager = new AssetManager();
+        manager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
+        manager.load("VillageStuff/VillageMap.tmx",TiledMap.class);
+        manager.load("audio/saw-audio.mp3",Sound.class);
+        manager.finishLoading(); // Espera
         mapa = manager.get("VillageStuff/VillageMap.tmx");
         saw = manager.get("audio/saw-audio.mp3",Sound.class);
         tiledMapRenderer = new OrthogonalTiledMapRendererWithSprites(mapa);
@@ -245,37 +248,20 @@ public class PlayScreen2 extends Pantalla {
         camara.update();
         tiledMapRenderer.render();
 
-
         TextureMapObject character = (TextureMapObject)mapa.getLayers().get("1V4N").getObjects().get(0);
         character.setX(ivan.getX());
         character.setY(ivan.getY());
         character.setTextureRegion(ivan.getAnimation());
-        batch.begin();
-
         batch.setProjectionMatrix(camaraHUD.combined);
+        batch.begin();
         escenaHUD.draw();
         labeld.setText(String.format("%01d",ivan.documents));
         label.setText(String.format("%01d",ivan.life));
 
-        ivan.getRectangle().setPosition(ivan.getX(),ivan.getY());
-
-        for (RectangleMapObject rectangleObject : objetos.getByType(RectangleMapObject.class)) {
-            int i;
-            Rectangle rectangle = rectangleObject.getRectangle();
-
-            if (Intersector.overlaps(rectangle,jugBounds)) {
-                if(ivan.estadoMover != Personaje.EstadoMovimento.ATAQUEX || ivan.estadoMover != Personaje.EstadoMovimento.ATAQUEXI){
-                    ivan.damage(1);
-                }else if (ivan.estadoMover == Personaje.EstadoMovimento.ATAQUEX || ivan.estadoMover == Personaje.EstadoMovimento.ATAQUEXI||
-                        ivan.estadoMover == Personaje.EstadoMovimento.ATAQUEYUP || ivan.estadoMover == Personaje.EstadoMovimento.ATAQUEYDOWN) {
-
-                }
-                // collision happened
-            }
-        }
         if (estado == EstadoJuego.PAUSADO){
             escenaPausa.draw();
         }
+        batch.end();
 
     }
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.6" orientation="orthogonal" renderorder="right-down" width="80" height="40" tilewidth="32" tileheight="32" infinite="0" nextobjectid="15">
+<map version="1.0" tiledversion="1.1.6" orientation="orthogonal" renderorder="right-down" width="80" height="40" tilewidth="32" tileheight="32" infinite="0" nextobjectid="29">
  <tileset firstgid="1" name="VillageFloorTiles" tilewidth="32" tileheight="32" tilecount="96" columns="8">
   <image source="VillageFloorTiles.png" width="256" height="384"/>
   <tile id="1">
@@ -954,4 +954,21 @@
   <object id="11" x="2304" y="288" width="63.5" height="127.25"/>
  </objectgroup>
  <objectgroup name="1V4N"/>
+ <objectgroup name="Object Layer 6">
+  <object id="15" x="630.108" y="413.92" width="73.8202" height="68.5473"/>
+  <object id="16" x="2095.97" y="437.648" width="65.9109" height="52.7287"/>
+  <object id="17" x="287.371" y="949.117" width="55.3651" height="58.0016"/>
+  <object id="18" x="2140.79" y="951.753" width="52.7287" height="58.0016"/>
+  <object id="19" x="1044.03" y="134.458" width="50.0923" height="52.7287"/>
+  <object id="20" x="1328.76" y="445.558" width="79.0931" height="73.8202"/>
+  <object id="21" x="1542.31" y="920.116" width="73.8202" height="73.8202"/>
+ </objectgroup>
+ <objectgroup name="Object Layer 7">
+  <object id="22" x="938.571" y="458.74" width="42.183" height="42.183"/>
+  <object id="23" x="137.095" y="949.117" width="34.2737" height="36.9101"/>
+  <object id="24" x="1874.51" y="928.025" width="42.183" height="44.8194"/>
+  <object id="25" x="1819.14" y="421.83" width="47.4558" height="50.0923"/>
+  <object id="26" x="311.099" y="435.012" width="42.183" height="52.7287"/>
+  <object id="27" x="957.026" y="841.023" width="60.638" height="68.5473"/>
+ </objectgroup>
 </map>
