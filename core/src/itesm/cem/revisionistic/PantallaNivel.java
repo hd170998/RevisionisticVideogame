@@ -29,10 +29,10 @@ public class PantallaNivel extends Pantalla {
     private void crearEscena() {
         batch = new SpriteBatch();
         escenaNivel = new Stage(vista);
-        backGround = new Texture("SelectLevelBG.png");
-        title = new Texture("SelectLevelTitle.png");
-        Drawable regionReac = new TextureRegionDrawable(new TextureRegion(new Texture("Level_Reactor")));
-        Drawable regionReavOP = new TextureRegionDrawable(new TextureRegion( new Texture("Level_Reactor.png")));
+        backGround = new Texture("Level/SelectLevelBG.png");
+        title = new Texture("Level/SelectLevelTitle.png");
+        Drawable regionReac = new TextureRegionDrawable(new TextureRegion(new Texture("Level/Level_Lab.png")));
+        Drawable regionReavOP = new TextureRegionDrawable(new TextureRegion( new Texture("Level/Level_Lab.png")));
         ImageButton levelReac = new ImageButton(regionReac,regionReavOP);
         levelReac.setPosition(ANCHO-10,10);
 

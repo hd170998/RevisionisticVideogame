@@ -107,40 +107,66 @@ public class PlayScreen  extends Pantalla{
         labelStyle.fontColor = Color.WHITE;
         label= new Label(String.format("%03d",ivan.getLife()),labelStyle);
         labeld = new Label(String.format("%01d",ivan.getDocuments()),labelStyle);
-        Skin skin = new Skin(); // Texturas para el pad
-        skin.add("fondo", new Texture("padBack.png"));
-        skin.add("boton", new Texture("padKnob.png"));
-        // Configura la vista del pad
-        Touchpad.TouchpadStyle estilo = new Touchpad.TouchpadStyle();
-        estilo.background = skin.getDrawable("fondo");
-        estilo.knob = skin.getDrawable("boton");
-        // Crea el pad
-        Touchpad pad = new Touchpad(64,estilo);     // Radio, estilo
-        pad.setBounds(16,16,256,256);               // x,y - ancho,alto
-        // Comportamiento del pad
-        pad.addListener(new ChangeListener() {
+        ////PAD
+        Drawable Pup = new TextureRegionDrawable(new TextureRegion(new Texture("Pad/PadUp.png")));
+        ImageButton btnPup = new ImageButton(Pup);
+        btnPup.setPosition(btnPup.getWidth()-10,btnPup.getHeight()*2.5f);
+        btnPup.addListener(new InputListener(){
             @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                Touchpad pad = (Touchpad)actor;
-                ivan.setVx(pad.getKnobPercentX());
-                ivan.setVy(pad.getKnobPercentY());
-                if (pad.getKnobPercentX() > 0.10) { // Más de 20% de desplazamiento DERECHA
-                    ivan.setEstadoMover(Personaje.EstadoMovimento.DERECHA);
-                } else if ( pad.getKnobPercentX() < -0.10 ) {   // Más de 20% IZQUIERDA
-                    ivan.setEstadoMover(Personaje.EstadoMovimento.IZQUIERDA);
-                } else if (pad.getKnobPercentY() > 0.10){
-                    ivan.setEstadoMover(Personaje.EstadoMovimento.ARRIBA);
-                }else if (pad.getKnobPercentY() < -0.10){
-                    ivan.setEstadoMover(Personaje.EstadoMovimento.ABAJO);
-                }
-                else{
-                    ivan.setEstadoMover(Personaje.EstadoMovimento.QUIETO);
-                }
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                ivan.setEstadoMover(Personaje.EstadoMovimento.ARRIBA);
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                ivan.setEstadoMover(Personaje.EstadoMovimento.QUIETO);
             }
         });
+        Drawable Pdown = new TextureRegionDrawable(new TextureRegion(new Texture("Pad/PadDown.png")));
+        ImageButton btnPdown = new ImageButton(Pdown);
+        btnPdown.setPosition(btnPdown.getWidth()-10,Pdown.getTopHeight());
+        btnPdown.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                ivan.setEstadoMover(Personaje.EstadoMovimento.ABAJO);
+                return true;
+            }
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                ivan.setEstadoMover(Personaje.EstadoMovimento.QUIETO);
+            }
+        });
+        Drawable Pri = new TextureRegionDrawable(new TextureRegion(new Texture("Pad/PadRight.png")));
+        ImageButton btnri = new ImageButton(Pri);
+        btnri.setPosition(2*btnri.getWidth(),ALTO/6);
+        btnri.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                ivan.setEstadoMover(Personaje.EstadoMovimento.DERECHA);
+                return true;
+            }
 
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                ivan.setEstadoMover(Personaje.EstadoMovimento.QUIETO);
+            }
+        });
+        Drawable Pleft = new TextureRegionDrawable(new TextureRegion(new Texture("Pad/PadLeft.png")));
+        ImageButton btnleft = new ImageButton(Pleft);
+        btnleft.setPosition(Pleft.getLeftWidth(),ALTO/6);
+        btnleft.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                ivan.setEstadoMover(Personaje.EstadoMovimento.IZQUIERDA);
+                return true;
+            }
 
-        pad.setColor(1,1,1,0.7f);   // Transparente
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                ivan.setEstadoMover(Personaje.EstadoMovimento.QUIETO);
+            }
+        });
         Drawable regionPausa = new TextureRegionDrawable(new TextureRegion(new Texture("button_pause.png")));
         Drawable regionPausaOP = new TextureRegionDrawable(new TextureRegion( new Texture("button_pause.png")));
         ImageButton btnPausa = new ImageButton(regionPausa,regionPausaOP);
@@ -163,9 +189,9 @@ public class PlayScreen  extends Pantalla{
         btnAtaque.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                saw.play();
                 if (ivan.estadoMover==Personaje.EstadoMovimento.DERECHA||ivan.estadoMover==Personaje.EstadoMovimento.QUIETO){
                     ivan.setEstadoMover(Personaje.EstadoMovimento.ATAQUEX);
-                    saw.play();
                 }else if (ivan.estadoMover== Personaje.EstadoMovimento.IZQUIERDA){
                     ivan.setEstadoMover(Personaje.EstadoMovimento.ATAQUEXI);
                 }
@@ -197,12 +223,15 @@ public class PlayScreen  extends Pantalla{
         // Crea la escena y agrega el pad
         escenaHUD = new Stage(vistaHUD);// Escalar con esta vista
         escenaHUD.addActor(btnPausa);
-        escenaHUD.addActor(pad);
         escenaHUD.addActor(btnAtaque);
         escenaHUD.addActor(corazon);
         escenaHUD.addActor(label);
         escenaHUD.addActor(documento);
         escenaHUD.addActor(labeld);
+        escenaHUD.addActor(btnPup);
+        escenaHUD.addActor(btnPdown);
+        escenaHUD.addActor(btnleft);
+        escenaHUD.addActor(btnri);
     }
 
     private void actualizarCamara() {
@@ -236,11 +265,11 @@ public class PlayScreen  extends Pantalla{
     private void cargarMapa() {
         AssetManager manager = new AssetManager();
         manager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-        manager.load("ForestStuff/ForestMap.tmx", TiledMap.class);
-        manager.load("audio/saw-audio.mp3", Sound.class);
+        manager.load("ForestStuff/ForestMap.tmx",TiledMap.class);
+        manager.load("audio/saw-audio.mp3",Sound.class);
         manager.finishLoading(); // Espera
         mapa = manager.get("ForestStuff/ForestMap.tmx");
-        saw = manager.get("audio/saw-audio.mp3", Sound.class);
+        saw = manager.get("audio/saw-audio.mp3",Sound.class);
         tiledMapRenderer = new OrthogonalTiledMapRendererWithSprites(mapa);
         objectLayer = mapa.getLayers().get("1V4N");
         TextureMapObject IvanO = new TextureMapObject(ivan.getAnimation());
@@ -260,13 +289,10 @@ public class PlayScreen  extends Pantalla{
 
         MapLayer collisionObjectLayer = mapa.getLayers().get("Enemigos");
         objetos = collisionObjectLayer.getObjects();
-
-
     }
 
-    private void setIvanBounds(float x, float y){
+    private void SetIvanBounds(float x, float y){
         jugBounds = new Rectangle(x, y, 64, 128);
-
     }
 
     @Override
@@ -288,10 +314,6 @@ public class PlayScreen  extends Pantalla{
         character.setX(ivan.getX());
         character.setY(ivan.getY());
         character.setTextureRegion(ivan.getAnimation());
-
-        setIvanBounds(ivan.getX(), ivan.getY());
-
-
         batch.begin();
         for(Vaca v : vacas){
             stateTime += Gdx.graphics.getDeltaTime();
@@ -306,6 +328,7 @@ public class PlayScreen  extends Pantalla{
         labeld.setText(String.format("%01d",ivan.documents));
         label.setText(String.format("%01d",ivan.life));
 
+        SetIvanBounds(ivan.getX(), ivan.getY());
 
         for (RectangleMapObject rectangleObject : objetos.getByType(RectangleMapObject.class)) {
             int i;
@@ -314,8 +337,9 @@ public class PlayScreen  extends Pantalla{
             if (Intersector.overlaps(rectangle,jugBounds)) {
                 if(ivan.estadoMover != Personaje.EstadoMovimento.ATAQUEX || ivan.estadoMover != Personaje.EstadoMovimento.ATAQUEXI){
                     ivan.damage(1);
-                    break;
-                }else {
+
+                }else if (ivan.estadoMover == Personaje.EstadoMovimento.ATAQUEX || ivan.estadoMover == Personaje.EstadoMovimento.ATAQUEXI||
+                        ivan.estadoMover == Personaje.EstadoMovimento.ATAQUEYUP || ivan.estadoMover == Personaje.EstadoMovimento.ATAQUEYDOWN) {git
 
                     for(i= 0; i < vacas.size; i++) {
                         for (Vaca v : vacas) {
@@ -338,16 +362,21 @@ public class PlayScreen  extends Pantalla{
 
     @Override
     public void pause() {
-
+        this.estado = EstadoJuego.PAUSADO;
     }
 
     @Override
     public void resume() {
+        this.estado = EstadoJuego.JUGANDO;
 
     }
 
     @Override
     public void dispose() {
+        escenaHUD.dispose();
+        mapa.dispose();
+        batch.dispose();
+
 
     }
     private class EscenaPausa extends Stage {

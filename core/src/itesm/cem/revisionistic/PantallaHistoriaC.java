@@ -5,10 +5,12 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 
 public class PantallaHistoriaC extends Pantalla {
+    private final PantallaInicio pantallaInicio;
     private Texture historia;
     private float elapsedtime;
     private float posY=-6030;
     public PantallaHistoriaC(PantallaInicio pantallaInicio) {
+        this.pantallaInicio = pantallaInicio;
     }
 
     @Override
@@ -21,17 +23,16 @@ public class PantallaHistoriaC extends Pantalla {
 
     @Override
     public void render(float delta) {
-        elapsedtime+= Gdx.graphics.getDeltaTime();
-        if ((Math.round(elapsedtime))%5==0){
-
-            Gdx.app.log("Tiempo", ""+Math.round(elapsedtime));
-            posY+=720;
-        }
         borrarPantalla(0,0,0);
         batch.setProjectionMatrix(camara.combined);
+        elapsedtime+= Gdx.graphics.getDeltaTime();
         batch.begin();
-        batch.draw(historia,0,posY);
+        batch.draw(historia,0,-6030+posY);
+        posY=+(elapsedtime*120);
         batch.end();
+        if (posY>5760){
+            pantallaInicio.setScreen(new PlayScreen(pantallaInicio));
+        }
 
 
     }

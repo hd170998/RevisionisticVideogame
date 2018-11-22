@@ -984,7 +984,6 @@
   <object id="48" x="2303" y="2089" width="73" height="116"/>
   <object id="50" x="1089" y="2153" width="74" height="117"/>
   <object id="53" x="351.14" y="1811.3" width="69" height="119"/>
-  <object id="55" x="1471" y="1221" width="76" height="121"/>
  </objectgroup>
  <objectgroup name="Enemigos">
   <object id="19" x="2752" y="416.333" width="287" height="159.5"/>

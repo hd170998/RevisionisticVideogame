@@ -21,6 +21,10 @@ public class Personaje extends Objeto {
     private Animation animacionXA;
     private Animation animacionYAU;
     private Animation animacionYAD;
+    private Animation atacadoA;
+    private Animation atacadoB;
+    private Animation atacadoIX;
+    private Animation atacadoDe;
     private float timerAnimacion;
     private int width, height;
     private float x, y;   // coordenadas
@@ -31,6 +35,10 @@ public class Personaje extends Objeto {
     public int life;
     public int documents;
     private Rectangle jugBounds;
+
+    public Rectangle getRectangle() {
+        return jugBounds;
+    }
 
 
     public enum EstadoMovimento {
@@ -51,7 +59,7 @@ public class Personaje extends Objeto {
     }
 
     public Personaje(Texture textura) {
-
+        jugBounds = new Rectangle(x,y,textura.getWidth(),textura.getHeight());
         // Crea una region
         TextureRegion region = new TextureRegion(textura);
         setSize(textura.getWidth(), textura.getHeight());
@@ -60,7 +68,7 @@ public class Personaje extends Objeto {
         animacionX = new Animation(0.15f,texturaPersonaje[0][2],texturaPersonaje[0][1]);
         animacionX.setPlayMode(Animation.PlayMode.LOOP);
         TextureRegion regionYup= new TextureRegion(new Texture("1V4N_YaxisUp.png"));
-        TextureRegion [][] texturaPersonajeYup = regionYup.split(64,128);
+        TextureRegion [][] texturaPersonajeYup = regionYup.split(64,165);
         animacionY = new Animation(0.15f, texturaPersonajeYup[0][2], texturaPersonajeYup[0][1], texturaPersonajeYup[0][0]);
         animacionY.setPlayMode(Animation.PlayMode.LOOP);
         TextureRegion regionDown = new TextureRegion(new Texture("1V4N_YaxisDown.png"));
@@ -79,13 +87,31 @@ public class Personaje extends Objeto {
         animacionYAU.setPlayMode(Animation.PlayMode.LOOP);
         timerAnimacion = 0;
         ////////////
-        TextureRegion ataqueYD = new TextureRegion(new Texture("Saw/SawSword_YUp.png"));
+        TextureRegion ataqueYD = new TextureRegion(new Texture("Saw/SawSword_Ydown.png"));
         TextureRegion [][] regionesYAD = ataqueYD.split(83,157);
         animacionYAD = new Animation(0.15f,regionesYAD[0][1], regionesYAD[0][0]);
         animacionYAD.setPlayMode(Animation.PlayMode.LOOP);
+
+        ///////Daño animation
+        TextureRegion daño = new TextureRegion(new Texture("Damage/Damage_Back.png"));
+        TextureRegion [][] regionDaño = daño.split(71,139);
+        atacadoA = new Animation(0.15f, regionDaño[0][0], regionDaño[0][1], regionDaño[0][2]);
+
+        TextureRegion dañoFrente = new TextureRegion(new Texture("Damage/Damage_Front.png"));
+        TextureRegion [][] frentedaño = dañoFrente.split(61,139);
+        atacadoB = new Animation(0.15f, frentedaño[0][0], frentedaño[0][1], frentedaño[0][2]);
+
+        TextureRegion dañoLado = new TextureRegion(new Texture("Damage/Damage_Side.png"));
+        TextureRegion [][] regionLados = dañoLado.split(75,120);
+        atacadoB = new Animation(0.15f, regionDaño[0][0], regionDaño[0][1], regionDaño[0][2]);
+
+
+
+
+
         timerAnimacion = 0;
         ////
-        // Quieto
+        // Quie
         sprite = new Sprite(texturaPersonaje[0][0]);
         sprite.setPosition(64,1250);
         x = 64;
@@ -102,7 +128,8 @@ public class Personaje extends Objeto {
         if (estadoMover==EstadoMovimento.QUIETO) {
             //batch.draw(marioQuieto.getTexture(),x,y);
             return texturaPersonaje[0][0];
-        } else if (estadoMover== EstadoMovimento.DERECHA || estadoMover==EstadoMovimento.IZQUIERDA){
+        }
+        else if (estadoMover== EstadoMovimento.DERECHA || estadoMover==EstadoMovimento.IZQUIERDA){
             timerAnimacion += Gdx.graphics.getDeltaTime();
             TextureRegion region = (TextureRegion) animacionX.getKeyFrame(timerAnimacion);
             if (estadoMover == EstadoMovimento.IZQUIERDA) {
@@ -149,34 +176,29 @@ public class Personaje extends Objeto {
 
         // Verificar si se puede mover (no hay obstáculos, por ahora tubos verdes)
         switch (estadoMover) {
-            case ATAQUEX:
-                if (puedeMover(1,0,mapa)){
-                    mover(VX*SPEED, VY*SPEED);
-                }
             case ABAJO:
                 if (puedeMover(0,-1,mapa)){
-                    mover(VX*SPEED, VY*SPEED);
+                    moverY(-SPEED);
                 }
                 break;
             case ARRIBA:
                 if (puedeMover(0,1,mapa)){
-                    mover(VX*SPEED, VY*SPEED);
+                    moverY(SPEED);
                 }
                 break;
             case DERECHA:
                 if (puedeMover(1,0,mapa)) {
 
-                    mover(VX*SPEED, VY*SPEED);
+                    moverx(SPEED);
                 }
                 break;
             case IZQUIERDA:
                 if (puedeMover(-1,0,mapa)) {
-                    mover(VX*SPEED, VY*SPEED);
+                    moverx(-SPEED);
                 }
                 break;
             case ATAQUEYDOWN:
                 if (puedeMover(0,-1,mapa)){
-                    mover(VX*SPEED, VY*SPEED);
                 }
         }
     }
@@ -190,8 +212,8 @@ public class Personaje extends Objeto {
         TiledMapTileLayer.Cell celda = capa.getCell(cx,cy);
         // Obtener la celda en x,y
         if (celda2!=null){
-            addDocumets(1);
             celda2.setTile(null);
+            addDocumets(1);
         }
         if (celda!=null){
             Object material = celda.getTile().getProperties().get("Material");
@@ -235,13 +257,15 @@ public class Personaje extends Objeto {
     public int getLife(){
         return life;
     }
-    public void mover(float dx, float dy) {
+    public void moverx(float dx) {
         x += dx;
-        y += dy;
+
         sprite.setPosition(x, y);
     }
-    public void setVx(float VX) {
-        this.VX = VX;
+    public void moverY(float dy){
+        y += dy;
+        sprite.setPosition(x,y);
+
     }
 
     public void addDocumets(int documents){
@@ -264,16 +288,8 @@ public class Personaje extends Objeto {
         return height;
     }
 
-    public void setVy(float VY) {
-        this.VY = VY;
-    }
     public void setEstadoMover(EstadoMovimento estadoMover) {
         this.estadoMover = estadoMover;
-    }
-
-
-    public Rectangle getBounds(){
-        return jugBounds;
     }
 
 }

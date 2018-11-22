@@ -19,7 +19,6 @@ public class PantallaExtras extends Pantalla{
     private Texture box;
     private Stage escenaExtras;
     private Texture lock;
-    private Table popUp;
     public Music music;
 
 
