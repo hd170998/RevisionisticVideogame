@@ -310,10 +310,6 @@ public class PlayScreen  extends Pantalla{
         character.setX(ivan.getX());
         character.setY(ivan.getY());
         character.setTextureRegion(ivan.getAnimation());
-
-        setIvanBounds(ivan.getX(), ivan.getY());
-
-
         batch.begin();
         for(Vaca v : vacas){
             stateTime += Gdx.graphics.getDeltaTime();

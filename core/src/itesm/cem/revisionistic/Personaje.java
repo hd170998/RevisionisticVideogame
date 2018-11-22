@@ -93,15 +93,15 @@ public class Personaje extends Objeto {
         animacionYAD.setPlayMode(Animation.PlayMode.LOOP);
 
         ///////Daño animation
-        TextureRegion daño = new TextureRegion(new Texture("Damage_Back.png"));
+        TextureRegion daño = new TextureRegion(new Texture("Damage/Damage_Back.png"));
         TextureRegion [][] regionDaño = daño.split(71,139);
         atacadoA = new Animation(0.15f, regionDaño[0][0], regionDaño[0][1], regionDaño[0][2]);
 
-        TextureRegion dañoFrente = new TextureRegion(new Texture("Damage_Front.png"));
+        TextureRegion dañoFrente = new TextureRegion(new Texture("Damage/Damage_Front.png"));
         TextureRegion [][] frentedaño = dañoFrente.split(61,139);
         atacadoB = new Animation(0.15f, frentedaño[0][0], frentedaño[0][1], frentedaño[0][2]);
 
-        TextureRegion dañoLado = new TextureRegion(new Texture("Damage_Side.png"));
+        TextureRegion dañoLado = new TextureRegion(new Texture("Damage/Damage_Side.png"));
         TextureRegion [][] regionLados = dañoLado.split(75,120);
         atacadoB = new Animation(0.15f, regionDaño[0][0], regionDaño[0][1], regionDaño[0][2]);
 
