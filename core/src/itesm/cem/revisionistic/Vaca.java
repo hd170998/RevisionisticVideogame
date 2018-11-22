@@ -101,9 +101,6 @@ public class Vaca extends Enemigo {
 
     @Override
     public void hitOnHead() {
-        //if (currentState != Vaca.State.WALKING){
-         //   currentState = Vaca.State.ATTACKING;
-       // }
         sprite.getTexture().dispose();
 
     }

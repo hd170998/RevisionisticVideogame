@@ -291,6 +291,10 @@ public class PlayScreen  extends Pantalla{
         objetos = collisionObjectLayer.getObjects();
     }
 
+    private void SetIvanBounds(float x, float y){
+        jugBounds = new Rectangle(x, y, 64, 128);
+    }
+
     @Override
     public void render(float delta) {
         ivan.actualizar(mapa);
@@ -324,8 +328,7 @@ public class PlayScreen  extends Pantalla{
         labeld.setText(String.format("%01d",ivan.documents));
         label.setText(String.format("%01d",ivan.life));
 
-
-        ivan.getRectangle().setPosition(ivan.getX(),ivan.getY());
+        SetIvanBounds(ivan.getX(), ivan.getY());
 
         for (RectangleMapObject rectangleObject : objetos.getByType(RectangleMapObject.class)) {
             int i;
@@ -334,7 +337,8 @@ public class PlayScreen  extends Pantalla{
             if (Intersector.overlaps(rectangle,jugBounds)) {
                 if(ivan.estadoMover != Personaje.EstadoMovimento.ATAQUEX || ivan.estadoMover != Personaje.EstadoMovimento.ATAQUEXI){
                     ivan.damage(1);
-                }else {
+                }else if (ivan.estadoMover == Personaje.EstadoMovimento.ATAQUEX || ivan.estadoMover == Personaje.EstadoMovimento.ATAQUEXI||
+                        ivan.estadoMover == Personaje.EstadoMovimento.ATAQUEYUP || ivan.estadoMover == Personaje.EstadoMovimento.ATAQUEYDOWN) {
 
                     for(i= 0; i < vacas.size; i++) {
                         for (Vaca v : vacas) {
