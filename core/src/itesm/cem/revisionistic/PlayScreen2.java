@@ -1,5 +1,7 @@
 package itesm.cem.revisionistic;
+
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
@@ -12,7 +14,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
@@ -20,16 +21,15 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -37,10 +37,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-
-public class PlayScreen  extends Pantalla{
+public class PlayScreen2 extends Pantalla {
     private static final float ANCHO_MAPA = 4800;
     private static final float ALTO_MAPA = 2560;
     private TiledMap mapa;
@@ -62,10 +59,9 @@ public class PlayScreen  extends Pantalla{
     private Array<Vaca> vacas = new Array<Vaca>();
     private Rectangle jugBounds;
 
-    private float stateTime = 0f;
-
-    public PlayScreen(PantallaInicio pantallaInicio) {
+    public PlayScreen2(PantallaInicio pantallaInicio) {
         this.pantallaInicio = pantallaInicio;
+
     }
 
     @Override
@@ -82,19 +78,13 @@ public class PlayScreen  extends Pantalla{
         crearHUD();
         cargaMusica();
         Gdx.input.setInputProcessor(escenaHUD);
+        cargarMapa();
     }
+
     private void cargaMusica() {
-        AssetManager manager = new AssetManager();
-        manager.load("audio/Forest.mp3", Music.class);
-        manager.load("audio/saw-audio.mp3",Sound.class);
-        manager.finishLoading();
-        music = manager.get("audio/Forest.mp3");
-        music.setLooping(true);
-        music.play();
     }
 
     private void crearHUD() {
-
         camaraHUD = new OrthographicCamera(ANCHO, ALTO);
         camaraHUD.position.set(ANCHO/2, ALTO_MAPA/2-50, 0);
         camaraHUD.update();
@@ -231,6 +221,62 @@ public class PlayScreen  extends Pantalla{
         escenaHUD.addActor(btnPdown);
         escenaHUD.addActor(btnleft);
         escenaHUD.addActor(btnri);
+
+    }
+
+    private void cargarMapa() {
+        AssetManager manager = new AssetManager();
+        mapa = manager.get("VillageStuff/VillageMap.tmx");
+        saw = manager.get("audio/saw-audio.mp3",Sound.class);
+        tiledMapRenderer = new OrthogonalTiledMapRendererWithSprites(mapa);
+        objectLayer = mapa.getLayers().get("1V4N");
+        TextureMapObject IvanO = new TextureMapObject(ivan.getAnimation());
+        objectLayer.getObjects().add(IvanO);
+    }
+
+    @Override
+    public void render(float delta) {
+        ivan.actualizar(mapa);
+        actualizarCamara();
+        borrarPantalla(0,0,0);
+        tiledMapRenderer.setView(camara);
+        batch.setProjectionMatrix(camara.combined);
+        camara.position.set(ANCHO/2,ALTO_MAPA/2-50,0);
+        camara.update();
+        tiledMapRenderer.render();
+
+
+        TextureMapObject character = (TextureMapObject)mapa.getLayers().get("1V4N").getObjects().get(0);
+        character.setX(ivan.getX());
+        character.setY(ivan.getY());
+        character.setTextureRegion(ivan.getAnimation());
+        batch.begin();
+
+        batch.setProjectionMatrix(camaraHUD.combined);
+        escenaHUD.draw();
+        labeld.setText(String.format("%01d",ivan.documents));
+        label.setText(String.format("%01d",ivan.life));
+
+        ivan.getRectangle().setPosition(ivan.getX(),ivan.getY());
+
+        for (RectangleMapObject rectangleObject : objetos.getByType(RectangleMapObject.class)) {
+            int i;
+            Rectangle rectangle = rectangleObject.getRectangle();
+
+            if (Intersector.overlaps(rectangle,jugBounds)) {
+                if(ivan.estadoMover != Personaje.EstadoMovimento.ATAQUEX || ivan.estadoMover != Personaje.EstadoMovimento.ATAQUEXI){
+                    ivan.damage(1);
+                }else if (ivan.estadoMover == Personaje.EstadoMovimento.ATAQUEX || ivan.estadoMover == Personaje.EstadoMovimento.ATAQUEXI||
+                        ivan.estadoMover == Personaje.EstadoMovimento.ATAQUEYUP || ivan.estadoMover == Personaje.EstadoMovimento.ATAQUEYDOWN) {
+
+                }
+                // collision happened
+            }
+        }
+        if (estado == EstadoJuego.PAUSADO){
+            escenaPausa.draw();
+        }
+
     }
 
     private void actualizarCamara() {
@@ -239,6 +285,8 @@ public class PlayScreen  extends Pantalla{
         float posY = ivan.getY();
         if (posY>ALTO_MAPA-120  &&  ((posX>3710)||(posX<3720))&&(ivan.documents>50)){
             pantallaInicio.setScreen(new PlayScreen2(pantallaInicio));
+
+
         }
         // Primera mitad
         if (posX < ANCHO/2) {
@@ -263,121 +311,22 @@ public class PlayScreen  extends Pantalla{
             camara.position.y= posY;
         }
         camara.update();
-    }
-    private void cargarMapa() {
-        AssetManager manager = new AssetManager();
-        manager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-        manager.load("ForestStuff/ForestMap.tmx",TiledMap.class);
-        manager.load("audio/saw-audio.mp3",Sound.class);
-        manager.finishLoading(); // Espera
-        mapa = manager.get("ForestStuff/ForestMap.tmx");
-        saw = manager.get("audio/saw-audio.mp3",Sound.class);
-        tiledMapRenderer = new OrthogonalTiledMapRendererWithSprites(mapa);
-        objectLayer = mapa.getLayers().get("1V4N");
-        TextureMapObject IvanO = new TextureMapObject(ivan.getAnimation());
-        objectLayer.getObjects().add(IvanO);
-
-
-        for(MapObject object : mapa.getLayers().get("Enemigos").getObjects()){
-
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
-
-            vacas.add(new Vaca(rect.x, rect.y));
-
-
-
-        }
-
-
-        MapLayer collisionObjectLayer = mapa.getLayers().get("Enemigos");
-        objetos = collisionObjectLayer.getObjects();
-    }
-
-    private void SetIvanBounds(float x, float y){
-        jugBounds = new Rectangle(x, y, 64, 128);
-    }
-
-    @Override
-    public void render(float delta) {
-        ivan.actualizar(mapa);
-        actualizarCamara();
-        actualizarCamara();
-        borrarPantalla(0,0,0);
-        tiledMapRenderer.setView(camara);
-        batch.setProjectionMatrix(camara.combined);
-        camara.position.set(ANCHO/2,ALTO_MAPA/2-50,0);
-        camara.update();
-        tiledMapRenderer.render();
-
-
-
-
-        TextureMapObject character = (TextureMapObject)mapa.getLayers().get("1V4N").getObjects().get(0);
-        character.setX(ivan.getX());
-        character.setY(ivan.getY());
-        character.setTextureRegion(ivan.getAnimation());
-        batch.begin();
-        for(Vaca v : vacas){
-            stateTime += Gdx.graphics.getDeltaTime();
-            TextureRegion currenFrame = (TextureRegion) v.walkingAnimation.getKeyFrame(stateTime, true);
-            batch.draw(currenFrame, v.getX(), v.getY());
-        }
-        batch.end();
-
-
-        batch.setProjectionMatrix(camaraHUD.combined);
-        escenaHUD.draw();
-        labeld.setText(String.format("%01d",ivan.documents));
-        label.setText(String.format("%01d",ivan.life));
-
-        SetIvanBounds(ivan.getX(), ivan.getY());
-
-        for (RectangleMapObject rectangleObject : objetos.getByType(RectangleMapObject.class)) {
-            int i;
-            Rectangle rectangle = rectangleObject.getRectangle();
-
-            if (Intersector.overlaps(rectangle,jugBounds)) {
-                if(ivan.estadoMover != Personaje.EstadoMovimento.ATAQUEX || ivan.estadoMover != Personaje.EstadoMovimento.ATAQUEXI){
-                    ivan.damage(1);
-                }else if (ivan.estadoMover == Personaje.EstadoMovimento.ATAQUEX || ivan.estadoMover == Personaje.EstadoMovimento.ATAQUEXI||
-                        ivan.estadoMover == Personaje.EstadoMovimento.ATAQUEYUP || ivan.estadoMover == Personaje.EstadoMovimento.ATAQUEYDOWN) {
-
-                    for(i= 0; i < vacas.size; i++) {
-                        for (Vaca v : vacas) {
-                            if (v.getX() == rectangle.getX() && v.getY() == rectangle.getY()) {
-                                v.hitOnHead();
-                                vacas.removeIndex(i);
-                            }
-                        }
-                    }
-
-                }
-                // collision happened
-            }
-        }
-        if (estado == EstadoJuego.PAUSADO){
-            escenaPausa.draw();
-        }
 
     }
+
 
     @Override
     public void pause() {
-        this.estado = EstadoJuego.PAUSADO;
+
     }
 
     @Override
     public void resume() {
-        this.estado = EstadoJuego.JUGANDO;
 
     }
 
     @Override
     public void dispose() {
-        escenaHUD.dispose();
-        mapa.dispose();
-        batch.dispose();
-
 
     }
     class EscenaPausa extends Stage {
