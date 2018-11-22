@@ -28,6 +28,7 @@ public class PantallaExtras extends Pantalla{
 
     @Override
     public void show() {
+        Gdx.input.setCatchBackKey(true);
         escenaExtras();
         cargarMusica();
         Gdx.input.setInputProcessor(escenaExtras);
