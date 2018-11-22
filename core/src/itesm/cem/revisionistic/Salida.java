@@ -15,7 +15,7 @@ public class Salida {
 
 
     public Salida(float x, float y){
-        TextureRegion region = new TextureRegion(new Texture("ForestStuff/EXITSprite"));
+        TextureRegion region = new TextureRegion(new Texture("ForestStuff/EXITSprite.png"));
         sprite = new Sprite(region);
         sprite.setPosition(x, y);
         salidaBounds = new Rectangle(x, y, width, height);
