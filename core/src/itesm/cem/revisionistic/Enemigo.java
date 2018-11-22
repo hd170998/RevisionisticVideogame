@@ -24,8 +24,8 @@ public abstract class Enemigo extends Sprite {
     }
 
     protected abstract void defineEnemy();
-    public abstract void update(float dt);
-    public abstract void hitOnHead(Personaje ivan);
+    public abstract void update();
+    public abstract void hitOnHead();
     public abstract void hitByEnemy(Enemigo enemigo);
 
     public void reverseVelocity(boolean x, boolean y){

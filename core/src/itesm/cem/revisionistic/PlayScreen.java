@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
@@ -32,15 +33,18 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class PlayScreen  extends Pantalla{
     private static final float ANCHO_MAPA = 4800;
     private static final float ALTO_MAPA = 2560;
     private TiledMap mapa;
     private final PantallaInicio pantallaInicio;
-    private OrthogonalTiledMapRenderer renderer;
     private TiledMapRenderer tiledMapRenderer;
     private Personaje ivan;
     private MapLayer objectLayer;
@@ -55,6 +59,10 @@ public class PlayScreen  extends Pantalla{
     private Music music;
     private EscenaPausa escenaPausa;
     private MapObjects objetos;
+    private Array<Vaca> vacas = new Array<Vaca>();
+    private Rectangle jugBounds;
+
+    private float stateTime = 0f;
 
     public PlayScreen(PantallaInicio pantallaInicio) {
         this.pantallaInicio = pantallaInicio;
@@ -99,7 +107,6 @@ public class PlayScreen  extends Pantalla{
         labelStyle.fontColor = Color.WHITE;
         label= new Label(String.format("%03d",ivan.getLife()),labelStyle);
         labeld = new Label(String.format("%01d",ivan.getDocuments()),labelStyle);
-        final TextureMapObject character = (TextureMapObject)mapa.getLayers().get("1V4N").getObjects().get(0);
         Skin skin = new Skin(); // Texturas para el pad
         skin.add("fondo", new Texture("padBack.png"));
         skin.add("boton", new Texture("padKnob.png"));
@@ -240,13 +247,25 @@ public class PlayScreen  extends Pantalla{
         objectLayer.getObjects().add(IvanO);
 
 
-        /*objectLayer = mapa.getLayers().get("Enemigos");
-        TextureMapObject EnemOb = new TextureMapObject(ivan.getAnimation());
-        objectLayer.getObjects().add(EnemOb);*/
+        for(MapObject object : mapa.getLayers().get("Enemigos").getObjects()){
+
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+            vacas.add(new Vaca(rect.x, rect.y));
+
+
+
+        }
 
 
         MapLayer collisionObjectLayer = mapa.getLayers().get("Enemigos");
         objetos = collisionObjectLayer.getObjects();
+
+
+    }
+
+    private void setIvanBounds(float x, float y){
+        jugBounds = new Rectangle(x, y, 64, 128);
 
     }
 
@@ -261,38 +280,52 @@ public class PlayScreen  extends Pantalla{
         camara.position.set(ANCHO/2,ALTO_MAPA/2-50,0);
         camara.update();
         tiledMapRenderer.render();
+
+
+
+
         TextureMapObject character = (TextureMapObject)mapa.getLayers().get("1V4N").getObjects().get(0);
         character.setX(ivan.getX());
         character.setY(ivan.getY());
         character.setTextureRegion(ivan.getAnimation());
 
+        setIvanBounds(ivan.getX(), ivan.getY());
 
-        /*RectangleMapObject enemigos = (RectangleMapObject) mapa.getLayers().get("Enemigos").getObjects().get(0);
-        //enemigos.set(vaca4.getX());
-        //enemigos.setY(vaca4.getY());
-        //enemigos.setTextureRegion(vaca4.getAnimation());
+
         batch.begin();
+        for(Vaca v : vacas){
+            stateTime += Gdx.graphics.getDeltaTime();
+            TextureRegion currenFrame = (TextureRegion) v.walkingAnimation.getKeyFrame(stateTime, true);
+            batch.draw(currenFrame, v.getX(), v.getY());
+        }
+        batch.end();
 
-
-
-
-
-
-
-
-
-        batch.end();*/
 
         batch.setProjectionMatrix(camaraHUD.combined);
         escenaHUD.draw();
         labeld.setText(String.format("%01d",ivan.documents));
         label.setText(String.format("%01d",ivan.life));
-        for (RectangleMapObject rectangleObject : objetos.getByType(RectangleMapObject.class)) {
 
+
+        for (RectangleMapObject rectangleObject : objetos.getByType(RectangleMapObject.class)) {
+            int i;
             Rectangle rectangle = rectangleObject.getRectangle();
-            Gdx.app.log("rectangle",""+rectangle);
-            if (Intersector.overlaps(rectangle, ivan.getRectangle())) {
-                Gdx.app.log("Collision", "Happened");
+
+            if (Intersector.overlaps(rectangle,jugBounds)) {
+                if(ivan.estadoMover != Personaje.EstadoMovimento.ATAQUEX || ivan.estadoMover != Personaje.EstadoMovimento.ATAQUEXI){
+                    ivan.damage(1);
+                }else {
+
+                    for(i= 0; i < vacas.size; i++) {
+                        for (Vaca v : vacas) {
+                            if (v.getX() == rectangle.getX() && v.getY() == rectangle.getY()) {
+                                v.hitOnHead();
+                                vacas.removeIndex(i);
+                            }
+                        }
+                    }
+
+                }
                 // collision happened
             }
         }
