@@ -32,7 +32,7 @@ public class PantallaCargando extends Pantalla{
         manager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
         manager.load("ForestStuff/ForestMap.tmx",TiledMap.class);
         //manager.load("MapLaboratory/LabMap01.tmx", TiledMap.class);
-        //manager.load("VillageStuff/HOME1.tmx", TiledMap.class);
+        manager.load("VillageStuff/VillageMap.tmx", TiledMap.class);
         manager.finishLoading(); // Espera
         if(manager.update()) {
             pantallaInicio.setScreen(new PlayScreen(pantallaInicio));
