@@ -49,6 +49,7 @@ public class PlayScreen  extends Pantalla{
     private TiledMapRenderer tiledMapRenderer;
     private Personaje ivan;
     private MapLayer objectLayer;
+    private MapObject salidaLayer;
     private Label label, labeld;
     private BitmapFont font;
     private OrthographicCamera camaraHUD;
@@ -61,6 +62,7 @@ public class PlayScreen  extends Pantalla{
     private EscenaPausa escenaPausa;
     private Array<Vaca> vacas = new Array<Vaca>();
     private Rectangle jugBounds;
+    private Salida salida;
     private float elapsedTime = 0f;
 
     private float stateTime = 0f;
@@ -297,6 +299,16 @@ public class PlayScreen  extends Pantalla{
 
         }
 
+        salidaLayer = mapa.getLayers().get("Salida").getObjects().get(0);
+        Rectangle rect = ((RectangleMapObject) salidaLayer).getRectangle();
+        salida = new Salida(rect.x,rect.y);
+
+
+
+
+
+
+
 
 
     }
@@ -325,7 +337,7 @@ public class PlayScreen  extends Pantalla{
         elapsedTime += Gdx.graphics.getDeltaTime();
         batch.begin();
 
-        if(checkCollision()) {
+        if(checkEnemyCollision()) {
             for (Vaca v : vacas) {
                 stateTime += Gdx.graphics.getDeltaTime();
                 if (v.state != true) {
@@ -337,7 +349,7 @@ public class PlayScreen  extends Pantalla{
                 }
             }
 
-        }else if (!checkCollision()) {
+        }else if (!checkEnemyCollision()) {
 
                 for (Vaca v : vacas) {
 
@@ -355,7 +367,8 @@ public class PlayScreen  extends Pantalla{
 
 
         batch.end();
-        checkCollision();
+        checkEnemyCollision();
+
 
 
         batch.setProjectionMatrix(camaraHUD.combined);
@@ -369,7 +382,14 @@ public class PlayScreen  extends Pantalla{
 
     }
 
-    public boolean checkCollision(){
+    public void checkExitCollision(){
+        if (jugBounds.overlaps(salida.salidaBounds)){
+            pantallaInicio.setScreen (new PlayScreen2(pantallaInicio));
+
+        }
+    }
+
+    public boolean checkEnemyCollision(){
         for(Vaca v : vacas){
             if (jugBounds.overlaps(v.boundsVaca)){
                 if(ivan.movimiento == "ATAQUE"){
