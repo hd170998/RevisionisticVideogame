@@ -235,6 +235,8 @@ public class PlayScreen2 extends Pantalla {
         objectLayer = mapa.getLayers().get("1V4N");
         TextureMapObject IvanO = new TextureMapObject(ivan.getAnimation());
         objectLayer.getObjects().add(IvanO);
+
+
     }
 
     @Override

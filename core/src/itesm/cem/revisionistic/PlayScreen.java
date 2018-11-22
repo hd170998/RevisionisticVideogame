@@ -336,6 +336,7 @@ public class PlayScreen  extends Pantalla{
         SetIvanBounds(ivan.getX(), ivan.getY());
         elapsedTime += Gdx.graphics.getDeltaTime();
         batch.begin();
+        salida.sprite.draw(batch);
 
         if(checkEnemyCollision()) {
             for (Vaca v : vacas) {
@@ -368,6 +369,7 @@ public class PlayScreen  extends Pantalla{
 
         batch.end();
         checkEnemyCollision();
+        checkExitCollision();
 
 
 
