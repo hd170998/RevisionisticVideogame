@@ -43,7 +43,7 @@ public class PlayScreen3 extends Pantalla{
     private static final float ALTO_MAPA = 6070;
     private TiledMap mapa;
     private final PantallaInicio pantallaInicio;
-
+    private MapObject salidaLayer;
     private TiledMapRenderer tiledMapRenderer;
     private Personaje ivan;
     private EstadoJuego estado;
@@ -53,6 +53,7 @@ public class PlayScreen3 extends Pantalla{
     private BitmapFont font;
     private OrthographicCamera camaraHUD;
     private Viewport vistaHUD;
+    private Salida salida;
     private Stage escenaHUD;
     private Music music;
 
@@ -284,15 +285,17 @@ public class PlayScreen3 extends Pantalla{
         TextureMapObject IvanO = new TextureMapObject(ivan.getAnimation());
         objectLayer.getObjects().add(IvanO);
 
-        for(MapObject object : mapa.getLayers().get("Enemigos").getObjects()){
+        for(MapObject object : mapa.getLayers().get("Object Layer 5").getObjects()){
 
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
             slimes.add(new Slime(rect.x, rect.y,2));
 
-
-
         }
+
+        salidaLayer = mapa.getLayers().get("Object Layer 6").getObjects().get(0);
+        Rectangle rect = ((RectangleMapObject) salidaLayer).getRectangle();
+        salida = new Salida(rect.x,rect.y);
 
 
 
@@ -323,7 +326,7 @@ public class PlayScreen3 extends Pantalla{
         character.setTextureRegion(ivan.getAnimation());
         SetIvanBounds(ivan.getX(), ivan.getY());
         batch.begin();
-
+        salida.sprite.draw(batch);
 
         if(checkEnemyCollision()) {
             for (Slime s : slimes) {
@@ -356,10 +359,7 @@ public class PlayScreen3 extends Pantalla{
 
         batch.end();
         checkEnemyCollision();
-        //checkExitCollision();
-
-
-
+        checkExitCollision();
         batch.setProjectionMatrix(camaraHUD.combined);
         escenaHUD.draw();
         labeld.setText(String.format("%01d",ivan.documents));
@@ -371,12 +371,12 @@ public class PlayScreen3 extends Pantalla{
 
     }
 
-    /*public void checkExitCollision(){
+    public void checkExitCollision(){
         if (jugBounds.overlaps(salida.salidaBounds)){
-            pantallaInicio.setScreen (new PlayScreen2(pantallaInicio));
+            pantallaInicio.setScreen (new PantallaCreditos(pantallaInicio));
 
         }
-    }*/
+    }
 
     public boolean checkEnemyCollision(){
         for(Slime s : slimes){

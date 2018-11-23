@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.1" orientation="orthogonal" renderorder="right-down" width="250" height="200" tilewidth="32" tileheight="32" infinite="0" nextlayerid="11" nextobjectid="59">
+<map version="1.2" tiledversion="1.2.1" orientation="orthogonal" renderorder="right-down" width="250" height="200" tilewidth="32" tileheight="32" infinite="0" nextlayerid="13" nextobjectid="87">
  <tileset firstgid="1" source="tilesLab02.tsx"/>
  <tileset firstgid="193" source="tilea5.tsx"/>
  <tileset firstgid="321" source="tilesLab09.tsx"/>
@@ -1244,29 +1244,6 @@
  <objectgroup id="7" name="PuertaCerrada" visible="0">
   <object id="31" x="736" y="3296" width="184" height="132"/>
  </objectgroup>
- <objectgroup id="8" name="Enemigos">
-  <object id="37" x="3368" y="4960" width="184" height="200"/>
-  <object id="38" x="3536" y="2192" width="128" height="152"/>
-  <object id="39" x="2144" y="5848" width="144" height="192"/>
-  <object id="40" x="3240" y="4488" width="152" height="136"/>
-  <object id="41" x="1264" y="1376" width="128" height="160"/>
-  <object id="42" x="632" y="976" width="152" height="184"/>
-  <object id="43" x="4256" y="1200" width="152" height="176"/>
-  <object id="44" x="2512" y="712" width="184" height="184"/>
-  <object id="45" x="1176" y="3752" width="184" height="216"/>
-  <object id="47" x="784" y="2376" width="64" height="8"/>
-  <object id="48" x="1112" y="5656" width="8" height="8"/>
-  <object id="49" x="1008" y="5472" width="224" height="312"/>
-  <object id="50" x="1136" y="4312" width="128" height="192"/>
-  <object id="51" x="4128" y="5624" width="216" height="224"/>
-  <object id="52" x="6568" y="1016" width="176" height="184"/>
-  <object id="53" x="6544" y="2688" width="232" height="256"/>
-  <object id="54" x="6264" y="5064" width="248" height="248"/>
-  <object id="55" x="7336" y="4192" width="200" height="216"/>
-  <object id="56" x="6168" y="3448" width="240" height="240"/>
-  <object id="57" x="7072" y="2248" width="256" height="296"/>
-  <object id="58" x="6120" y="672" width="184" height="176"/>
- </objectgroup>
  <objectgroup id="9" name="Objetos" visible="0">
   <object id="6" x="605.333" y="254.667" width="64" height="113.333"/>
   <object id="9" x="1212" y="282.667" width="68" height="97.3333"/>
@@ -1289,4 +1266,58 @@
   <object id="34" x="8264" y="744"/>
  </objectgroup>
  <objectgroup id="10" name="1V4N"/>
+ <objectgroup id="8" name="Enemigos" visible="0">
+  <object id="37" x="3368" y="4960" width="184" height="200"/>
+  <object id="38" x="3536" y="2192" width="128" height="152"/>
+  <object id="39" x="2144" y="5848" width="144" height="192"/>
+  <object id="40" x="3240" y="4488" width="152" height="136"/>
+  <object id="41" x="1264" y="1376" width="128" height="160"/>
+  <object id="42" x="632" y="976" width="152" height="184"/>
+  <object id="43" x="4256" y="1200" width="152" height="176"/>
+  <object id="44" x="2512" y="712" width="184" height="184"/>
+  <object id="45" x="1176" y="3752" width="184" height="216"/>
+  <object id="47" x="784" y="2376" width="64" height="8"/>
+  <object id="48" x="1112" y="5656" width="8" height="8"/>
+  <object id="49" x="1008" y="5472" width="224" height="312"/>
+  <object id="50" x="1136" y="4312" width="128" height="192"/>
+  <object id="51" x="4128" y="5624" width="216" height="224"/>
+  <object id="52" x="6568" y="1016" width="176" height="184"/>
+  <object id="53" x="6544" y="2688" width="232" height="256"/>
+  <object id="54" x="6264" y="5064" width="248" height="248"/>
+  <object id="55" x="7336" y="4192" width="200" height="216"/>
+  <object id="56" x="6168" y="3448" width="240" height="240"/>
+  <object id="57" x="7072" y="2248" width="256" height="296"/>
+  <object id="58" x="6120" y="672" width="184" height="176"/>
+ </objectgroup>
+ <objectgroup id="11" name="Object Layer 5">
+  <object id="59" x="568" y="800" width="160" height="144"/>
+  <object id="60" x="784" y="1096" width="208" height="200"/>
+  <object id="61" x="2816" y="736" width="120" height="144"/>
+  <object id="62" x="4176" y="528" width="136" height="184"/>
+  <object id="63" x="3064" y="1976" width="256" height="232"/>
+  <object id="64" x="4896" y="1352" width="192" height="192"/>
+  <object id="65" x="6160" y="728" width="224" height="224"/>
+  <object id="66" x="3688" y="3384" width="120" height="104"/>
+  <object id="67" x="800" y="2584" width="120" height="120"/>
+  <object id="68" x="704" y="3864" width="232" height="168"/>
+  <object id="69" x="1392" y="5616" width="176" height="144"/>
+  <object id="70" x="3280" y="4560" width="160" height="152"/>
+  <object id="71" x="4544" y="5576" width="200" height="184"/>
+  <object id="72" x="6016" y="4728" width="208" height="152"/>
+  <object id="73" x="6224" y="4888" height="8"/>
+  <object id="74" x="6872" y="4784" width="256" height="240"/>
+  <object id="75" x="6800" y="2400" width="216" height="200"/>
+  <object id="76" x="7240" y="1344" width="168" height="168"/>
+  <object id="77" x="5160" y="4600" width="128" height="200"/>
+  <object id="78" x="1224" y="4384" width="216" height="208"/>
+  <object id="79" x="4160" y="1288" width="216" height="224"/>
+  <object id="80" x="1200" y="360" width="176" height="160"/>
+  <object id="81" x="7120" y="560" width="232" height="224"/>
+  <object id="82" x="6368" y="1304" width="216" height="208"/>
+  <object id="83" x="6112" y="3056" width="232" height="184"/>
+  <object id="84" x="7232" y="3904" width="240" height="224"/>
+ </objectgroup>
+ <objectgroup id="12" name="Object Layer 6">
+  <object id="86" x="7264" y="6072" width="192" height="168"/>
+ </objectgroup>
 </map>

@@ -72,12 +72,12 @@ public class Slime extends Enemigo{
         } else if (type==2 ) {
             sprite = new Sprite(texturaBlueSlime[0][0]);
 
-            setX(x);
-            setY(y);
-            sprite.setPosition(x, y);
+            setX(recx);
+            setY(recy);
+            sprite.setPosition(recx, recy);
             walkingAnimation = new Animation(3f, texturaBlueSlime[0][3], texturaBlueSlime[0][2], texturaBlueSlime[0][1], texturaBlueSlime[0][0] );
             attackingAnimation = new Animation(2f, texturaBlueAtaque[0][3], texturaBlueAtaque[0][2], texturaBlueAtaque[0][1], texturaBlueAtaque[0][0]);
-            boundsSlime = new Rectangle(x, y, 150, 100);
+            boundsSlime = new Rectangle(recx, recy, 150, 100);
         } else if (type==3){
             sprite = new Sprite(texturaRedSlime[0][0]);
 
