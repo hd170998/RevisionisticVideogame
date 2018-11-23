@@ -322,7 +322,7 @@ public class PlayScreen  extends Pantalla{
         character.setX(ivan.getX());
         character.setY(ivan.getY());
         character.setTextureRegion(ivan.getAnimation());
-        batch.setProjectionMatrix(camaraHUD.combined);
+
         SetIvanBounds(ivan.getX(), ivan.getY());
         batch.begin();
         salida.sprite.draw(batch);
@@ -359,6 +359,7 @@ public class PlayScreen  extends Pantalla{
         batch.end();
         checkEnemyCollision();
         checkExitCollision();
+        batch.setProjectionMatrix(camaraHUD.combined);
         escenaHUD.draw();
         labeld.setText(String.format("%01d",ivan.documents));
         label.setText(String.format("%01d",ivan.life));
