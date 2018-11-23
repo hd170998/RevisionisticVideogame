@@ -974,7 +974,4 @@
   <object id="26" x="311.099" y="435.012" width="42.183" height="52.7287"/>
   <object id="27" x="957.026" y="841.023" width="60.638" height="68.5473"/>
  </objectgroup>
-<objectgroup id="19" name="Object Layer 8">
-   <object id="28" x="1224.24" y="15.15" width="48.48" height="48.48"/>
-</objectgroup>
 </map>
