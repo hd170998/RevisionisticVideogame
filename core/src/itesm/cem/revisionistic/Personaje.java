@@ -228,7 +228,12 @@ public class Personaje extends Objeto {
         int cx = (int)(getX()+(dx*32))/32;
         int cy = (int)(getY()+(dy*32))/32;
         TiledMapTileLayer capa = (TiledMapTileLayer)mapa.getLayers().get(1);
-
+        TiledMapTileLayer capa2 = (TiledMapTileLayer)mapa.getLayers().get(6);
+        TiledMapTileLayer.Cell celda2 = capa2.getCell(cx,cy);
+        if (celda2!=null){
+            celda2.setTile(null);
+            addDocumets(1);
+        }
         TiledMapTileLayer.Cell celda = capa.getCell(cx,cy);
         // Obtener la celda en x,y
         if (celda!=null){
