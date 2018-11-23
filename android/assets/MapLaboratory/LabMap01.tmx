@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.1" orientation="orthogonal" renderorder="right-down" width="250" height="200" tilewidth="32" tileheight="32" infinite="0" nextlayerid="11" nextobjectid="48">
+<map version="1.2" tiledversion="1.2.1" orientation="orthogonal" renderorder="right-down" width="250" height="200" tilewidth="32" tileheight="32" infinite="0" nextlayerid="11" nextobjectid="59">
  <tileset firstgid="1" source="tilesLab02.tsx"/>
  <tileset firstgid="193" source="tilea5.tsx"/>
  <tileset firstgid="321" source="tilesLab09.tsx"/>
@@ -1241,11 +1241,10 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="7" name="PuertaCerrada">
+ <objectgroup id="7" name="PuertaCerrada" visible="0">
   <object id="31" x="736" y="3296" width="184" height="132"/>
  </objectgroup>
  <objectgroup id="8" name="Enemigos">
-  <object id="36" x="1040" y="5528" width="248" height="224"/>
   <object id="37" x="3368" y="4960" width="184" height="200"/>
   <object id="38" x="3536" y="2192" width="128" height="152"/>
   <object id="39" x="2144" y="5848" width="144" height="192"/>
@@ -1256,8 +1255,19 @@
   <object id="44" x="2512" y="712" width="184" height="184"/>
   <object id="45" x="1176" y="3752" width="184" height="216"/>
   <object id="47" x="784" y="2376" width="64" height="8"/>
+  <object id="48" x="1112" y="5656" width="8" height="8"/>
+  <object id="49" x="1008" y="5472" width="224" height="312"/>
+  <object id="50" x="1136" y="4312" width="128" height="192"/>
+  <object id="51" x="4128" y="5624" width="216" height="224"/>
+  <object id="52" x="6568" y="1016" width="176" height="184"/>
+  <object id="53" x="6544" y="2688" width="232" height="256"/>
+  <object id="54" x="6264" y="5064" width="248" height="248"/>
+  <object id="55" x="7336" y="4192" width="200" height="216"/>
+  <object id="56" x="6168" y="3448" width="240" height="240"/>
+  <object id="57" x="7072" y="2248" width="256" height="296"/>
+  <object id="58" x="6120" y="672" width="184" height="176"/>
  </objectgroup>
- <objectgroup id="9" name="Objetos">
+ <objectgroup id="9" name="Objetos" visible="0">
   <object id="6" x="605.333" y="254.667" width="64" height="113.333"/>
   <object id="9" x="1212" y="282.667" width="68" height="97.3333"/>
   <object id="11" x="1438.67" y="2026.67" width="64" height="100"/>

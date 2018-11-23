@@ -47,6 +47,8 @@ public class PlayScreen2 extends Pantalla {
     private BitmapFont font;
     private OrthographicCamera camaraHUD;
     private Viewport vistaHUD;
+    private Salida salida;
+    private MapObject salidaLayer;
     // HUD con una escena para los botones y componentes
     private Stage escenaHUD;
     private Sound saw;
@@ -69,7 +71,7 @@ public class PlayScreen2 extends Pantalla {
     public void show() {
         Gdx.input.setCatchBackKey(true);
         ivan = new Personaje(new Texture("1V4N_Xaxis.png"));
-        ivan.setX(1000);
+        ivan.setX(995);
         ivan.setY(5);
         ivan.setLife(100);
         ivan.setDocuments(0);
@@ -289,6 +291,9 @@ public class PlayScreen2 extends Pantalla {
 
 
         }
+        salidaLayer = mapa.getLayers().get("Object Layer 8").getObjects().get(0);
+        Rectangle rect = ((RectangleMapObject) salidaLayer).getRectangle();
+        salida = new Salida(rect.x,rect.y);
 
 
     }
@@ -315,6 +320,7 @@ public class PlayScreen2 extends Pantalla {
         SetIvanBounds(ivan.getX(), ivan.getY());
 
         batch.begin();
+        salida.sprite.draw(batch);
 
         //salida.sprite.draw(batch);
 
@@ -351,6 +357,7 @@ public class PlayScreen2 extends Pantalla {
 
         batch.end();
         checkEnemyCollision();
+        checkExitCollision();
         batch.setProjectionMatrix(camaraHUD.combined);
         escenaHUD.draw();
         labeld.setText(String.format("%01d",ivan.documents));
@@ -363,6 +370,12 @@ public class PlayScreen2 extends Pantalla {
     }
 
 
+    public void checkExitCollision(){
+        if (jugBounds.overlaps(salida.salidaBounds)){
+            pantallaInicio.setScreen (new PlayScreen3(pantallaInicio));
+
+        }
+    }
 
 
     private boolean checkEnemyCollision() {
@@ -392,16 +405,21 @@ public class PlayScreen2 extends Pantalla {
 
     @Override
     public void pause() {
-
+        this.estado = EstadoJuego.PAUSADO;
     }
 
     @Override
     public void resume() {
+        this.estado = EstadoJuego.JUGANDO;
 
     }
 
     @Override
     public void dispose() {
+        escenaHUD.dispose();
+        mapa.dispose();
+        batch.dispose();
+
 
     }
     class EscenaPausa extends Stage {

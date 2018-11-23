@@ -359,10 +359,6 @@ public class PlayScreen  extends Pantalla{
         batch.end();
         checkEnemyCollision();
         checkExitCollision();
-
-
-
-
         escenaHUD.draw();
         labeld.setText(String.format("%01d",ivan.documents));
         label.setText(String.format("%01d",ivan.life));
