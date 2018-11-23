@@ -372,7 +372,7 @@ public class PlayScreen2 extends Pantalla {
 
     public void checkExitCollision(){
         if (jugBounds.overlaps(salida.salidaBounds)){
-            pantallaInicio.setScreen (new PlayScreen3(pantallaInicio));
+            pantallaInicio.setScreen (new PantallaCreditos(pantallaInicio));
 
         }
     }
