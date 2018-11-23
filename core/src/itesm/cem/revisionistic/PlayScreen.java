@@ -240,9 +240,7 @@ public class PlayScreen  extends Pantalla{
         // Depende de la posición del personaje. Siempre sigue al personaje
         float posX = ivan.getX();
         float posY = ivan.getY();
-        if (posY>ALTO_MAPA-120  &&  ((posX>3710)||(posX<3720))&&(ivan.documents>50)){
-            pantallaInicio.setScreen(new PlayScreen2(pantallaInicio));
-        }
+
         // Primera mitad
         if (posX < ANCHO/2) {
             camara.position.x = ANCHO/2;
@@ -303,14 +301,6 @@ public class PlayScreen  extends Pantalla{
         Rectangle rect = ((RectangleMapObject) salidaLayer).getRectangle();
         salida = new Salida(rect.x,rect.y);
 
-
-
-
-
-
-
-
-
     }
 
     private void SetIvanBounds(float x, float y){
@@ -333,6 +323,7 @@ public class PlayScreen  extends Pantalla{
         character.setX(ivan.getX());
         character.setY(ivan.getY());
         character.setTextureRegion(ivan.getAnimation());
+        batch.setProjectionMatrix(camaraHUD.combined);
         SetIvanBounds(ivan.getX(), ivan.getY());
         elapsedTime += Gdx.graphics.getDeltaTime();
         batch.begin();
@@ -373,7 +364,7 @@ public class PlayScreen  extends Pantalla{
 
 
 
-        batch.setProjectionMatrix(camaraHUD.combined);
+
         escenaHUD.draw();
         labeld.setText(String.format("%01d",ivan.documents));
         label.setText(String.format("%01d",ivan.life));

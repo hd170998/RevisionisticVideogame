@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
@@ -35,8 +36,8 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class PlayScreen2 extends Pantalla {
-    private static final float ANCHO_MAPA = 4800;
-    private static final float ALTO_MAPA = 2560;
+    private static final float ANCHO_MAPA = 2560;
+    private static final float ALTO_MAPA = 1280;
     private TiledMap mapa;
     private final PantallaInicio pantallaInicio;
     private TiledMapRenderer tiledMapRenderer;
@@ -53,8 +54,10 @@ public class PlayScreen2 extends Pantalla {
     private Music music;
     private EscenaPausa escenaPausa;
     private MapObjects objetos;
-    private Array<Vaca> vacas = new Array<Vaca>();
+    private Array<Slime> slimes = new Array<Slime>();
     private Rectangle jugBounds;
+    private float stateTime = 0f;
+
 
     public PlayScreen2(PantallaInicio pantallaInicio) {
         this.pantallaInicio = pantallaInicio;
@@ -77,7 +80,7 @@ public class PlayScreen2 extends Pantalla {
         crearHUD();
         cargaMusica();
         Gdx.input.setInputProcessor(escenaHUD);
-        cargarMapa();
+
     }
 
     private void cargaMusica() {
@@ -223,59 +226,11 @@ public class PlayScreen2 extends Pantalla {
 
     }
 
-    private void cargarMapa() {
-        AssetManager manager = new AssetManager();
-        manager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-        manager.load("VillageStuff/VillageMap.tmx",TiledMap.class);
-        manager.load("audio/saw-audio.mp3",Sound.class);
-        manager.finishLoading(); // Espera
-        mapa = manager.get("VillageStuff/VillageMap.tmx");
-        saw = manager.get("audio/saw-audio.mp3",Sound.class);
-        tiledMapRenderer = new OrthogonalTiledMapRendererWithSprites(mapa);
-        objectLayer = mapa.getLayers().get("1V4N");
-        TextureMapObject IvanO = new TextureMapObject(ivan.getAnimation());
-        objectLayer.getObjects().add(IvanO);
-
-
-    }
-
-    @Override
-    public void render(float delta) {
-        ivan.actualizar(mapa);
-        actualizarCamara();
-        borrarPantalla(0,0,0);
-        tiledMapRenderer.setView(camara);
-        batch.setProjectionMatrix(camara.combined);
-        camara.position.set(ANCHO/2,ALTO_MAPA/2-50,0);
-        camara.update();
-        tiledMapRenderer.render();
-
-        TextureMapObject character = (TextureMapObject)mapa.getLayers().get("1V4N").getObjects().get(0);
-        character.setX(ivan.getX());
-        character.setY(ivan.getY());
-        character.setTextureRegion(ivan.getAnimation());
-        batch.setProjectionMatrix(camaraHUD.combined);
-        batch.begin();
-        escenaHUD.draw();
-        labeld.setText(String.format("%01d",ivan.documents));
-        label.setText(String.format("%01d",ivan.life));
-
-        if (estado == EstadoJuego.PAUSADO){
-            escenaPausa.draw();
-        }
-        batch.end();
-
-    }
-
     private void actualizarCamara() {
         // Depende de la posición del personaje. Siempre sigue al personaje
         float posX = ivan.getX();
         float posY = ivan.getY();
-        if (posY>ALTO_MAPA-120  &&  ((posX>3710)||(posX<3720))&&(ivan.documents>50)){
-            pantallaInicio.setScreen(new PlayScreen2(pantallaInicio));
 
-
-        }
         // Primera mitad
         if (posX < ANCHO/2) {
             camara.position.x = ANCHO/2;
@@ -301,6 +256,128 @@ public class PlayScreen2 extends Pantalla {
         camara.update();
 
     }
+
+
+    private void cargarMapa() {
+        AssetManager manager = new AssetManager();
+        manager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
+        manager.load("VillageStuff/VillageMap.tmx",TiledMap.class);
+        manager.load("audio/saw-audio.mp3",Sound.class);
+        manager.finishLoading(); // Espera
+        mapa = manager.get("VillageStuff/VillageMap.tmx");
+        saw = manager.get("audio/saw-audio.mp3",Sound.class);
+        tiledMapRenderer = new OrthogonalTiledMapRendererWithSprites(mapa);
+        objectLayer = mapa.getLayers().get("1V4N");
+        TextureMapObject IvanO = new TextureMapObject(ivan.getAnimation());
+        objectLayer.getObjects().add(IvanO);
+
+        /*for(MapObject object : mapa.getLayers().get("Object Layer 7").getObjects()){
+
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+            slimes.add(new Slime(rect.x, rect.y,1));
+
+
+
+
+        }*/
+
+    }
+
+    private void SetIvanBounds(float x, float y){
+        jugBounds = new Rectangle(x, y, 64, 128);
+    }
+
+    @Override
+    public void render(float delta) {
+        ivan.actualizar(mapa);
+        actualizarCamara();
+        borrarPantalla(0,0,0);
+        tiledMapRenderer.setView(camara);
+        batch.setProjectionMatrix(camara.combined);
+        camara.position.set(ANCHO/2,ALTO_MAPA/2-50,0);
+        camara.update();
+        tiledMapRenderer.render();
+
+        TextureMapObject character = (TextureMapObject)mapa.getLayers().get("1V4N").getObjects().get(0);
+        character.setX(ivan.getX());
+        character.setY(ivan.getY());
+        character.setTextureRegion(ivan.getAnimation());
+        batch.setProjectionMatrix(camaraHUD.combined);
+        SetIvanBounds(ivan.getX(), ivan.getY());
+        batch.begin();
+
+        //salida.sprite.draw(batch);
+
+
+        /*if(checkEnemyCollision()) {
+            for (Slime s : slimes) {
+                stateTime += Gdx.graphics.getDeltaTime();
+                if (s.state != true) {
+
+                    TextureRegion currenFrame = (TextureRegion) s.attackingAnimation.getKeyFrame(stateTime, true);
+                    batch.draw(currenFrame, s.getX(), s.getY());
+                    //v.boundsVaca.setPosition(v.x, v.y);
+                    //v.update();
+                }
+            }
+
+        }else if (!checkEnemyCollision()) {
+
+            for (Slime s : slimes) {
+
+                stateTime += Gdx.graphics.getDeltaTime();
+                if (s.state != true) {
+
+
+                    TextureRegion currenFrame = (TextureRegion) s.walkingAnimation.getKeyFrame(stateTime, true);
+                    batch.draw(currenFrame, s.getX(), s.getY());
+                    //v.boundsVaca.setPosition(v.x, v.y);
+                    //v.update();
+                }
+            }
+        }*/
+
+
+        batch.end();
+        checkEnemyCollision();
+        escenaHUD.draw();
+        labeld.setText(String.format("%01d",ivan.documents));
+        label.setText(String.format("%01d",ivan.life));
+
+        if (estado == EstadoJuego.PAUSADO){
+            escenaPausa.draw();
+        }
+
+
+    }
+
+
+
+
+    private boolean checkEnemyCollision() {
+        for(Slime s : slimes){
+            if (jugBounds.overlaps(s.boundsSlime)){
+                if(ivan.movimiento == "ATAQUE"){
+
+                    s.hitOnHead();
+                    return true;
+                } else {
+                    //ivan.estado = "atacado";
+
+                    ivan.damage(1);
+                    if(ivan.getLife() <= 0){
+                        pantallaInicio.setScreen (new PantallaGameOver(pantallaInicio));
+
+                    }
+                    return true;
+                }
+
+            }
+        }
+        return false;
+    }
+
 
 
     @Override

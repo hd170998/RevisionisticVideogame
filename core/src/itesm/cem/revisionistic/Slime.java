@@ -10,8 +10,9 @@ import com.badlogic.gdx.utils.Array;
 public class Slime extends Enemigo{
 
     public enum State {WALKING, ATTACKING}
-    public State currentState;
-    public State previousState;
+
+    public boolean state;
+
     private float stateTime;
     public Animation<TextureRegion> walkingAnimation;
     public Animation<TextureRegion> attackingAnimation;
@@ -21,17 +22,35 @@ public class Slime extends Enemigo{
     private boolean destroyed;
     private Sprite sprite;
     public Rectangle boundsSlime;
+    private float x;
+    private float y;
 
-    public Slime(float x, float y, int type){
+    public void setX(float x){
+        this.x = x;
+    }
+
+    public void setY(float y){
+        this.y = y;
+    }
+
+    public float getX(){
+        return x;
+    }
+
+    public float getY(){
+        return y;
+    }
+
+    public Slime(float recx, float recy, boolean type){
 
         TextureRegion greenRegion = new TextureRegion(new Texture("enemies/GreenSlimeWalkingX.png"));
-        TextureRegion greenAttackRegion = new TextureRegion(new Texture("ForestStuff/GreenSlimeAttackX.png"));
+        TextureRegion greenAttackRegion = new TextureRegion(new Texture("enemies/GreenSlimeAttackX.png"));
 
-        TextureRegion blueRegion = new TextureRegion(new Texture("enemies/BlueSlimeWalkingX.png"));
-        TextureRegion blueAttackRegion = new TextureRegion(new Texture("ForestStuff/BlueSlimeAttackX.png"));
+        TextureRegion blueRegion = new TextureRegion(new Texture("BlueSlimeWalkingX.png"));
+        TextureRegion blueAttackRegion = new TextureRegion(new Texture("BlueSlimeAttackX.png"));
 
-        TextureRegion redRegion = new TextureRegion(new Texture("enemies/RedSlimeWalkingX.png"));
-        TextureRegion redAttackRegion = new TextureRegion(new Texture("ForestStuff/RedSlimeAttackX.png"));
+        TextureRegion redRegion = new TextureRegion(new Texture("RedSlimeWalkingX.png"));
+        TextureRegion redAttackRegion = new TextureRegion(new Texture("RedSlimeAttackX.png"));
 
 
 
@@ -47,25 +66,25 @@ public class Slime extends Enemigo{
         TextureRegion[][] texturaRedAtaque = redAttackRegion.split(320, 128);
 
 
-        if(type == 1){
+        if(type){
             sprite = new Sprite(texturaGreenSlime[0][0]);
+            sprite.setPosition(recx, recy);
+            setX(recx);
+            setY(recy);
 
-            setX(x);
-            setY(y);
-            sprite.setPosition(x, y);
             walkingAnimation = new Animation<TextureRegion>(3f, texturaGreenSlime[0][3], texturaGreenSlime[0][2], texturaGreenSlime[0][1], texturaGreenSlime[0][0] );
             attackingAnimation = new Animation<TextureRegion>(2f, texturaGreenAtaque[0][3], texturaGreenAtaque[0][2], texturaGreenAtaque[0][1], texturaGreenAtaque[0][0]);
-            boundsSlime = new Rectangle(x, y, 300, 100);
-        } else if (type == 2) {
+            boundsSlime = new Rectangle(recx,recy, 200, 100);
+        } else if (!type ) {
             sprite = new Sprite(texturaBlueSlime[0][0]);
 
             setX(x);
             setY(y);
             sprite.setPosition(x, y);
-            walkingAnimation = new Animation<TextureRegion>(3f, texturaBlueSlime[0][3], texturaBlueSlime[0][2], texturaBlueSlime[0][1], texturaBlueSlime[0][0] );
-            attackingAnimation = new Animation<TextureRegion>(2f, texturaBlueAtaque[0][3], texturaBlueAtaque[0][2], texturaBlueAtaque[0][1], texturaBlueAtaque[0][0]);
-            boundsSlime = new Rectangle(x, y, 300, 100);
-        } else if (type == 3){
+            walkingAnimation = new Animation(3f, texturaBlueSlime[0][3], texturaBlueSlime[0][2], texturaBlueSlime[0][1], texturaBlueSlime[0][0] );
+            attackingAnimation = new Animation(2f, texturaBlueAtaque[0][3], texturaBlueAtaque[0][2], texturaBlueAtaque[0][1], texturaBlueAtaque[0][0]);
+            boundsSlime = new Rectangle(x, y, 200, 100);
+        } else if (!type){
             sprite = new Sprite(texturaRedSlime[0][0]);
 
             setX(x);
@@ -92,6 +111,8 @@ public class Slime extends Enemigo{
     @Override
     public void hitOnHead() {
         sprite.getTexture().dispose();
+        boundsSlime.setPosition(-1000,-1000);
+        state = true;
 
     }
 
