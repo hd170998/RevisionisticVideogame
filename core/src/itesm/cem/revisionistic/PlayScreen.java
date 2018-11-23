@@ -63,7 +63,6 @@ public class PlayScreen  extends Pantalla{
     private Array<Vaca> vacas = new Array<Vaca>();
     private Rectangle jugBounds;
     private Salida salida;
-    private float elapsedTime = 0f;
 
     private float stateTime = 0f;
 
@@ -325,7 +324,6 @@ public class PlayScreen  extends Pantalla{
         character.setTextureRegion(ivan.getAnimation());
         batch.setProjectionMatrix(camaraHUD.combined);
         SetIvanBounds(ivan.getX(), ivan.getY());
-        elapsedTime += Gdx.graphics.getDeltaTime();
         batch.begin();
         salida.sprite.draw(batch);
 

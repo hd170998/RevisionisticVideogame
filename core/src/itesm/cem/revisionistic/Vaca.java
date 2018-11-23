@@ -1,27 +1,14 @@
 package itesm.cem.revisionistic;
 
-
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
 
 public class Vaca extends Enemigo {
     public  Animation attackingAnimation;
-    public enum State {WALKING, ATTACKING}
-    public Vaca.State currentState;
-    public Vaca.State previousState;
-    private float stateTime;
     public Animation walkingAnimation;
-    private Array<TextureRegion> frames;
-    Personaje.EstadoMovimento estadoMover = Personaje.EstadoMovimento.QUIETO;
-    private Array<TextureRegion> attackVaca;
     public boolean state;
     public Rectangle boundsVaca;
     public static final int height = 160;

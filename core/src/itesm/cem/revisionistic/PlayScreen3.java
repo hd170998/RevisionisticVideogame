@@ -1,8 +1,11 @@
 package itesm.cem.revisionistic;
 
 import com.badlogic.gdx.Gdx;
+
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+
+
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
@@ -14,6 +17,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -31,6 +35,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class PlayScreen3 extends Pantalla{
@@ -38,23 +43,27 @@ public class PlayScreen3 extends Pantalla{
     private static final float ALTO_MAPA = 6070;
     private TiledMap mapa;
     private final PantallaInicio pantallaInicio;
+
     private TiledMapRenderer tiledMapRenderer;
     private Personaje ivan;
+    private EstadoJuego estado;
     private MapLayer objectLayer;
-    private MapObject salidaLayer;
+
     private Label label, labeld;
     private BitmapFont font;
     private OrthographicCamera camaraHUD;
     private Viewport vistaHUD;
     private Stage escenaHUD;
-    private Sound saw;
-    private EstadoJuego estado;
     private Music music;
+
     private EscenaPausa escenaPausa;
     private Array<Slime> slimes = new Array<Slime>();
     private Rectangle jugBounds;
-    private Salida salida;
+
     private float stateTime = 0f;
+
+
+
 
     public PlayScreen3(PantallaInicio pantallaInicio) {
         this.pantallaInicio = pantallaInicio;
@@ -63,12 +72,14 @@ public class PlayScreen3 extends Pantalla{
 
     @Override
     public void show() {
+
         Gdx.input.setCatchBackKey(true);
         ivan = new Personaje(new Texture("1V4N_Xaxis.png"));
         ivan.setLife(100);
         ivan.setDocuments(0);
         ivan.setX(300);
         ivan.setY(1250);
+
         font = new BitmapFont(Gdx.files.internal("font.fnt"));
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = font;
@@ -273,14 +284,18 @@ public class PlayScreen3 extends Pantalla{
         TextureMapObject IvanO = new TextureMapObject(ivan.getAnimation());
         objectLayer.getObjects().add(IvanO);
 
-
-        for(MapObject object : mapa.getLayers().get("Objetos").getObjects()){
+        for(MapObject object : mapa.getLayers().get("Enemigos").getObjects()){
 
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
-            slimes.add(new Slime(rect.x, rect.y,true));
+            slimes.add(new Slime(rect.x, rect.y,2));
+
+
 
         }
+
+
+
 
 
 
@@ -306,7 +321,6 @@ public class PlayScreen3 extends Pantalla{
         character.setX(ivan.getX());
         character.setY(ivan.getY());
         character.setTextureRegion(ivan.getAnimation());
-        batch.setProjectionMatrix(camaraHUD.combined);
         SetIvanBounds(ivan.getX(), ivan.getY());
         batch.begin();
 
@@ -346,7 +360,7 @@ public class PlayScreen3 extends Pantalla{
 
 
 
-
+        batch.setProjectionMatrix(camaraHUD.combined);
         escenaHUD.draw();
         labeld.setText(String.format("%01d",ivan.documents));
         label.setText(String.format("%01d",ivan.life));

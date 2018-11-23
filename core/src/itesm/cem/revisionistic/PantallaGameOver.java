@@ -47,16 +47,16 @@ public class PantallaGameOver extends Pantalla {
     private void crearEscena() {
         batch = new SpriteBatch();
         escenaGameOver = new Stage(vista);
-        textFondo = new Texture("GameOver\\GameOverScreen_BG.png");
-        baseGameOver = new Texture("GameOver\\GameOverScreen_Skull.png");
-        textGameOver = new Texture("GameOver\\GameOverScreen_Title.png");
-        optionsGameOver = new Texture("GameOver\\GameOverScreen_TryAgainScreen.png");
+        textFondo = new Texture("GameOver/GameOverScreen_BG.png");
+        baseGameOver = new Texture("GameOver/GameOverScreen_Skull.png");
+        textGameOver = new Texture("GameOver/GameOverScreen_Title.png");
+        optionsGameOver = new Texture("GameOver/GameOverScreen_TryAgainScreen.png");
 
         //btn regreso
-        Texture BtnBack = new Texture("GameOver\\GameOverScreen_TryAgainNO.png");
+        Texture BtnBack = new Texture("GameOver/GameOverScreen_TryAgainNO.png");
         TextureRegionDrawable tback = new TextureRegionDrawable(new TextureRegion(BtnBack));
 
-        Texture BtnBackOP = new Texture("GameOver\\GameOverScreen_TryAgainNOPressed.png");
+        Texture BtnBackOP = new Texture("GameOver/GameOverScreen_TryAgainNOPressed.png");
         TextureRegionDrawable tbackop = new TextureRegionDrawable(new TextureRegion(BtnBackOP));
 
         ImageButton btnBack = new ImageButton(tback,tbackop);
@@ -70,10 +70,10 @@ public class PantallaGameOver extends Pantalla {
         });
 
         //btnJugarDeNuevo
-        Texture BtnPlayAgain = new Texture("GameOver\\GameOverScreen_TryAgainYES.png");
+        Texture BtnPlayAgain = new Texture("GameOver/GameOverScreen_TryAgainYES.png");
         TextureRegionDrawable tplayAgain = new TextureRegionDrawable(new TextureRegion(BtnPlayAgain));
 
-        Texture BtnPlayAgainOP = new Texture("GameOver\\GameOverScreen_TryAgainYESPressed.png");
+        Texture BtnPlayAgainOP = new Texture("GameOver/GameOverScreen_TryAgainYESPressed.png");
         TextureRegionDrawable tplayAgainOp = new TextureRegionDrawable(new TextureRegion(BtnPlayAgainOP));
 
         ImageButton btnPlayAgin = new ImageButton(tplayAgain,tplayAgainOp);

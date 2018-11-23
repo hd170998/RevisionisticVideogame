@@ -20,7 +20,7 @@ import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.math.Intersector;
+
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -54,10 +54,11 @@ public class PlayScreen2 extends Pantalla {
     private Music music;
     private EscenaPausa escenaPausa;
     private MapObjects objetos;
-    private Array<Slime> slimes = new Array<Slime>();
+    
+    private Array<Slime> slimes;
+    
     private Rectangle jugBounds;
-    private float stateTime = 0f;
-
+    private float stateTime;
 
     public PlayScreen2(PantallaInicio pantallaInicio) {
         this.pantallaInicio = pantallaInicio;
@@ -84,6 +85,13 @@ public class PlayScreen2 extends Pantalla {
     }
 
     private void cargaMusica() {
+        AssetManager manager = new AssetManager();
+        manager.load("audio/Forest.mp3", Music.class);
+        manager.load("audio/saw-audio.mp3",Sound.class);
+        manager.finishLoading();
+        music = manager.get("audio/Forest.mp3");
+        music.setLooping(true);
+        music.play();
     }
 
     private void crearHUD() {
@@ -261,17 +269,18 @@ public class PlayScreen2 extends Pantalla {
     private void cargarMapa() {
         AssetManager manager = new AssetManager();
         manager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-        manager.load("VillageStuff/VillageMap.tmx",TiledMap.class);
-        manager.load("audio/saw-audio.mp3",Sound.class);
+        manager.load("VillageStuff/VillageMap.tmx", TiledMap.class);
+        manager.load("audio/saw-audio.mp3", Sound.class);
         manager.finishLoading(); // Espera
         mapa = manager.get("VillageStuff/VillageMap.tmx");
-        saw = manager.get("audio/saw-audio.mp3",Sound.class);
+        saw = manager.get("audio/saw-audio.mp3", Sound.class);
         tiledMapRenderer = new OrthogonalTiledMapRendererWithSprites(mapa);
         objectLayer = mapa.getLayers().get("1V4N");
         TextureMapObject IvanO = new TextureMapObject(ivan.getAnimation());
         objectLayer.getObjects().add(IvanO);
-
-        /*for(MapObject object : mapa.getLayers().get("Object Layer 7").getObjects()){
+        
+        slimes = new Array<Slime>();
+        for(MapObject object : mapa.getLayers().get("Object Layer 6").getObjects()){
 
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
@@ -279,8 +288,8 @@ public class PlayScreen2 extends Pantalla {
 
 
 
+        }
 
-        }*/
 
     }
 
@@ -303,19 +312,20 @@ public class PlayScreen2 extends Pantalla {
         character.setX(ivan.getX());
         character.setY(ivan.getY());
         character.setTextureRegion(ivan.getAnimation());
-        batch.setProjectionMatrix(camaraHUD.combined);
         SetIvanBounds(ivan.getX(), ivan.getY());
+
         batch.begin();
 
         //salida.sprite.draw(batch);
 
 
-        /*if(checkEnemyCollision()) {
+        if(checkEnemyCollision()) {
             for (Slime s : slimes) {
                 stateTime += Gdx.graphics.getDeltaTime();
                 if (s.state != true) {
 
                     TextureRegion currenFrame = (TextureRegion) s.attackingAnimation.getKeyFrame(stateTime, true);
+
                     batch.draw(currenFrame, s.getX(), s.getY());
                     //v.boundsVaca.setPosition(v.x, v.y);
                     //v.update();
@@ -336,11 +346,12 @@ public class PlayScreen2 extends Pantalla {
                     //v.update();
                 }
             }
-        }*/
+        }
 
 
         batch.end();
         checkEnemyCollision();
+        batch.setProjectionMatrix(camaraHUD.combined);
         escenaHUD.draw();
         labeld.setText(String.format("%01d",ivan.documents));
         label.setText(String.format("%01d",ivan.life));
@@ -348,7 +359,6 @@ public class PlayScreen2 extends Pantalla {
         if (estado == EstadoJuego.PAUSADO){
             escenaPausa.draw();
         }
-
 
     }
 

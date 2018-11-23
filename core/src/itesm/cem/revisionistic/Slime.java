@@ -5,25 +5,19 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.utils.Array;
+
 
 public class Slime extends Enemigo{
 
-    public enum State {WALKING, ATTACKING}
+
 
     public boolean state;
-
-    private float stateTime;
-    public Animation<TextureRegion> walkingAnimation;
-    public Animation<TextureRegion> attackingAnimation;
-    private Array<TextureRegion> frames;
-    private Array<TextureRegion> attackSlime;
-    private boolean setToDestroy;
-    private boolean destroyed;
+    public Animation walkingAnimation;
+    public Animation attackingAnimation;
     private Sprite sprite;
     public Rectangle boundsSlime;
-    private float x;
-    private float y;
+    float x;
+    float y;
 
     public void setX(float x){
         this.x = x;
@@ -41,7 +35,7 @@ public class Slime extends Enemigo{
         return y;
     }
 
-    public Slime(float recx, float recy, boolean type){
+    public Slime(float recx, float recy, int type){
 
         TextureRegion greenRegion = new TextureRegion(new Texture("enemies/GreenSlimeWalkingX.png"));
         TextureRegion greenAttackRegion = new TextureRegion(new Texture("enemies/GreenSlimeAttackX.png"));
@@ -66,16 +60,16 @@ public class Slime extends Enemigo{
         TextureRegion[][] texturaRedAtaque = redAttackRegion.split(320, 128);
 
 
-        if(type){
+        if(type ==1){
             sprite = new Sprite(texturaGreenSlime[0][0]);
-            sprite.setPosition(recx, recy);
+
             setX(recx);
             setY(recy);
-
-            walkingAnimation = new Animation<TextureRegion>(3f, texturaGreenSlime[0][3], texturaGreenSlime[0][2], texturaGreenSlime[0][1], texturaGreenSlime[0][0] );
-            attackingAnimation = new Animation<TextureRegion>(2f, texturaGreenAtaque[0][3], texturaGreenAtaque[0][2], texturaGreenAtaque[0][1], texturaGreenAtaque[0][0]);
-            boundsSlime = new Rectangle(recx,recy, 200, 100);
-        } else if (!type ) {
+            sprite.setPosition(recx, recy);
+            walkingAnimation = new Animation(3f, texturaGreenSlime[0][3], texturaGreenSlime[0][2], texturaGreenSlime[0][1], texturaGreenSlime[0][0] );
+            attackingAnimation = new Animation(2f, texturaGreenAtaque[0][3], texturaGreenAtaque[0][2], texturaGreenAtaque[0][1], texturaGreenAtaque[0][0]);
+            boundsSlime = new Rectangle(recx,recy, 150, 100);
+        } else if (type==2 ) {
             sprite = new Sprite(texturaBlueSlime[0][0]);
 
             setX(x);
@@ -83,8 +77,8 @@ public class Slime extends Enemigo{
             sprite.setPosition(x, y);
             walkingAnimation = new Animation(3f, texturaBlueSlime[0][3], texturaBlueSlime[0][2], texturaBlueSlime[0][1], texturaBlueSlime[0][0] );
             attackingAnimation = new Animation(2f, texturaBlueAtaque[0][3], texturaBlueAtaque[0][2], texturaBlueAtaque[0][1], texturaBlueAtaque[0][0]);
-            boundsSlime = new Rectangle(x, y, 200, 100);
-        } else if (!type){
+            boundsSlime = new Rectangle(x, y, 150, 100);
+        } else if (type==3){
             sprite = new Sprite(texturaRedSlime[0][0]);
 
             setX(x);
